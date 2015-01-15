@@ -71,7 +71,7 @@ _write_cr3:
 	pop ebp
 	retn
 
-global gdt_flush] ; make 'gdt_flush' accessible from C code
+[global gdt_flush] ; make 'gdt_flush' accessible from C code
 [extern gp]        ; tells the assembler to look at C code for 'gp'
  
 ; this function does the same thing of the 'start' one, this time with
