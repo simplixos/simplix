@@ -29,6 +29,7 @@
 #include <sys/vga.h>
 #include <sys/gdt.h>
 #include <sys/page.h>
+#include <bas/defs.h>
 
 // Our kernel's first function: kmain
 void kmain()
@@ -40,7 +41,15 @@ void kmain()
         // Clear the screen
         vga_clear();
         
-        // Print a warm welcome!
+        // Print logo
+        vga_write(ASCII_LOGO);
+        
+        // Display build an authoring info
+        vga_write("BasicOS ver. "BAS_VER_FUL"\n");
+		vga_write(AUTHOR_NOTE"\n");
+		vga_write(COMPILE_NOTE"\n\n");
+		
+		// Print a warm welcome!
         vga_write("Hello, User!");
         
         // Hang up the computer

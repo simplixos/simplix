@@ -1,11 +1,10 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: include/sys/common.h
+ * File: include/bas/defs.h
  * 
  * Description:
- * 	Defines common data types and I/O manipulation function 
- * 	prototypes.
+ * 	General constants used for versioning and authoring.
  * 
  * License:
  * BasicOS Operating System - An experimental operating system.
@@ -25,26 +24,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  ***********************************************************************/
+ 
+#ifndef BAS_DEFS_H
+#define BAS_DEFS_H
 
-#ifndef COMMON_H
-#define COMMON_H
+#define ASCII_LOGO \
+" __________               .__         ________    _________ \n" \
+" \\______   \\_____    _____|__| ____   \\_____  \\  /   _____/	\n" \
+"  |    |  _/\\__  \\  /  ___/  |/ ___\\   /   |   \\ \\_____  \\  \n" \
+"  |    |   \\ / __ \\_\\___ \\|  \\  \\___  /    |    \\/        \\ \n" \
+"  |______  /(____  /____  >__|\\___  > \\_______  /_______  / \n" \
+"         \\/      \\/     \\/        \\/          \\/        \\/  \n" \
+"=============================================================\n" \
 
-// Common 32-bit x86 Data types
+#define BAS_VER_MAJ "0"
+#define BAS_VER_MIN	"1"
 
-typedef unsigned  long long int u64int;
-typedef long long int   s64int;
-typedef unsigned  int   u32int;
-typedef           int   s32int;
-typedef unsigned  short u16int;
-typedef           short s16int;
-typedef unsigned  char  u8int;
-typedef           char  s8int;
+#define BAS_VER_FUL BAS_VER_MAJ"."BAS_VER_MIN
 
-// Essential Low-level I/O Control Functions
+#define AUTHOR_NOTE "written by Aun-Ali Zaidi."
+#define COMPILE_NOTE "Compiled on "__DATE__", "__TIME__", using GCC "__VERSION__
 
-void outb(u16int port, u8int value);
-u8int inb(u16int port);
-u16int inw(u16int port);
-void io_wait(void);
-
-#endif // COMMON_H
+#endif // BAS_DEFS_H
