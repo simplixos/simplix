@@ -44,7 +44,7 @@ void kmain()
 	irq_init();
 
 	// Interrupt tests
-	int_enable();
+	//int_enable();
 	//int_nmi_enable();
 	//asm volatile ("int $0x3");
 
@@ -56,10 +56,10 @@ void kmain()
         
         // Display build an authoring info
         vga_write("BasicOS ver. "BAS_VER_FUL"\n");
-		vga_write(AUTHOR_NOTE"\n");
-		vga_write(COMPILE_NOTE"\n\n");
+	vga_write(AUTHOR_NOTE"\n");
+	vga_write(COMPILE_NOTE"\n\n");
 		
-		// Print a warm welcome!
+	// Print a warm welcome!
         vga_write("Hello, User!");
         
         // Hang up the computer
