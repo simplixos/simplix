@@ -1,12 +1,11 @@
-/***********************************************************************
+/************************************************************
  * BasicOS Operating System
- * 
- * File: include/sys/vga.h
- * 
+ *
+ * File: kernel/int.c
+ *
  * Description:
- * 	Defines VGA screen buffer, memory locations, and other
- * 	VGA screen related constants.
- * 
+ *      Basic interrupt control functions.
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
@@ -20,30 +19,26 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
- ***********************************************************************/
+ *
+ ************************************************************/
 
-#ifndef VGA_H
-#define VGA_H
+#include <sys/int.h>
 
-#include <sys/common.h>
+void int_disable() {
+	asm volatile("cli");
+}
 
-/** Function Declerations **/
+void int_enable() {
+	asm volatile("sti");
+}
 
-// Write a single character out to the screen.
-void vga_put(char c);
+void int_nmi_disable() {
+	outb(INT_NMI_CONTROL, inb(INT_NMI_CONTROL) | INT_NMI_BIT);
+}
 
-// Clear the screen to all black.
-void vga_clear();
-
-// Output a null-terminated ASCII string to the vga.
-void vga_write(char *c);
-
-void vga_write_dec(u32int n);
-
-void vga_write_hex(u32int n);
-
-#endif // VGA_H
+void int_nmi_enable() {
+	outb(INT_NMI_CONTROL, inb(INT_NMI_CONTROL) & (~INT_NMI_BIT));
+}

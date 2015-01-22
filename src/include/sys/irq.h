@@ -1,12 +1,11 @@
-/***********************************************************************
+/************************************************************
  * BasicOS Operating System
- * 
- * File: include/sys/vga.h
- * 
+ *
+ * File: include/sys/irq.h
+ *
  * Description:
- * 	Defines VGA screen buffer, memory locations, and other
- * 	VGA screen related constants.
- * 
+ *      Defines IRQ PIC types.
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
@@ -20,30 +19,35 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
- ***********************************************************************/
+ *
+ ************************************************************/
 
-#ifndef VGA_H
-#define VGA_H
+#ifndef _IRQ_H
+#define	_IRQ_H
 
 #include <sys/common.h>
 
-/** Function Declerations **/
+#define IRQ0_DEFAULT_OFFSET 0x20
+#define IRQ1_DEFAULT_OFFSET 0x28
 
-// Write a single character out to the screen.
-void vga_put(char c);
+#define IRQ_PIC0         0x20
+#define IRQ_PIC0_COMMAND IRQ_PIC0
+#define IRQ_PIC0_DATA    IRQ_PIC0 + 1
 
-// Clear the screen to all black.
-void vga_clear();
+#define IRQ_PIC1         0xA0
+#define IRQ_PIC1_COMMAND IRQ_PIC1
+#define IRQ_PIC1_DATA    IRQ_PIC1 + 1
 
-// Output a null-terminated ASCII string to the vga.
-void vga_write(char *c);
+#define IRQ_PIC_INIT 0x11
+#define IRQ_EOI      0x20
 
-void vga_write_dec(u32int n);
+#define IRQ_PIC_8086_MODE 0x01
+// TODO: add other ints
 
-void vga_write_hex(u32int n);
+void irq_init();
+bool irq_test(u8int int_n);
 
-#endif // VGA_H
+#endif

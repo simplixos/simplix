@@ -27,8 +27,8 @@ CFLAGS=-std=gnu99 -I$(INCLUDE) -ffreestanding -nostdlib -O2 -Wall -Wextra
 ASFLAGS=-felf
 LDFLAGS=-T linker.ld
 
-CSOURCES= ./kernel/common.c ./kernel/vga.c ./kernel/gdt.c ./kernel/page.c ./kernel/kernel.c
-ASMSOURCES= ./kernel/boot.s
+CSOURCES= ./kernel/common.c ./kernel/vga.c ./kernel/gdt.c ./kernel/idt.c ./kernel/irq.c ./kernel/int.c ./kernel/page.c ./kernel/kernel.c
+ASMSOURCES= ./kernel/boot.s ./kernel/idt_asm.s ./kernel/isr.s
 
 COBJECTS=$(CSOURCES:.c=.o)
 ASMOBJECTS=$(ASMSOURCES:.s=.o)
@@ -38,7 +38,7 @@ KERNEL=basicos.bin
 all: $(CSOURCES) $(ASMSOURCES) $(KERNEL)
 
 $(KERNEL): $(COBJECTS) $(ASMOBJECTS)
-	$(CC) $(LDFLAGS) $(CFLAGS) $(COBJECTS) $(ASMOBJECTS) -o $@
+	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) -o $@
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@

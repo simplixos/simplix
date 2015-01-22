@@ -28,16 +28,26 @@
 #include <sys/common.h>
 #include <sys/vga.h>
 #include <sys/gdt.h>
+#include <sys/idt.h>
+#include <sys/int.h>
+#include <sys/irq.h>
 #include <sys/page.h>
 #include <bas/defs.h>
 
 // Our kernel's first function: kmain
 void kmain()
 {
-		// FIRST enable paging and THEN load the real GDT!
+	// FIRST enable paging and THEN load the real GDT!
         init_paging();
         gdt_install();
-        
+	idt_init();
+	irq_init();
+
+	// Interrupt tests
+	int_enable();
+	//int_nmi_enable();
+	//asm volatile ("int $0x3");
+
         // Clear the screen
         vga_clear();
         

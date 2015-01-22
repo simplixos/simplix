@@ -1,12 +1,11 @@
-/***********************************************************************
+/************************************************************
  * BasicOS Operating System
- * 
- * File: include/sys/vga.h
- * 
+ *
+ * File: include/sys/int.h
+ *
  * Description:
- * 	Defines VGA screen buffer, memory locations, and other
- * 	VGA screen related constants.
- * 
+ *      Basic interrupt control.
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
@@ -20,30 +19,22 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
- ***********************************************************************/
-
-#ifndef VGA_H
-#define VGA_H
+ *
+ ************************************************************/
+#ifndef INT_H
+#define	INT_H
 
 #include <sys/common.h>
 
-/** Function Declerations **/
+#define INT_NMI_BIT     1 << 7
+#define INT_NMI_CONTROL 0x70
 
-// Write a single character out to the screen.
-void vga_put(char c);
+void int_disable();
+void int_enable();
+void int_nmi_disable();
+void int_nmi_enable();
 
-// Clear the screen to all black.
-void vga_clear();
-
-// Output a null-terminated ASCII string to the vga.
-void vga_write(char *c);
-
-void vga_write_dec(u32int n);
-
-void vga_write_hex(u32int n);
-
-#endif // VGA_H
+#endif // INT_H
