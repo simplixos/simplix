@@ -44,14 +44,14 @@ void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned cha
 // Sets our 5 gates and installs the real GDT through the assembler function
 void gdt_install()
 {
-        gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
+        gp.limit = (sizeof(struct gdt_entry) * 5) - 1;
         gp.base = (unsigned int)&gdt;
  
         gdt_set_gate(0, 0, 0, 0, 0);				// Null sgment
         gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code Segment
         gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);	// Data Segment
-        //gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
-		//gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
+        gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
+	gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
  
         gdt_flush();
 }

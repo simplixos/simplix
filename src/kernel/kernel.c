@@ -33,6 +33,7 @@
 #include <sys/irq.h>
 #include <sys/page.h>
 #include <bas/defs.h>
+#include <hw/cpuid.h>
 
 // Our kernel's first function: kmain
 void kmain()
@@ -58,7 +59,10 @@ void kmain()
         vga_write("BasicOS ver. "BAS_VER_FUL"\n");
 	vga_write(AUTHOR_NOTE"\n");
 	vga_write(COMPILE_NOTE"\n\n");
-		
+	
+	// Display CPU info
+	cpu_info();
+	
 	// Print a warm welcome!
         vga_write("Hello, User!");
         

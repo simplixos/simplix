@@ -27,7 +27,7 @@ CFLAGS=-std=gnu99 -I$(INCLUDE) -ffreestanding -nostdlib -O2 -Wall -Wextra
 ASFLAGS=-felf
 LDFLAGS=-T linker.ld
 
-CSOURCES= ./kernel/common.c ./kernel/vga.c ./kernel/gdt.c ./kernel/idt.c ./kernel/irq.c ./kernel/int.c ./kernel/page.c ./kernel/kernel.c
+CSOURCES= ./kernel/common.c ./kernel/vga.c ./kernel/gdt.c ./kernel/idt.c ./kernel/irq.c ./kernel/int.c ./kernel/page.c ./hw/cpu/cpuid.c ./kernel/kernel.c
 ASMSOURCES= ./kernel/boot.s ./kernel/idt_asm.s ./kernel/isr.s
 
 COBJECTS=$(CSOURCES:.c=.o)
