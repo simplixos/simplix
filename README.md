@@ -2,10 +2,7 @@ BasicOS
 =======
 
 [![Build Status](https://travis-ci.org/aunali1/BasicOS.svg?branch=master)](https://travis-ci.org/aunali1/BasicOS)
-<a href="https://scan.coverity.com/projects/4010">
-  <img alt="Coverity Scan Build Status"
-       src="https://scan.coverity.com/projects/4010/badge.svg"/>
-</a>
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/4010/badge.svg)](https://scan.coverity.com/projects/4010)
 
 This repository contains the sample code for my personal
 operating system.
