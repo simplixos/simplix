@@ -29,7 +29,7 @@
 #ifndef VGA_H
 #define VGA_H
 
-#include <sys/common.h>
+#include <bos/k/common.h>
 
 /** Function Declerations **/
 

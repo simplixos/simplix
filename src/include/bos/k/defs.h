@@ -38,7 +38,7 @@
 "=============================================================\n" \
 
 #define BAS_VER_MAJ "0"
-#define BAS_VER_MIN	"1"
+#define BAS_VER_MIN	"2"
 
 #define BAS_VER_FUL BAS_VER_MAJ"."BAS_VER_MIN
 

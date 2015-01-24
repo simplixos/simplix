@@ -25,7 +25,7 @@
  *
  ***********************************************************************/
 
-#include <sys/idt.h>
+#include <bos/k/idt.h>
 
 idt_entry_t         idt_entries[256];
 idt_pointer_t       idt_pointer;

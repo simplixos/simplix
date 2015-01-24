@@ -155,5 +155,9 @@ void cpu_info()
 	if (cpuid_extended_features() & CPU_FEATURE_EXT_CAE)  vga_write("CAE ");
 	vga_write("\n\n");
 
+	vga_write("________________________________\n");
+        vga_write("|         Processor Info       |\n");
+        vga_write("********************************\n");
+
 	// TODO: Add CPUID detection for CPU built-in caches.
 }

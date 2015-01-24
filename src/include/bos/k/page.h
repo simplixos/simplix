@@ -29,8 +29,8 @@
 #ifndef PAGE_H
 #define PAGE_H
 
-#include <sys/common.h>
-#include <sys/vga.h>
+#include <bos/k/common.h>
+#include <bos/k/vga.h>
 
 // Declare the page directory and a page table, both 4kb-aligned
 unsigned long kernelpagedir[1024] __attribute__ ((aligned (4096)));

@@ -28,8 +28,8 @@
 #ifndef CPUID_H
 #define CPUID_H
 
-#include <sys/common.h>
-#include <sys/vga.h>
+#include <bos/k/common.h>
+#include <bos/k/vga.h>
 
 // CPU Stepping
 #define CPU_STEP_1		1<<0

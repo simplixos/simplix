@@ -28,8 +28,8 @@
 #ifndef GDT_H
 #define GDT_H
  
-#include <sys/common.h>
-#include <sys/vga.h>
+#include <bos/k/common.h>
+#include <bos/k/vga.h>
 
 /** GDT Pointer Structures **/
 

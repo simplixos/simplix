@@ -25,14 +25,14 @@
  * 
  ***********************************************************************/
 
-#include <sys/common.h>
-#include <sys/vga.h>
-#include <sys/gdt.h>
-#include <sys/idt.h>
-#include <sys/int.h>
-#include <sys/irq.h>
-#include <sys/page.h>
-#include <bas/defs.h>
+#include <bos/k/common.h>
+#include <bos/k/vga.h>
+#include <bos/k/gdt.h>
+#include <bos/k/idt.h>
+#include <bos/k/int.h>
+#include <bos/k/irq.h>
+#include <bos/k/page.h>
+#include <bos/k/defs.h>
 #include <hw/cpuid.h>
 
 // Our kernel's first function: kmain

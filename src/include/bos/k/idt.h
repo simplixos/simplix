@@ -28,8 +28,8 @@
 #ifndef IDT_H
 #define	IDT_H
 
-#include <sys/common.h>
-#include <sys/vga.h>
+#include <bos/k/common.h>
+#include <bos/k/vga.h>
 
 #define IDT_TASK_GATE_32 1 | 1 << 2
 #define IDT_INT_GATE_16  1 << 1 | 1 << 2

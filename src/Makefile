@@ -28,7 +28,7 @@ ASFLAGS=-felf
 LDFLAGS=-T linker.ld
 
 CSOURCES= ./kernel/common.c ./kernel/vga.c ./kernel/gdt.c ./kernel/idt.c ./kernel/irq.c ./kernel/int.c ./kernel/page.c ./hw/cpu/cpuid.c ./kernel/kernel.c
-ASMSOURCES= ./kernel/boot.s ./kernel/idt_asm.s ./kernel/isr.s
+ASMSOURCES= ./kernel/boot.s ./kernel/idt_asm.s ./kernel/isr.s ./kernel/test.s
 
 COBJECTS=$(CSOURCES:.c=.o)
 ASMOBJECTS=$(ASMSOURCES:.s=.o)

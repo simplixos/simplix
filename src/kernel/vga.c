@@ -25,7 +25,7 @@
  * 
  ***********************************************************************/
 
-#include <sys/vga.h>
+#include <bos/k/vga.h>
 
 // VGA Framebuffer
 u16int *video_memory = (u16int *)0xB8000;

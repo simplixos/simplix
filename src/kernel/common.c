@@ -25,7 +25,7 @@
  *
  ************************************************************/
 
-#include <sys/common.h>
+#include <bos/k/common.h>
 
 /** Low-level I/O Handling functions **/
 

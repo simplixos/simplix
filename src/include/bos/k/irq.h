@@ -28,7 +28,7 @@
 #ifndef _IRQ_H
 #define	_IRQ_H
 
-#include <sys/common.h>
+#include <bos/k/common.h>
 
 #define IRQ0_DEFAULT_OFFSET 0x20
 #define IRQ1_DEFAULT_OFFSET 0x28

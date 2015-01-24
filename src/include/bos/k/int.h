@@ -27,7 +27,7 @@
 #ifndef INT_H
 #define	INT_H
 
-#include <sys/common.h>
+#include <bos/k/common.h>
 
 #define INT_NMI_BIT     1 << 7
 #define INT_NMI_CONTROL 0x70

@@ -26,8 +26,8 @@
  *
  ************************************************************/
 
-#include <sys/irq.h>
-#include <sys/idt.h>
+#include <bos/k/irq.h>
+#include <bos/k/idt.h>
 
 u8int irq0_offset = IRQ0_DEFAULT_OFFSET;
 u8int irq1_offset = IRQ1_DEFAULT_OFFSET;
