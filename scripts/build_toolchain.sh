@@ -8,12 +8,12 @@ echo $TARGET
 export PATH="$PREFIX/bin:$PATH"
 
 platform='unknown'
-unamestr = $(uname)
-if [[ "$unamestr" == 'Linux' ]]; then
+uname=$(uname)
+if [[ "$uname" == 'Linux' ]]; then
 	platform='linux'
-elif [[ "$unamestr" == 'Darwin' ]]; then
+elif [[ "$uname" == 'Darwin' ]]; then
 	platform='macos'
-elif [[ "$unamestr" == 'SunOS' ]]; then
+elif [[ "$uname" == 'SunOS' ]]; then
 	platform='solaris'
 fi
 
@@ -40,12 +40,9 @@ pwd
 ../binutils-2.25/configure --target=i686-elf --prefix="$pwd/cross/os-toolchain" --with-sysroot --disable-nls --disable-werror
 if [[ $platform == 'solaris' ]]; then
 	gmake
-else
-	make
-fi
-if [[ $platform == 'solaris' ]]; then
 	gmake install
 else
+	make
 	make install
 fi
 cd ..
