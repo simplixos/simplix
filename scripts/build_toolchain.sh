@@ -27,9 +27,11 @@ pwd
 
 wget http://ftp.gnu.org/gnu/binutils/binutils-2.25.tar.gz
 wget http://ftp.gnu.org/gnu/gcc/gcc-4.8.4/gcc-4.8.4.tar.bz2
+wget http://www.nasm.us/pub/nasm/releasebuilds/2.11.06/nasm-2.11.06.tar.gz
 
 tar -xzf binutils-2.25.tar.gz
 tar -xf gcc-4.8.4.tar.bz2
+tar -xzf nasm-2.11.06.tar.gz
 
 rm -f *tar.gz
 rm -f *tar.bz2
@@ -64,13 +66,27 @@ else
 	make install-target-libgcc
 fi
 cd ..
-ls -la
+pwd
+
+cd nasm-2.11.06/
+./configure --prefix="$pwd/cross/os-toolchain"
+if [[ $platform == 'solaris' ]]; then
+	gmake
+	gmake install
+else
+	make
+	make install
+fi
+cd ..
+ls -lah
 rm -rf build*
 cd ..
 rm -rf src/
 pwd
 
 os-toolchain/bin/i686-elf-gcc --version
+
+os-toolchain/bin/nasm -v
 
 cd ..
 pwd

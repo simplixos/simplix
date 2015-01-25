@@ -20,11 +20,11 @@
 ###############################################################################
 
 CC=../cross/os-toolchain/bin/i686-elf-gcc
-AS=nasm
+AS=../cross/os-toolchain/bin/nasm
 
 INCLUDE=include/
 CFLAGS=-std=gnu99 -I$(INCLUDE) -ffreestanding -nostdlib -O2 -Wall -Wextra
-ASFLAGS=-felf
+ASFLAGS=-felf32
 LDFLAGS=-T linker.ld
 
 CSOURCES= ./kernel/common.c ./kernel/vga.c ./kernel/gdt.c ./kernel/idt.c ./kernel/irq.c ./kernel/int.c ./kernel/page.c ./hw/cpu/cpuid.c ./kernel/kernel.c
