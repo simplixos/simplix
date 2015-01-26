@@ -1,0 +1,20 @@
+--- Makefile	Sun Jan 25 17:09:39 2015
++++ Makefile	Sun Jan 25 17:34:56 2015
+@@ -27,14 +27,14 @@
+ 
+ all:
+ 	@echo "Building Kernel!"
+-	make -C ./src all
++	gmake -C ./src all
+ 
+ clean:
+-	make -C ./src clean
++	gmake -C ./src clean
+ 
+ distclean:
+ 	rm -rf cross/
+-	make -C ./src clean
++	gmake -C ./src clean
+ 
+ toolchain:
+ 	./scripts/build_toolchain.sh

@@ -92,5 +92,10 @@ cd ..
 pwd
 ls -la
 
+if [[ $platform == 'solaris' ]]; then
+        echo "Applying Solaris patches:"
+        ./scripts/host_patches.sh
+fi
+
 echo " "
 echo "Finished building OS-specific toolchain!"
