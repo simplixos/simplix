@@ -23,7 +23,7 @@ CC=../cross/os-toolchain/bin/i686-elf-gcc
 AS=../cross/os-toolchain/bin/nasm
 
 INCLUDE=include/
-CFLAGS=-std=gnu99 -I$(INCLUDE) -ffreestanding -nostdlib -O2 -Wall -Wextra
+CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -ffreestanding -nostdlib -O2 -Wall -Wextra
 ASFLAGS=-felf32
 LDFLAGS=-T linker.ld
 

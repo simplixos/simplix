@@ -37,7 +37,7 @@ distclean:
 	make -C ./src clean
 
 toolchain:
-	./scripts/build_toolchain.sh
+	bash ./scripts/build_toolchain.sh
 
 isoimage:
 	./scripts/update_image.sh
