@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: kernel/page.c
+ * File: kernel/arch/x86page.c
  * 
  * Description:
  * 	Functions dealing with initializing and managing the Kernel

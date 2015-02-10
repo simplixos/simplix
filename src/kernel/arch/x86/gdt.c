@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: kernel/gdt.c
+ * File: kernel/arch/x86/gdt.c
  * 
  * Description:
  * 	Functions that manage and setup the GDT.

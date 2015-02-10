@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: include/bas/defs.h
+ * File: include/bos/k/defs.h
  * 
  * Description:
  * 	General constants used for versioning and authoring.

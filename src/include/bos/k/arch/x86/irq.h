@@ -1,7 +1,7 @@
 /************************************************************
  * BasicOS Operating System
  *
- * File: include/sys/irq.h
+ * File: include/bos/k/arch/x86/irq.h
  *
  * Description:
  *      Defines IRQ PIC types.

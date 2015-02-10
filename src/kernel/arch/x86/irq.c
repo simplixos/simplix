@@ -1,7 +1,7 @@
 /************************************************************
  * BasicOS Operating System
  *
- * File: kernel/irq.c
+ * File: kernel/arch/x86/irq.c
  *
  * Description:
  *      Handles initialization of IRQ and setup of highe level

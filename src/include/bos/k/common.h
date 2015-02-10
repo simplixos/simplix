@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: include/sys/common.h
+ * File: include/bos/k/common.h
  * 
  * Description:
  * 	Defines common data types and I/O manipulation function 

@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: kernel/arch/x86/panic.c
+ * File: kernel/bos/k/arch/x86/panic.c
  *
  * Description:
  * 	 Functions deailing with kernel panic handling.

@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: include/sys/idt.h
+ * File: include/bos/k/arch/x86/idt.h
  *
  * Description:
  *      Defines IDT structs, gates, functions, etc.

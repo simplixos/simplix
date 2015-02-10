@@ -1,7 +1,7 @@
 ;---------------------------------------------------------------------------
 ;	BasicOS Operating System
 ;
-;	File: kernel/boot.s
+;	File: kernel/arch/x86/boot.s
 ;
 ;	Descripition:
 ;		Loads 32-bit kernel into memory and sets up paging and GDT.

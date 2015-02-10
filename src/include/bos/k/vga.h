@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: include/sys/vga.h
+ * File: include/bos/k/vga.h
  * 
  * Description:
  * 	Defines VGA screen buffer, memory locations, and other

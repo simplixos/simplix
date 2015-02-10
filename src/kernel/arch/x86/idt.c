@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: kernel/idt.c
+ * File: kernel/arch/x86/idt.c
  *
  * Description:
  *      Sets up higher-level IDT interface.

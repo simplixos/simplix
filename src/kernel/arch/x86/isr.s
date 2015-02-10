@@ -1,7 +1,7 @@
 ;---------------------------------------------------------------------------
 ;       BasicOS Operating System
 ;
-;       File: kernel/isr.s
+;       File: kernel/arch/x86/isr.s
 ;
 ;       Description:
 ;               Low-level interrupt service routines interface.

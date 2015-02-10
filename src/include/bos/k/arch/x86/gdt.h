@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: include/sys/gdt.h
+ * File: include/bos/k/arch/x86/gdt.h
  * 
  * Description:
  * 	Defines GDT constants and related structs.

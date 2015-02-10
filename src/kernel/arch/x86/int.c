@@ -1,7 +1,7 @@
 /************************************************************
  * BasicOS Operating System
  *
- * File: kernel/int.c
+ * File: kernel/arch/x86/int.c
  *
  * Description:
  *      Basic interrupt control functions.

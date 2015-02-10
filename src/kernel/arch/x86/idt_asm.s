@@ -1,7 +1,7 @@
 ;---------------------------------------------------------------------------
 ;       BasicOS Operating System
 ;
-;       File: kernel/idt_asm.s
+;       File: kernel/arch/x86/idt_asm.s
 ;
 ;       Description:
 ;		Low-level IDT initialization code.

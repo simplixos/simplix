@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: include/sys/page.h
+ * File: include/bos/k/arch/x86/page.h
  * 
  * Description:
  * 	Defines Kernel Paging related constants, tables, and

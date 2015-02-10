@@ -1,7 +1,7 @@
 /************************************************************
  * BasicOS Operating System
  *
- * File: include/sys/int.h
+ * File: include/bos/k/arch/x86/int.h
  *
  * Description:
  *      Basic interrupt control.
