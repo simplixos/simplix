@@ -24,7 +24,7 @@ AS=../cross/os-toolchain/bin/nasm
 
 INCLUDE=include/
 LIBDIR=sysroot/lib/
-CFLAGS=-std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra
+CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra
 ASFLAGS=-felf32
 LDFLAGS=-T linker.ld
 
