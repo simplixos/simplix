@@ -26,7 +26,7 @@
  * 
  ***********************************************************************/
  
- #include <bos/k/page.h>
+ #include <bos/k/arch/x86/page.h>
  
 // This function fills the page directory and the page table,
 // then enables paging by putting the address of the page directory

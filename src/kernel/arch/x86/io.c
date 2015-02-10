@@ -1,11 +1,11 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
- * File: include/bas/defs.h
- * 
+ *
+ * File: kernel/arch/x86/io.c
+ *
  * Description:
- * 	General constants used for versioning and authoring.
- * 
+ *      Low-level x86 specific I/O manipulation functions.
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
@@ -19,32 +19,34 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
- 
-#ifndef BAS_DEFS_H
-#define BAS_DEFS_H
 
-#define ASCII_LOGO \
-" __________               .__         ________    _________ \n" \
-" \\______   \\_____    _____|__| ____   \\_____  \\  /   _____/	\n" \
-"  |    |  _/\\__  \\  /  ___/  |/ ___\\   /   |   \\ \\_____  \\  \n" \
-"  |    |   \\ / __ \\_\\___ \\|  \\  \\___  /    |    \\/        \\ \n" \
-"  |______  /(____  /____  >__|\\___  > \\_______  /_______  / \n" \
-"         \\/      \\/     \\/        \\/          \\/        \\/  \n" \
-"=============================================================\n" \
+#include <bos/k/arch/x86/io.h>
 
-#define BAS_VER_MAJ "0"
-#define BAS_VER_MIN "4a"
+/** Low-level I/O Handling functions **/
 
-#define _x86
+// Sends a 8/16/32-bit value on a I/O location
+void outb(uint16_t port, uint8_t val)
+{
+	asm volatile ( "outb %0, %1" : : "a"(val), "Nd"(port) );
+}
 
-#define BAS_VER_FUL BAS_VER_MAJ"."BAS_VER_MIN
+// Receives a 8/16/32-bit value from an I/O location.
+uint8_t inb(uint16_t port)
+{
+	uint8_t ret;
+	asm volatile ( "inb %1, %0" : "=a"(ret) : "Nd"(port) );
+	return ret;
+}
 
-#define AUTHOR_NOTE "written by Aun-Ali Zaidi."
-#define COMPILE_NOTE "Compiled on "__DATE__", "__TIME__", using GCC "__VERSION__
-
-#endif // BAS_DEFS_H
+// Receives a 8/16/32-bit value from an I/O location.
+uint16_t inw(uint16_t port)
+{
+	uint16_t ret;
+	asm volatile ("inw %1, %0" : "=a" (ret) : "dN" (port));
+	return ret;
+}

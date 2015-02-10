@@ -29,28 +29,6 @@
 
 /** Low-level I/O Handling functions **/
 
-// Sends a 8/16/32-bit value on a I/O location
-void outb(u16int port, u8int val)
-{
-    asm volatile ( "outb %0, %1" : : "a"(val), "Nd"(port) );
-}
-
-// Receives a 8/16/32-bit value from an I/O location.
-u8int inb(u16int port)
-{
-    u8int ret;
-    asm volatile ( "inb %1, %0" : "=a"(ret) : "Nd"(port) );
-    return ret;
-}
-
-// Receives a 8/16/32-bit value from an I/O location.
-u16int inw(u16int port)
-{
-   u16int ret;
-   asm volatile ("inw %1, %0" : "=a" (ret) : "dN" (port));
-   return ret;
-} 
-
 // Wait for I/O activity
 void io_wait(void)
 {
@@ -112,7 +90,7 @@ void *memmove(void *s1, const void *s2, size_t n)
 }
 
 // copy c into each of the first n bytes of the object pointed to by s
-void *memset(void *s, s32int c, size_t n)
+void *memset(void *s, int c, size_t n)
 {
 	char *xs = s;
 
@@ -121,3 +99,13 @@ void *memset(void *s, s32int c, size_t n)
 	return s;
 }
 
+/** String Manipulation Functions **/
+
+// returns the length of string s
+size_t strlen(const char *s)
+{
+        size_t result = 0;
+        while (s[result])
+                result++;
+        return result;
+}

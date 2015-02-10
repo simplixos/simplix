@@ -1,10 +1,11 @@
-/************************************************************
+/***********************************************************************
  * BasicOS Operating System
  *
- * File: include/sys/irq.h
+ * File: include/libk/stdio.h
  *
  * Description:
- *      Defines IRQ PIC types.
+ *      Standard input and output handling functions.
+ *      This file is part of the BasicOS Kernel LibC.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
@@ -23,31 +24,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- ************************************************************/
+ ***********************************************************************/
 
-#ifndef _IRQ_H
-#define	_IRQ_H
+#ifndef _STDIO_H
+#define _STDIO_H
 
-#include <bos/k/common.h>
+#include <libk/sys/cdefs.h>
 
-#define IRQ0_DEFAULT_OFFSET 0x20
-#define IRQ1_DEFAULT_OFFSET 0x28
-
-#define IRQ_PIC0         0x20
-#define IRQ_PIC0_COMMAND IRQ_PIC0
-#define IRQ_PIC0_DATA    IRQ_PIC0 + 1
-
-#define IRQ_PIC1         0xA0
-#define IRQ_PIC1_COMMAND IRQ_PIC1
-#define IRQ_PIC1_DATA    IRQ_PIC1 + 1
-
-#define IRQ_PIC_INIT 0x11
-#define IRQ_EOI      0x20
-
-#define IRQ_PIC_8086_MODE 0x01
-// TODO: add other ints
-
-void irq_init();
-bool irq_test(u8int int_n);
-
+#ifdef __cplusplus
+extern "C" {
 #endif
+
+int _k_printf(const char* __restrict, ...);
+int _k_putchar(int);
+int _k_puts(const char *);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // _STDIO_H

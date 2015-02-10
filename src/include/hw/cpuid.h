@@ -94,10 +94,10 @@
 
 // CPUID Funcs
 
-u32int cpuid_maxcall();
-u32int cpuid_general_info();
-u32int cpuid_features();
-u32int cpuid_extended_features();
+uint32_t cpuid_maxcall();
+uint32_t cpuid_general_info();
+uint32_t cpuid_features();
+uint32_t cpuid_extended_features();
 // TODO: implement cpuid func in inline asm/c to use with cpuid_procname
 // void cpuid_procname(char *name);
 void cpu_info();

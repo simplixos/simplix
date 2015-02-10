@@ -1,10 +1,10 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: include/bas/defs.h
+ * File: include/sys/gdt.h
  * 
  * Description:
- * 	General constants used for versioning and authoring.
+ * 	Defines GDT constants and related structs.
  * 
  * License:
  * BasicOS Operating System - An experimental operating system.
@@ -24,27 +24,47 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  ***********************************************************************/
+
+#ifndef GDT_H
+#define GDT_H
  
-#ifndef BAS_DEFS_H
-#define BAS_DEFS_H
+#include <bos/k/common.h>
+#include <bos/k/vga.h>
 
-#define ASCII_LOGO \
-" __________               .__         ________    _________ \n" \
-" \\______   \\_____    _____|__| ____   \\_____  \\  /   _____/	\n" \
-"  |    |  _/\\__  \\  /  ___/  |/ ___\\   /   |   \\ \\_____  \\  \n" \
-"  |    |   \\ / __ \\_\\___ \\|  \\  \\___  /    |    \\/        \\ \n" \
-"  |______  /(____  /____  >__|\\___  > \\_______  /_______  / \n" \
-"         \\/      \\/     \\/        \\/          \\/        \\/  \n" \
-"=============================================================\n" \
+/** GDT Pointer Structures **/
 
-#define BAS_VER_MAJ "0"
-#define BAS_VER_MIN "4a"
+// Defines the structures of a GDT entry and of a GDT pointer
+struct gdt_entry
+{
+	unsigned short limit_low;
+	unsigned short base_low;
+	unsigned char base_middle;
+	unsigned char access;
+	unsigned char granularity;
+	unsigned char base_high;
+} __attribute__((packed));
 
-#define _x86
+struct gdt_ptr
+{
+	unsigned short limit;
+	unsigned int base;
+} __attribute__((packed));
 
-#define BAS_VER_FUL BAS_VER_MAJ"."BAS_VER_MIN
+// We'll need at least 3 entries in our GDT...
 
-#define AUTHOR_NOTE "written by Aun-Ali Zaidi."
-#define COMPILE_NOTE "Compiled on "__DATE__", "__TIME__", using GCC "__VERSION__
+struct gdt_entry gdt[5];
+struct gdt_ptr gp;
 
-#endif // BAS_DEFS_H
+/** GDT Functions **/
+
+// Very simple: fills a GDT entry using the parameters
+void gdt_set_gate(int num, unsigned long base, unsigned long limit, uint8_t access, uint8_t gran);
+
+// Sets 5 gates and installs the real GDT through the assembler function
+void gdt_install();
+
+// ExASM: Flushes changes to the GDT.
+void gdt_flush();
+
+#endif // GDT_H
+ 

@@ -13,7 +13,8 @@ fi
 mkdir -p isodir
 mkdir -p isodir/boot
 mkdir -p isodir/boot/grub
-cp src/basicos.bin ./isodir/boot/basicos.bin
+cp src/basicosstable.bin ./isodir/boot/basicosstable.bin
+cp src/basicosdev.bin ./isodir/boot/basicosdev.bin
 cp scripts/menu.lst ./isodir/boot/grub/menu.lst
 cp scripts/stage2_eltorito ./isodir/boot/grub/stage2_eltorito
 if [[ $platform == 'solaris' ]]; then

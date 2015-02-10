@@ -21,13 +21,21 @@
 
 help:
 	@echo "Makefile for BasicOS Operating System."
-	@echo "Usage: make [ all | clean | distclean | help ] " 
+	@echo "Usage: make [ all | dev | stable | clean | distclean | help ] " 
 	@echo ""
 	@echo
 
 all:
-	@echo "Building Kernel!"
+	@echo "Building Kernel and ISO!"
 	make -C ./src all
+
+dev:
+	@echo "Building Bleeding-Edge Kernel!"
+	make -C ./src dev
+
+stable:
+	@echo "Builfing Stable Kernel!"
+	make -C ./src stable
 
 clean:
 	make -C ./src clean

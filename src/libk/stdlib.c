@@ -1,10 +1,11 @@
-/************************************************************
+/***********************************************************************
  * BasicOS Operating System
  *
- * File: kernel/int.c
+ * File: libk/stdlib.c
  *
  * Description:
- *      Basic interrupt control functions.
+ *      Standard LibC related functions.
+ *      This file is part of the BasicOS Kernel LibC.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
@@ -23,22 +24,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- ************************************************************/
+ ***********************************************************************/
 
-#include <bos/k/int.h>
-
-void int_disable() {
-	asm volatile("cli");
-}
-
-void int_enable() {
-	asm volatile("sti");
-}
-
-void int_nmi_disable() {
-	outb(INT_NMI_CONTROL, inb(INT_NMI_CONTROL) | INT_NMI_BIT);
-}
-
-void int_nmi_enable() {
-	outb(INT_NMI_CONTROL, inb(INT_NMI_CONTROL) & (~INT_NMI_BIT));
+#include <libk/stdlib.h>
+#include <libk/stdio.h>
+#include <libk/string.h>
+ 
+__attribute__((__noreturn__))
+void abort(void)
+{
+	// TODO: Add proper kernel panic.
+	_k_printf("Kernel Panic: abort()\n");
+	while ( 1 ) { }
+	__builtin_unreachable();
 }

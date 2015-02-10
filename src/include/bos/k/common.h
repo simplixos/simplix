@@ -29,6 +29,17 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <bos/k/defs.h>
+
+#ifdef __GNUC__
+#include <stddef.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdint.h>
+#endif
+
+#include <bos/k/arch/x86/io.h>
+
 // Common data types
 
 #define TRUE	1
@@ -38,26 +49,8 @@
 	#define NULL ((void *)0)
 #endif // NULL
 
-typedef int bool;
-
-// Common 32-bit x86 Data types
-
-typedef unsigned  long long int u64int;
-typedef long long int   s64int;
-typedef unsigned  int   u32int;
-typedef           int   s32int;
-typedef unsigned  short u16int;
-typedef           short s16int;
-typedef unsigned  char  u8int;
-typedef           char  s8int;
-
-typedef unsigned  int 	size_t;
-
 /** Essential Low-level I/O Control Functions **/
 
-void outb(u16int port, u8int value);
-u8int inb(u16int port);
-u16int inw(u16int port);
 void io_wait(void);
 
 /** Memory handling functions **/
@@ -65,6 +58,9 @@ void io_wait(void);
 void *memclr(void *p, register unsigned long n);
 void *memcpy(void *restrict s1, const void *restrict s2, size_t n);
 void *memmove(void *s1, const void *s2, size_t n);
-void *memset(void *s, s32int c, size_t n);
+void *memset(void *s, int c, size_t n);
+
+/** String manipulation functions **/
+size_t strlen(const char *s);
 
 #endif // COMMON_H

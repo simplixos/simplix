@@ -32,35 +32,35 @@
 	"=a" (ax), "=b" (bx), "=c" (cx), "=d" (dx) : "a" (func));
 
 // Retrieve the maximum function callable using cpuid
-u32int cpuid_maxcall()
+uint32_t cpuid_maxcall()
 {
-	u32int eax, ebx, ecx, edx;
+	uint32_t eax, ebx, ecx, edx;
 	cpuid(0, eax, ebx, ecx, edx);
 	return eax;
 }
 
 // Retrive the processors manufacturing stepping
-u32int cpuid_general_info()
+uint32_t cpuid_general_info()
 {
-	u32int eax, ebx, ecx, edx;
+	uint32_t eax, ebx, ecx, edx;
 	cpuid(1, eax, ebx, ecx, edx);
 	return eax;
 }
 
 // This will retrieve the CPU features available
 // returns the content of the edx register containing available features
-u32int cpuid_features()
+uint32_t cpuid_features()
 {
-	u32int eax, ebx, ecx, edx;
+	uint32_t eax, ebx, ecx, edx;
 	cpuid(1, eax, ebx, ecx, edx);
 	return edx;
 }
 
 // This will retrieve the extended CPU features available
 // returns The content of the ecx register containing available extended features
-u32int cpuid_extended_features()
+uint32_t cpuid_extended_features()
 {
-	u32int eax, ebx, ecx, edx;
+	uint32_t eax, ebx, ecx, edx;
 	cpuid(1, eax, ebx, ecx, edx);
 	return ecx;
 }

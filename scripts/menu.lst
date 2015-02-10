@@ -4,5 +4,8 @@ timeout 5
 #title Boot from hard disk
 #chainloader (hd0)+1
 
-title Basic OS
-kernel /boot/basicos.bin
+title Basic OS v0.4 (Stable)
+kernel /boot/basicosstable.bin
+
+title Basic OS v0.4a (Bleeding-Edge)
+kernel /boot/basicosdev.bin

@@ -43,29 +43,31 @@
 #define IDT_RING_3 1 << 5 | 1 << 6
 
 typedef struct idt_entry {
-  u16int base_low;
-  u16int selector;
-  u8int  zero;
-  u8int  flags;
-  u16int base_high;
+  uint16_t base_low;
+  uint16_t selector;
+  uint8_t  zero;
+  uint8_t  flags;
+  uint16_t base_high;
 } __attribute__((packed)) idt_entry_t, *pidt_entry_t;
 
 typedef struct idt_pointer {
-  u16int limit;
-  u32int base;
+  uint16_t limit;
+  uint32_t base;
 } __attribute__((packed)) idt_pointer_t, *pidt_pointer_t;
 
-typedef struct regs {
-  u32int ds;
-  u32int edi, esi, ebp, esp, ebx, edx, ecx, eax; 
-  u32int int_no, err_code;    
-  u32int eip, cs, eflags, useresp, ss; 
-} regs_t, *pregs_t;
+struct regs {
+  uint32_t ds;
+  uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax; 
+  uint32_t int_no, err_code;    
+  uint32_t eip, cs, eflags, useresp, ss; 
+};
+
+typedef struct regs regs_t, *pregs_t;
 
 typedef void (*interrupt_handler_t) (regs_t);
 
 void idt_init();
-void idt_fill_entry(int entry, u32int handler, u8int ring, u8int type);
+void idt_fill_entry(int entry, uint32_t handler, uint8_t ring, uint8_t type);
 void idt_set_handler(int entry, interrupt_handler_t handler);
 
 #endif

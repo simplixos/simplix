@@ -23,29 +23,52 @@ CC=../cross/os-toolchain/bin/i686-elf-gcc
 AS=../cross/os-toolchain/bin/nasm
 
 INCLUDE=include/
-CFLAGS=-std=gnu99 -I$(INCLUDE) -ffreestanding -nostdlib -O2 -Wall -Wextra
+LIBDIR=sysroot/lib/
+CFLAGS=-std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra
 ASFLAGS=-felf32
 LDFLAGS=-T linker.ld
 
-CSOURCES= ./kernel/common.c ./kernel/vga.c ./kernel/gdt.c ./kernel/idt.c ./kernel/irq.c ./kernel/int.c ./kernel/page.c ./hw/cpu/cpuid.c ./kernel/kernel.c
-ASMSOURCES= ./kernel/boot.s ./kernel/idt_asm.s ./kernel/isr.s ./kernel/test.s
+CFLAGS_DEV=-g -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra
+ASFLAGS_DEV=-g -felf32
+
+CSOURCES= ./kernel/arch/x86/io.c ./kernel/common.c ./kernel/vga.c ./kernel/arch/x86/tty.c ./kernel/sample.c ./kernel/arch/x86/gdt.c ./kernel/arch/x86/idt.c ./kernel/arch/x86/panic.c ./kernel/arch/x86/irq.c ./kernel/arch/x86/int.c ./kernel/arch/x86/page.c ./hw/cpu/cpuid.c ./kernel/kernel.c
+ASMSOURCES= ./kernel/arch/x86/boot.s ./kernel/arch/x86/idt_asm.s ./kernel/arch/x86/isr.s ./kernel/test.s
+LIBS=
 
 COBJECTS=$(CSOURCES:.c=.o)
 ASMOBJECTS=$(ASMSOURCES:.s=.o)
 
-KERNEL=basicos.bin
+CSOURCES_DEV= ./kernel/arch/x86/io.c ./kernel/common.c ./kernel/vga.c ./kernel/arch/x86/tty.c ./kernel/sample.c ./kernel/arch/x86/gdt.c ./kernel/arch/x86/idt.c ./kernel/arch/x86/panic.c ./kernel/arch/x86/irq.c ./kernel/arch/x86/int.c ./kernel/arch/x86/page.c ./hw/cpu/cpuid.c ./kernel/kernel.c
+ASMSOURCES_DEV= ./kernel/arch/x86/boot.s ./kernel/arch/x86/idt_asm.s ./kernel/arch/x86/isr.s ./kernel/test.s
 
-all: $(CSOURCES) $(ASMSOURCES) $(KERNEL)
+COBJECTS_DEV=$(CSOURCES_DEV:.c=.od)
+ASMOBJECTS_DEV=$(ASMSOURCES_DEV:.s=.sod)
 
-$(KERNEL): $(COBJECTS) $(ASMOBJECTS)
+KERNEL_DEV=basicosdev.bin
+KERNEL_STABLE=basicosstable.bin
+
+all: dev stable
+
+dev: $(CSOURCES) $(ASMSOURCES) $(KERNEL_DEV)
+
+stable: $(CSOURCES) $(ASMSOURCES) $(KERNEL_STABLE)
+
+$(KERNEL_DEV): $(COBJECTS_DEV) $(ASMOBJECTS_DEV)
+	$(CC) $(LDFLAGS) $(CFLAGS_DEV) $(ASMOBJECTS_DEV) $(COBJECTS_DEV) -o $@
+
+$(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS)
+	rm -f basicosstable.bin
 	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) -o $@
 
-.cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
-
-.s.o:
+%.s.o: %.s
 	$(AS) $(ASFLAGS)  $< -o $@
 
+%.od: %.c
+	$(CC) $(CFLAGS_DEV) -c $< -o $@
+
+%.sod: %.s
+	$(AS) $(ASFLAGS_DEV)  $< -o $@
+
 clean:
-	rm -f $(COBJECTS) $(ASMOBJECTS) $(KERNEL) ../basicos.iso
+	rm -f $(COBJECTS) $(ASMOBJECTS) $(COBJECTS_DEV) $(ASMOBJECTS_DEV) $(KERNEL_DEV) ../basicos.iso
 

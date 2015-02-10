@@ -4,7 +4,7 @@
 ;	File: kernel/boot.s
 ;
 ;	Descripition:
-;		Loads kernel into memory and sets up paging and GDT.
+;		Loads 32-bit kernel into memory and sets up paging and GDT.
 ;
 ;	License:
 ;	BasicOS Operating System - An experimental operating system
@@ -24,10 +24,11 @@
 ;	along with this program. If not, see <http://www.gnu.org/licenses/>.
 ;---------------------------------------------------------------------------
 
-[BITS 32]       ; 32 bit code
-[section .text] ; keep NASM happy
-[global start]  ; make 'start' function global
-[extern kmain]  ; our C kernel main
+[BITS 32]		; 32 bit code
+[section .text]		; keep NASM happy
+[global start]		; make 'start' function global
+[extern _k_early]	; C kernel early events
+[extern _k_main]	; our C kernel main
 
 ; Multiboot constants
 MULTIBOOT_PAGE_ALIGN    equ 1<<0
@@ -64,38 +65,13 @@ higherhalf:
 
         mov esp, sys_stack ; set up a new stack for our kernel
 
-        call kmain ; jump to our C kernel ;)
+	call _k_early ; jump to early setup functions in C
+
+        call _k_main ; jump to our C kernel ;)
 
         ; just a simple protection...
-        jmp $
-
-[global _read_cr0]
-_read_cr0:
-        mov eax, cr0
-        retn
-
-[global _write_cr0]
-_write_cr0:
-        push ebp
-        mov ebp, esp
-        mov eax, [ebp+8]
-        mov cr0,  eax
-        pop ebp
-        retn
-
-[global _read_cr3]
-_read_cr3:
-        mov eax, cr3
-        retn
-
-[global _write_cr3]
-_write_cr3:
-        push ebp
-        mov ebp, esp
-        mov eax, [ebp+8]
-        mov cr3, eax
-	pop ebp
-	retn
+        cli
+	hlt
 
 [global gdt_flush] ; make 'gdt_flush' accessible from C code
 [extern gp]        ; tells the assembler to look at C code for 'gp'
@@ -135,5 +111,3 @@ gdt_end:
 resb 0x1000
 sys_stack:
         ; our kernel stack
-
-

@@ -26,11 +26,11 @@
  *
  ************************************************************/
 
-#include <bos/k/irq.h>
-#include <bos/k/idt.h>
+#include <bos/k/arch/x86/irq.h>
+#include <bos/k/arch/x86/idt.h>
 
-u8int irq0_offset = IRQ0_DEFAULT_OFFSET;
-u8int irq1_offset = IRQ1_DEFAULT_OFFSET;
+uint8_t irq0_offset = IRQ0_DEFAULT_OFFSET;
+uint8_t irq1_offset = IRQ1_DEFAULT_OFFSET;
 
 interrupt_handler_t irq_handlers[16];
 
@@ -52,7 +52,7 @@ extern void irq14();
 extern void irq15();
 
 void irq_init() {
-  u8int pic0_icw4, pic1_icw4;
+  uint8_t pic0_icw4, pic1_icw4;
   pic0_icw4 = inb(IRQ_PIC0_DATA);
   pic1_icw4 = inb(IRQ_PIC1_DATA);
   outb(IRQ_PIC0_COMMAND, IRQ_PIC_INIT);
@@ -66,25 +66,25 @@ void irq_init() {
   outb(IRQ_PIC0_DATA, pic0_icw4);
   outb(IRQ_PIC1_DATA, pic1_icw4);
 
-  idt_fill_entry(irq0_offset,      (u32int) irq0,  IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq0_offset + 1,  (u32int) irq1,  IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq0_offset + 2,  (u32int) irq2,  IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq0_offset + 3,  (u32int) irq3,  IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq0_offset + 4,  (u32int) irq4,  IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq0_offset + 5,  (u32int) irq5,  IDT_RING_0, IDT_TRAP_GATE_32);
-  idt_fill_entry(irq0_offset + 6,  (u32int) irq6,  IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq0_offset + 7,  (u32int) irq7,  IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq1_offset + 8,  (u32int) irq8,  IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq1_offset + 9,  (u32int) irq9,  IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq1_offset + 10, (u32int) irq10, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq1_offset + 11, (u32int) irq11, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq1_offset + 12, (u32int) irq12, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq1_offset + 13, (u32int) irq13, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq1_offset + 14, (u32int) irq14, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(irq1_offset + 15, (u32int) irq15, IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq0_offset,      (uint32_t) irq0,  IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq0_offset + 1,  (uint32_t) irq1,  IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq0_offset + 2,  (uint32_t) irq2,  IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq0_offset + 3,  (uint32_t) irq3,  IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq0_offset + 4,  (uint32_t) irq4,  IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq0_offset + 5,  (uint32_t) irq5,  IDT_RING_0, IDT_TRAP_GATE_32);
+  idt_fill_entry(irq0_offset + 6,  (uint32_t) irq6,  IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq0_offset + 7,  (uint32_t) irq7,  IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq1_offset + 8,  (uint32_t) irq8,  IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq1_offset + 9,  (uint32_t) irq9,  IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq1_offset + 10, (uint32_t) irq10, IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq1_offset + 11, (uint32_t) irq11, IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq1_offset + 12, (uint32_t) irq12, IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq1_offset + 13, (uint32_t) irq13, IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq1_offset + 14, (uint32_t) irq14, IDT_RING_0, IDT_INT_GATE_32);
+  idt_fill_entry(irq1_offset + 15, (uint32_t) irq15, IDT_RING_0, IDT_INT_GATE_32);
 }
 
-bool irq_is_irq(u8int int_n) {
+bool irq_is_irq(uint8_t int_n) {
   return ((int_n >= irq0_offset && int_n < (irq0_offset + 8)) ||
           (int_n >= irq1_offset && int_n < (irq1_offset + 8))) ? TRUE : 
 FALSE;

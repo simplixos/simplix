@@ -1,11 +1,12 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
- * File: include/bas/defs.h
- * 
+ *
+ * File: include/libk/string.h
+ *
  * Description:
- * 	General constants used for versioning and authoring.
- * 
+ *      General purpose string manipulation and memory management.
+ *	This file is part of the BasicOS Kernel LibC.
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
@@ -19,32 +20,37 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
- 
-#ifndef BAS_DEFS_H
-#define BAS_DEFS_H
 
-#define ASCII_LOGO \
-" __________               .__         ________    _________ \n" \
-" \\______   \\_____    _____|__| ____   \\_____  \\  /   _____/	\n" \
-"  |    |  _/\\__  \\  /  ___/  |/ ___\\   /   |   \\ \\_____  \\  \n" \
-"  |    |   \\ / __ \\_\\___ \\|  \\  \\___  /    |    \\/        \\ \n" \
-"  |______  /(____  /____  >__|\\___  > \\_______  /_______  / \n" \
-"         \\/      \\/     \\/        \\/          \\/        \\/  \n" \
-"=============================================================\n" \
+#ifndef _STRING_H
+#define _STRING_H
 
-#define BAS_VER_MAJ "0"
-#define BAS_VER_MIN "4a"
+#include <libk/sys/cdefs.h>
 
-#define _x86
+#ifdef __GNUC__
+#include <stddef.h>
+#endif
 
-#define BAS_VER_FUL BAS_VER_MAJ"."BAS_VER_MIN
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define AUTHOR_NOTE "written by Aun-Ali Zaidi."
-#define COMPILE_NOTE "Compiled on "__DATE__", "__TIME__", using GCC "__VERSION__
+// Memory Management Function Prototypes
+int memcmp(const void* aptr, const void* bptr, size_t size);
+void *memclr(void *p, register unsigned long n);
+void *memcpy(void *restrict s1, const void *restrict s2, size_t n);
+void *memmove(void *s1, const void *s2, size_t n);
+void *memset(void *s, int c, size_t n);
 
-#endif // BAS_DEFS_H
+// String Manipulation Function Prototypes
+size_t strlen(const char*);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // _STRING_H

@@ -1,11 +1,12 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
- * File: include/bas/defs.h
- * 
+ *
+ * File: include/libc/sys/cdefs.h
+ *
  * Description:
- * 	General constants used for versioning and authoring.
- * 
+ *      C library related definitions specific to BasicOS.
+ *      This file is part of the BasicOS LibC.
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
@@ -19,32 +20,15 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
- 
-#ifndef BAS_DEFS_H
-#define BAS_DEFS_H
 
-#define ASCII_LOGO \
-" __________               .__         ________    _________ \n" \
-" \\______   \\_____    _____|__| ____   \\_____  \\  /   _____/	\n" \
-"  |    |  _/\\__  \\  /  ___/  |/ ___\\   /   |   \\ \\_____  \\  \n" \
-"  |    |   \\ / __ \\_\\___ \\|  \\  \\___  /    |    \\/        \\ \n" \
-"  |______  /(____  /____  >__|\\___  > \\_______  /_______  / \n" \
-"         \\/      \\/     \\/        \\/          \\/        \\/  \n" \
-"=============================================================\n" \
+#ifndef _SYS_CDEFS_H
+#define _SYS_CDEFS_H
 
-#define BAS_VER_MAJ "0"
-#define BAS_VER_MIN "4a"
+#define __bos_k_libc 1
 
-#define _x86
-
-#define BAS_VER_FUL BAS_VER_MAJ"."BAS_VER_MIN
-
-#define AUTHOR_NOTE "written by Aun-Ali Zaidi."
-#define COMPILE_NOTE "Compiled on "__DATE__", "__TIME__", using GCC "__VERSION__
-
-#endif // BAS_DEFS_H
+#endif // _SYS_CDEFS_H
