@@ -1,0 +1,6 @@
+compiler:
+  - gcc
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y flex bison nasm genisoimage qemu libgmp10 lib32gmp-dev libmpfr4 lib32mpfr-dev libmpc2 libmpc-dev
+script: make toolchain && make all && make isoimage
