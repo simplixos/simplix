@@ -32,10 +32,12 @@ all:
 dev:
 	@echo "Building Bleeding-Edge Kernel!"
 	make -C ./src dev
+	cp ./src/basicosdev.bin .
 
 stable:
-	@echo "Builfing Stable Kernel!"
+	@echo "Building Stable Kernel!"
 	make -C ./src stable
+	cp ./src/basicsosstable.bin .
 
 clean:
 	make -C ./src clean
@@ -44,8 +46,11 @@ distclean:
 	rm -rf cross/
 	make -C ./src clean
 
-toolchain:
+toolchain-x86:
 	bash ./scripts/build_toolchain.sh
+
+toolchain-x86_64:
+	bash ./scripts/build_toolchain64.sh
 
 isoimage:
 	./scripts/update_image.sh

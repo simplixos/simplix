@@ -21,6 +21,7 @@
 
 CC=../cross/os-toolchain/bin/i686-elf-gcc
 AS=../cross/os-toolchain/bin/nasm
+STRIP=../cross/os-toolchain/bin/i686-elf-strip
 
 INCLUDE=include/
 LIBDIR=sysroot/lib/
@@ -57,8 +58,9 @@ $(KERNEL_DEV): $(COBJECTS_DEV) $(ASMOBJECTS_DEV)
 	$(CC) $(LDFLAGS) $(CFLAGS_DEV) $(ASMOBJECTS_DEV) $(COBJECTS_DEV) -o $@
 
 $(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS)
-	rm -f basicosstable.bin
+	rm -f $(KERNEL_STABLE)
 	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) -o $@
+	$(STRIP) -s -g -v $(KERNEL_STABLE)
 
 %.s.o: %.s
 	$(AS) $(ASFLAGS)  $< -o $@

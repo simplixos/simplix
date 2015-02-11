@@ -29,12 +29,15 @@
 #include <libk/stdlib.h>
 #include <libk/stdio.h>
 #include <libk/string.h>
- 
+
+#ifdef _x86
+#include <bos/k/arch/x86/panic.h>
+#endif
+
 __attribute__((__noreturn__))
 void abort(void)
 {
 	// TODO: Add proper kernel panic.
-	_k_printf("Kernel Panic: abort()\n");
-	while ( 1 ) { }
+	_k_panic("Kernel Panic: abort()\n");
 	__builtin_unreachable();
 }

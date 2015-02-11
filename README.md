@@ -30,15 +30,19 @@ To compile this operating system your build system must have the following prere
     * ISL
     * CLooG
 
-Begin by building the OS-specific toolchain:
+Begin by building the x86 OS-build toolchain:
 
-    $ make toolchain
+    $ make toolchain-x86
+
+Or, if you want the 64-bit build toolchain:
+
+    $ make toolchain-x86_64
 
 Once the toolchain has finished, run the following to compile the kernel:
 
     $ make all
 
-Currently the kernel architecture is 32-bit, and a ix86 compiler toolchain is supported.
+Currently the kernel supports both x86 and x86_64, but x86 is the only architecture that compiles.
 
 To create a live ISO image of the operating system, execute the following:
 
