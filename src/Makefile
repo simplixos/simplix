@@ -25,6 +25,9 @@ STRIP=../cross/os-toolchain/bin/i686-elf-strip
 
 INCLUDE=include/
 LIBDIR=sysroot/lib/
+OBJ_DIR=obj
+BIN_DIR=../bin
+
 CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra
 ASFLAGS=-felf32
 LDFLAGS=-T linker.ld
@@ -32,21 +35,108 @@ LDFLAGS=-T linker.ld
 CFLAGS_DEV=-g -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra
 ASFLAGS_DEV=-g -felf32
 
-CSOURCES= ./kernel/arch/x86/io.c ./kernel/common.c ./kernel/vga.c ./kernel/arch/x86/tty.c ./kernel/sample.c ./kernel/arch/x86/gdt.c ./kernel/arch/x86/idt.c ./kernel/arch/x86/panic.c ./kernel/arch/x86/irq.c ./kernel/arch/x86/int.c ./kernel/arch/x86/page.c ./hw/cpu/cpuid.c ./kernel/kernel.c
-ASMSOURCES= ./kernel/arch/x86/boot.s ./kernel/arch/x86/idt_asm.s ./kernel/arch/x86/isr.s ./kernel/test.s
-LIBS=
+ifeq ($(ARCH),x86)
+CSOURCES= 	kernel/arch/x86/io.c \
+		kernel/common.c \
+		kernel/vga.c \
+		kernel/arch/x86/tty.c \
+		kernel/sample.c \
+		kernel/arch/x86/gdt.c \
+		kernel/arch/x86/idt.c \
+		kernel/arch/x86/panic.c \
+		kernel/arch/x86/irq.c \
+		kernel/arch/x86/int.c \
+		kernel/arch/x86/page.c \
+		hw/cpu/cpuid.c \
+		kernel/kernel.c	\
 
-COBJECTS=$(CSOURCES:.c=.o)
-ASMOBJECTS=$(ASMSOURCES:.s=.o)
+ASMSOURCES= 	kernel/arch/x86/boot.s \
+		kernel/arch/x86/idt_asm.s \
+		kernel/arch/x86/isr.s \
+		kernel/test.s	\
 
-CSOURCES_DEV= ./kernel/arch/x86/io.c ./kernel/common.c ./kernel/vga.c ./kernel/arch/x86/tty.c ./kernel/sample.c ./kernel/arch/x86/gdt.c ./kernel/arch/x86/idt.c ./kernel/arch/x86/panic.c ./kernel/arch/x86/irq.c ./kernel/arch/x86/int.c ./kernel/arch/x86/page.c ./hw/cpu/cpuid.c ./kernel/kernel.c
-ASMSOURCES_DEV= ./kernel/arch/x86/boot.s ./kernel/arch/x86/idt_asm.s ./kernel/arch/x86/isr.s ./kernel/test.s
+else ifeq ($(ARCH),x86_64) #64 bit support
+CSOURCES= 	kernel/arch/x86_64/io.c \
+		kernel/common.c kernel/vga.c \
+		kernel/arch/x86_64/tty.c \
+		kernel/sample.c \
+		kernel/arch/x86_64/gdt.c \
+		kernel/arch/x86_64/idt.c \
+		kernel/arch/x86_64/panic.c \
+		kernel/arch/x86_64/irq.c \
+		kernel/arch/x86_64/int.c \
+		kernel/arch/x86_64/page.c \
+		hw/cpu/cpuid.c \
+		kernel/kernel.c	\
 
-COBJECTS_DEV=$(CSOURCES_DEV:.c=.od)
-ASMOBJECTS_DEV=$(ASMSOURCES_DEV:.s=.sod)
+ASMSOURCES= 	kernel/arch/x86_64/boot.s \
+		kernel/arch/x86_64/idt_asm.s \
+		kernel/arch/x86_64/isr.s \
+		kernel/test.s	\
+else #not come here
+endif
 
-KERNEL_DEV=basicosdev.bin
-KERNEL_STABLE=basicosstable.bin
+ifeq ($(ARCH),x86)
+CSOURCES_DEV= 	kernel/arch/x86/io.c \
+		kernel/common.c \
+		kernel/vga.c \
+		kernel/arch/x86/tty.c \
+		kernel/sample.c \
+		kernel/arch/x86/gdt.c \
+		kernel/arch/x86/idt.c \
+		kernel/arch/x86/panic.c \
+		kernel/arch/x86/irq.c \
+		kernel/arch/x86/int.c \
+		kernel/arch/x86/page.c \
+		hw/cpu/cpuid.c \
+		kernel/kernel.c	\
+
+ASMSOURCES_DEV= kernel/arch/x86/boot.s \
+		kernel/arch/x86/idt_asm.s \
+		kernel/arch/x86/isr.s \
+		kernel/test.s	\
+
+else ifeq ($(ARCH),x86_64) #64 bit support
+CSOURCES_DEV= 	kernel/arch/x86_64/io.c \
+		kernel/common.c kernel/vga.c \
+		kernel/arch/x86_64/tty.c \
+		kernel/sample.c \
+		kernel/arch/x86_64/gdt.c \
+		kernel/arch/x86_64/idt.c \
+		kernel/arch/x86_64/panic.c \
+		kernel/arch/x86_64/irq.c \
+		kernel/arch/x86_64/int.c \
+		kernel/arch/x86_64/page.c \
+		hw/cpu/cpuid.c \
+		kernel/kernel.c	\
+
+ASMSOURCES_DEV= kernel/arch/x86_64/boot.s \
+		kernel/arch/x86_64/idt_asm.s \
+		kernel/arch/x86_64/isr.s \
+		kernel/test.s	\
+else #not come here
+endif
+
+KERNEL_DEV=$(BIN_DIR)/basicosdev.bin
+KERNEL_STABLE=$(BIN_DIR)/basicosstable.bin
+
+
+COBJECTS_DEV = $(patsubst %.c,obj/%.od,$(CSOURCES_DEV)) # developer objects named with .od extension
+ASMOBJECTS_DEV = $(patsubst %.s,obj/%.sod,$(ASMSOURCES_DEV))# developer ASM objects named with .sod extension
+
+COBJECTS = $(patsubst %.c,obj/%.os,$(CSOURCES)) # stable objects named with .os extension
+ASMOBJECTS = $(patsubst %.s,obj/%.sos,$(ASMSOURCES))# stable ASM objects named with .os extension
+
+$(COBJECTS_DEV): | obj
+$(ASMOBJECTS_DEV): | obj
+obj:
+	@mkdir -p $@
+
+$(COBJECTS): | obj
+$(ASMOBJECTS): | obj
+obj:
+	@mkdir -p $@
+
 
 all: dev stable
 
@@ -62,15 +152,23 @@ $(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS)
 	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) -o $@
 	$(STRIP) -s -g -v $(KERNEL_STABLE)
 
-%.s.o: %.s
+obj/%.os: %.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+obj/%.sos: %.s
+	@mkdir -p $(@D)
 	$(AS) $(ASFLAGS)  $< -o $@
 
-%.od: %.c
+obj/%.od: %.c
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS_DEV) -c $< -o $@
 
-%.sod: %.s
+obj/%.sod: %.s
+	@mkdir -p $(@D)
 	$(AS) $(ASFLAGS_DEV)  $< -o $@
 
 clean:
-	rm -f $(COBJECTS) $(ASMOBJECTS) $(COBJECTS_DEV) $(ASMOBJECTS_DEV) $(KERNEL_DEV) ../basicos.iso
+	rm -f $(COBJECTS) $(ASMOBJECTS) $(COBJECTS_DEV) $(ASMOBJECTS_DEV) $(KERNEL_DEV) $(BIN_DIR)/basicosdev.bin \
+	$(BIN_DIR)/basicosstable.bin $(BIN_DIR)/basicos.iso
 

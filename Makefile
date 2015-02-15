@@ -21,23 +21,25 @@
 
 help:
 	@echo "Makefile for BasicOS Operating System."
-	@echo "Usage: make [ all | dev | stable | clean | distclean | help ] " 
+	@echo "Usage: make [ all | dev | stable | clean | distclean | help ] ARCH = x86 or x86_64" 
 	@echo ""
 	@echo
 
 all:
 	@echo "Building Kernel and ISO!"
+	@mkdir -p bin
 	make -C ./src all
+	./scripts/update_image.sh
 
 dev:
 	@echo "Building Bleeding-Edge Kernel!"
+	@mkdir -p bin
 	make -C ./src dev
-	cp ./src/basicosdev.bin .
 
 stable:
 	@echo "Building Stable Kernel!"
+	@mkdir -p bin
 	make -C ./src stable
-	cp ./src/basicsosstable.bin .
 
 clean:
 	make -C ./src clean
