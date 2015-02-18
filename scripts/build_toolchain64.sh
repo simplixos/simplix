@@ -84,7 +84,7 @@ cd ..
 rm -rf src/
 pwd
 
-os-toolchain/bin/i686-elf-gcc --version
+os-toolchain/bin/x86_64-elf-gcc --version
 
 os-toolchain/bin/nasm -v
 
