@@ -27,6 +27,7 @@ INCLUDE=include/
 LIBDIR=sysroot/lib/
 OBJ_DIR=obj
 BIN_DIR=../bin
+LIBK_DIR=libk
 
 CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra
 ASFLAGS=-felf32
@@ -127,6 +128,9 @@ ASMOBJECTS_DEV = $(patsubst %.s,obj/%.sod,$(ASMSOURCES_DEV))# developer ASM obje
 COBJECTS = $(patsubst %.c,obj/%.os,$(CSOURCES)) # stable objects named with .os extension
 ASMOBJECTS = $(patsubst %.s,obj/%.sos,$(ASMSOURCES))# stable ASM objects named with .os extension
 
+# add static libs here and provide a rule below
+LIBK=libk/obj/libk.a
+
 $(COBJECTS_DEV): | obj
 $(ASMOBJECTS_DEV): | obj
 obj:
@@ -137,15 +141,14 @@ $(ASMOBJECTS): | obj
 obj:
 	@mkdir -p $@
 
-
 all: dev stable
 
-dev: $(CSOURCES) $(ASMSOURCES) $(KERNEL_DEV)
+dev: $(CSOURCES) $(ASMSOURCES) $(KERNEL_DEV) 
 
 stable: $(CSOURCES) $(ASMSOURCES) $(KERNEL_STABLE)
 
-$(KERNEL_DEV): $(COBJECTS_DEV) $(ASMOBJECTS_DEV)
-	$(CC) $(LDFLAGS) $(CFLAGS_DEV) $(ASMOBJECTS_DEV) $(COBJECTS_DEV) -o $@
+$(KERNEL_DEV): $(LIBK) $(COBJECTS_DEV) $(ASMOBJECTS_DEV)
+	$(CC) $(LDFLAGS) $(CFLAGS_DEV) $(LIBK) $(ASMOBJECTS_DEV) $(COBJECTS_DEV) -o $@
 
 $(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS)
 	rm -f $(KERNEL_STABLE)
@@ -168,7 +171,11 @@ obj/%.sod: %.s
 	@mkdir -p $(@D)
 	$(AS) $(ASFLAGS_DEV)  $< -o $@
 
+$(LIBK):
+	@cd $(LIBK_DIR) && $(MAKE) all #Any better way ?
+
 clean:
-	rm -f $(COBJECTS) $(ASMOBJECTS) $(COBJECTS_DEV) $(ASMOBJECTS_DEV) $(KERNEL_DEV) $(BIN_DIR)/basicosdev.bin \
+	@cd $(LIBK_DIR) && $(MAKE) clean
+	rm -rf $(COBJECTS) $(ASMOBJECTS) $(COBJECTS_DEV) $(ASMOBJECTS_DEV) $(KERNEL_DEV) $(OBJ_DIR) $(BIN_DIR)/basicosdev.bin \
 	$(BIN_DIR)/basicosstable.bin $(BIN_DIR)/basicos.iso
 

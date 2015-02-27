@@ -25,20 +25,31 @@ RANLIB=../../cross/os-toolchain/bin/i686-elf-ranlib
 
 CFLAGS=-O2 -std=gnu99 -ffreestanding -fbuiltin -Wall -Wextra -D__bos_libk -I../include
 
-SOURCES=./string.c ./stdlib.c ./stdio.c
-OBJS=$(SOURCES:.c=.libk.o)
+SOURCES=./src/string.c \
+	./src/stdlib.c \
+	./src/stdio.c
+OBJDIR=obj
 
-BIN=libkern.a
+OBJS = $(patsubst %.c,obj/%.libk.o,$(SOURCES)) # objects named with .a extension
+$(OBJS): | obj
+
+obj:
+	@mkdir -p $@
+
+BIN=obj/libk.a
+
+#FIXME : dev and stable support
 
 all: $(BIN)
 
-$(BIN): $(OBJS)
+$(BIN): $(OBJS) $(BIN)
 	$(AR) rcsv $@ $(OBJS)
 	$(RANLIB) $(BIN)
-	cp $(BIN) ../sysroot/lib/
+	#cp $(BIN) $(OBJDIR)/$(BIN)
 
-%.libk.o: %.c
+obj/%.libk.o: %.c
+	@mkdir -p $(@D)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 clean:
-	rm -rf $(OBJS) $(BIN) ../sysroot/lib/$(BIN)
+	rm -rf $(OBJS) $(BIN) $(OBJDIR)/$(BIN) $(OBJDIR)
