@@ -28,7 +28,8 @@ AS=../cross/os-toolchain/bin/nasm
 STRIP=../cross/os-toolchain/bin/i686-elf-strip
 
 INCLUDE=include/
-LIBDIR=sysroot/lib/
+LIBDIR=libk/obj
+LIBS=-lk
 OBJ_DIR=obj
 BIN_DIR=../bin
 LIBK_DIR=libk
@@ -154,9 +155,9 @@ stable: $(CSOURCES) $(ASMSOURCES) $(KERNEL_STABLE)
 $(KERNEL_DEV): $(LIBK) $(COBJECTS_DEV) $(ASMOBJECTS_DEV)
 	$(CC) $(LDFLAGS) $(CFLAGS_DEV) $(LIBK) $(ASMOBJECTS_DEV) $(COBJECTS_DEV) -o $@
 
-$(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS)
+$(KERNEL_STABLE): $(LIBK) $(COBJECTS) $(ASMOBJECTS)
 	rm -f $(KERNEL_STABLE)
-	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) -o $@
+	$(CC) $(LDFLAGS) $(CFLAGS) $(LIBK) $(ASMOBJECTS) $(COBJECTS) -o $@
 	$(STRIP) -s -g -v $(KERNEL_STABLE)
 
 obj/%.os: %.c
