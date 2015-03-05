@@ -1,10 +1,10 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: kernel/bos/k/arch/x86/panic.c
+ * File: kernel/stack_protector.c
  *
  * Description:
- * 	 Functions deailing with kernel panic handling.
+ *      Basic stack protector to prevent stack smashing.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
@@ -25,14 +25,19 @@
  *
  ***********************************************************************/
 
-#ifndef PANIC_H
-#define PANIC_H
+#ifndef STACK_PROTECTOR_H
+#define STACK_PROTECTOR_H
 
 #include <bos/k/common.h>
-#include <bos/k/vga.h>
-#include <bos/k/arch/x86/idt.h>
 
-void _k_halt() __attribute__((noreturn));
-void _k_panic(char *err_msg) __attribute__((noreturn));
+#ifdef _x86
+#include <bos/k/arch/x86/panic.h>
+#endif
 
-#endif // PANIC_H
+// TODO: Implement a randomized value during boot-time.
+#define STACK_CHK_GUARD 0x0999E9
+
+void __stack_chk_guard(void);
+void __stack_chk_fail(void) __attribute__((noreturn));
+
+#endif // STACK_PROTECTOR_H

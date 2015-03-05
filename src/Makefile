@@ -34,15 +34,16 @@ OBJ_DIR=obj
 BIN_DIR=../bin
 LIBK_DIR=libk
 
-CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra
+CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all
 ASFLAGS=-felf32
 LDFLAGS=-T linker.ld
 
-CFLAGS_DEV=-g -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra
+CFLAGS_DEV=-g -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all
 ASFLAGS_DEV=-g -felf32
 
 ifeq ($(ARCH),x86)
-CSOURCES= 	kernel/arch/x86/io.c \
+CSOURCES= 	kernel/stack_protector.c \
+		kernel/arch/x86/io.c \
 		kernel/common.c \
 		kernel/vga.c \
 		kernel/arch/x86/tty.c \
@@ -83,7 +84,8 @@ else #not come here
 endif
 
 ifeq ($(ARCH),x86)
-CSOURCES_DEV= 	kernel/arch/x86/io.c \
+CSOURCES_DEV= 	kernel/stack_protector.c \
+		kernel/arch/x86/io.c \
 		kernel/common.c \
 		kernel/vga.c \
 		kernel/arch/x86/tty.c \

@@ -82,7 +82,7 @@ void _k_main()
 	//sample_pi();
 
 	// Fake kernel Panic
-	_k_panic("[LOLZ] Just A test! ;)");
+	//_k_panic("[LOLZ] Just A test! ;)");
 
         // Hang up the computer
         for (;;);

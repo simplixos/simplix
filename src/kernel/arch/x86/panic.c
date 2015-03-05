@@ -30,12 +30,14 @@
 
 #include <libk/stdio.h>
 
+__attribute__((noreturn))
 void _k_halt()
 {
 	vga_write("0xDEADBEEF");
 	for (;;);
 }
 
+__attribute__((noreturn))
 void _k_panic(char *err_msg)
 {
 	struct regs registers;
