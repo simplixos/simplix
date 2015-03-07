@@ -27,6 +27,7 @@
 
 #include <bos/k/arch/x86/panic.h>
 #include <bos/k/arch/x86/idt.h>
+#include <bos/k/arch/x86/int.h>
 
 #include <libk/stdio.h>
 
@@ -53,6 +54,10 @@ void _k_panic(char *err_msg)
 	vga_write("EFLAGS:     "); vga_write_hex(registers.eflags); vga_write("\n");
 	vga_write("User ESP:   "); vga_write_hex(registers.useresp); vga_write("\n");
 	vga_write("eip="); vga_write_hex(registers.eip); vga_write("\n");
+
+	// Disable interrupts
+	int_disable();
+	int_nmi_disable();
 
 	vga_write("\n");
 	vga_write("================= NOTE =================\n");

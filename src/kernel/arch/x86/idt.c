@@ -120,7 +120,7 @@ void idt_fill_entry(int entry, uint32_t handler, uint8_t ring, uint8_t type) {
 }
 
 void isr_handler(regs_t regs) {
-	char buf[64];
+	char buf[64] = {0};
 	vga_write(buf);
 	vga_write("\n[EXCEPTION] interrupt ");
 	vga_write_hex(regs.int_no);

@@ -40,5 +40,5 @@ void int_nmi_disable() {
 }
 
 void int_nmi_enable() {
-	outb(INT_NMI_CONTROL, inb(INT_NMI_CONTROL) & (~INT_NMI_BIT));
+	outb(INT_NMI_CONTROL, inb(INT_NMI_CONTROL) & (~(INT_NMI_BIT)));
 }
