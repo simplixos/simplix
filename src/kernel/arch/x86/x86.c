@@ -1,11 +1,10 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: include/libk/stdio.h
+ * File: kernel/arch/x86/x86.c
  *
  * Description:
- *      Standard input and output handling functions.
- *      This file is part of the BasicOS Kernel LibC.
+ *      x86 specific code.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
@@ -26,21 +25,37 @@
  *
  ***********************************************************************/
 
-#ifndef _STDIO_H
-#define _STDIO_H
+#include <bos/k/arch/x86/x86.h>
 
-#include <libk/sys/cdefs.h>
-
-#ifdef __cplusplus
-extern "C" {
+#ifdef _x86
+#include <bos/k/arch/x86/gdt.h>
+#include <bos/k/arch/x86/idt.h>
+#include <bos/k/arch/x86/int.h>
+#include <bos/k/arch/x86/irq.h>
+#include <bos/k/arch/x86/page.h>
+#include <bos/k/arch/x86/panic.h>
+#else
 #endif
 
-int kprintf(const char* __restrict, ...);
-int kputchar(int);
-int kputs(const char *);
+void init_x86()
+{
+	// FIRST enable paging and THEN load the real GDT!
+        init_paging();
+        gdt_install();
+        
+	// Initialize Interrupt Descriptor Tables and Interrupt Request Handler
+	idt_init();
+        irq_init();
 
-#ifdef __cplusplus
+        // Clear the screen
+        vga_clear();
+
+        // Enable Interrupts
+        int_enable();
+        int_nmi_enable();
 }
-#endif
 
-#endif // _STDIO_H
+void timer_sample()
+{
+	
+}

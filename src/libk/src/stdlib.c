@@ -34,10 +34,11 @@
 #include <bos/k/arch/x86/panic.h>
 #endif
 
+#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
+
 __attribute__((__noreturn__))
 void abort(void)
 {
-	// TODO: Add proper kernel panic.
 	_k_panic("Kernel Panic: abort()\n");
 	__builtin_unreachable();
 }

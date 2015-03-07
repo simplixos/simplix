@@ -1,11 +1,10 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: include/libk/stdio.h
+ * File: include/bos/k/arch/x86/x86.h
  *
  * Description:
- *      Standard input and output handling functions.
- *      This file is part of the BasicOS Kernel LibC.
+ *      x86 specific init code.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
@@ -26,21 +25,29 @@
  *
  ***********************************************************************/
 
-#ifndef _STDIO_H
-#define _STDIO_H
+#ifndef X86_H
+#define X86_H
 
-#include <libk/sys/cdefs.h>
-
-#ifdef __cplusplus
-extern "C" {
+// x86 specific includes
+#ifdef _x86
+	#include <bos/k/arch/x86/gdt.h>
+	#include <bos/k/arch/x86/idt.h>
+	#include <bos/k/arch/x86/int.h>
+	#include <bos/k/arch/x86/irq.h>
+	#include <bos/k/arch/x86/page.h>
+	#include <bos/k/arch/x86/panic.h>
+#else
 #endif
 
-int kprintf(const char* __restrict, ...);
-int kputchar(int);
-int kputs(const char *);
+void init_x86();
 
-#ifdef __cplusplus
+static inline uint64_t rdtsc()
+{
+	uint64_t ret;
+	asm volatile ( "rdtsc" : "=A"(ret) );
+	return ret;
 }
-#endif
 
-#endif // _STDIO_H
+void timer_sample();
+
+#endif

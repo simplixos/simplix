@@ -128,7 +128,7 @@ void isr_handler(regs_t regs) {
 	vga_write(buf);
 	if (int_handlers[regs.int_no] != NULL)
 		int_handlers[regs.int_no](regs);
-	_k_panic("Interrupt raised!");
+	_k_panic("Interrupt raised!", __FILE__, __LINE__);
 }
 
 void idt_set_handler(int entry, interrupt_handler_t handler) {

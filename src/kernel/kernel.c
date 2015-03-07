@@ -30,38 +30,23 @@
 #include <bos/k/defs.h>
 
 #ifdef _x86
-#include <bos/k/arch/x86/gdt.h>
-#include <bos/k/arch/x86/idt.h>
-#include <bos/k/arch/x86/int.h>
-#include <bos/k/arch/x86/irq.h>
-#include <bos/k/arch/x86/page.h>
-#include <bos/k/arch/x86/panic.h>
+	#include <bos/k/arch/x86/x86.h>
 #else
 #endif
 
 #include <hw/cpuid.h>
-#include <bos/k/sample.h>
+
+#include <libk/stdio.h>
 
 void _k_early()
 {
-	// FIRST enable paging and THEN load the real GDT!
-        init_paging();
-        gdt_install();
-        idt_init();
-        irq_init();
-
-	// Clear the screen
-        vga_clear();
-
-	// Enable Interrupts
-        int_enable();
-        int_nmi_enable();
-
-	// Interrupt test
-        //asm volatile ("int $0x3");
+	#ifdef _x86
+		init_x86();
+	#else
+	#endif
 }
 
-// Our kernel's first function: kmain
+// The Kernel's Main Entrypoint : kmain
 void _k_main()
 {
 	// Print logo
@@ -78,11 +63,8 @@ void _k_main()
 	// Print a warm welcome!
         vga_write("Hello, User!");
 
-	// BUGGED - Run PI test!
-	//sample_pi();
-
 	// Fake kernel Panic
-	//_k_panic("[LOLZ] Just A test! ;)");
+	//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);
 
         // Hang up the computer
         for (;;);

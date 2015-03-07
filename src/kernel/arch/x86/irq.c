@@ -86,8 +86,7 @@ void irq_init() {
 
 bool irq_is_irq(uint8_t int_n) {
   return ((int_n >= irq0_offset && int_n < (irq0_offset + 8)) ||
-          (int_n >= irq1_offset && int_n < (irq1_offset + 8))) ? TRUE : 
-FALSE;
+          (int_n >= irq1_offset && int_n < (irq1_offset + 8))) ? TRUE : FALSE;
 }
 
 void irq_handler(regs_t regs) {

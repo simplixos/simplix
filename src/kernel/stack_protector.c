@@ -39,5 +39,5 @@ void __stack_chk_guard(void)
 __attribute__((noreturn))
 void __stack_chk_fail(void)
 {
-	_k_panic("[STACK] Stack has smashed!");
+	_k_panic("[STACK] Stack has smashed!", __FILE__, __LINE__);
 }

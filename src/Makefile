@@ -28,7 +28,7 @@ AS=../cross/os-toolchain/bin/nasm
 STRIP=../cross/os-toolchain/bin/i686-elf-strip
 
 INCLUDE=include/
-LIBDIR=libk/obj
+LIBDIR=libk/obj/
 LIBS=-lk
 OBJ_DIR=obj
 BIN_DIR=../bin
@@ -42,12 +42,14 @@ CFLAGS_DEV=-g -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdl
 ASFLAGS_DEV=-g -felf32
 
 ifeq ($(ARCH),x86)
+CFLAGS+=	-D_x86
+
 CSOURCES= 	kernel/stack_protector.c \
+		kernel/arch/x86/x86.c \
 		kernel/arch/x86/io.c \
 		kernel/common.c \
 		kernel/vga.c \
 		kernel/arch/x86/tty.c \
-		kernel/sample.c \
 		kernel/arch/x86/gdt.c \
 		kernel/arch/x86/idt.c \
 		kernel/arch/x86/panic.c \
@@ -63,10 +65,11 @@ ASMSOURCES= 	kernel/arch/x86/boot.s \
 		kernel/test.s	\
 
 else ifeq ($(ARCH),x86_64) #64 bit support
+CFLAGS+=	-D_x86_64
+
 CSOURCES= 	kernel/arch/x86_64/io.c \
 		kernel/common.c kernel/vga.c \
 		kernel/arch/x86_64/tty.c \
-		kernel/sample.c \
 		kernel/arch/x86_64/gdt.c \
 		kernel/arch/x86_64/idt.c \
 		kernel/arch/x86_64/panic.c \
@@ -84,12 +87,14 @@ else #not come here
 endif
 
 ifeq ($(ARCH),x86)
+CFLAGS_DEV+=	-D_x86
+
 CSOURCES_DEV= 	kernel/stack_protector.c \
+		kernel/arch/x86/x86.c \
 		kernel/arch/x86/io.c \
 		kernel/common.c \
 		kernel/vga.c \
 		kernel/arch/x86/tty.c \
-		kernel/sample.c \
 		kernel/arch/x86/gdt.c \
 		kernel/arch/x86/idt.c \
 		kernel/arch/x86/panic.c \
@@ -105,10 +110,11 @@ ASMSOURCES_DEV= kernel/arch/x86/boot.s \
 		kernel/test.s	\
 
 else ifeq ($(ARCH),x86_64) #64 bit support
+CFLAGS_DEV+=	-D_x86_64
+
 CSOURCES_DEV= 	kernel/arch/x86_64/io.c \
 		kernel/common.c kernel/vga.c \
 		kernel/arch/x86_64/tty.c \
-		kernel/sample.c \
 		kernel/arch/x86_64/gdt.c \
 		kernel/arch/x86_64/idt.c \
 		kernel/arch/x86_64/panic.c \

@@ -32,13 +32,15 @@
 #include <bos/k/defs.h>
 
 #ifdef __GNUC__
-#include <stddef.h>
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stdint.h>
+	#include <stddef.h>
+	#include <stdarg.h>
+	#include <stdbool.h>
+	#include <stdint.h>
 #endif
 
-#include <bos/k/arch/x86/io.h>
+#ifdef _x86
+	#include <bos/k/arch/x86/io.h>
+#endif
 
 // Common data types
 
@@ -48,10 +50,6 @@
 #ifndef NULL
 	#define NULL ((void *)0)
 #endif // NULL
-
-/** Essential Low-level I/O Control Functions **/
-
-void io_wait(void);
 
 /** Memory handling functions **/
 

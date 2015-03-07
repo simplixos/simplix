@@ -38,9 +38,7 @@
 "=============================================================\n" \
 
 #define BAS_VER_MAJ "0"
-#define BAS_VER_MIN "4a"
-
-#define _x86
+#define BAS_VER_MIN "1c"
 
 #define BAS_VER_FUL BAS_VER_MAJ"."BAS_VER_MIN
 

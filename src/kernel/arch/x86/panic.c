@@ -39,12 +39,14 @@ void _k_halt()
 }
 
 __attribute__((noreturn))
-void _k_panic(char *err_msg)
+void _k_panic(char *err_msg, char *file, int line)
 {
 	struct regs registers;
 
 	vga_write("\n [PANIC] SYSTEM HALTED! \n\n");
-	vga_write("ErrMsg: "); vga_write(err_msg); vga_write("\n\n");
+	vga_write("ErrMsg: "); vga_write(err_msg); vga_write("\n");
+	vga_write("  File: "); vga_write(file); vga_write("\n");
+	vga_write("  Line: "); vga_write_dec(line); vga_write("\n\n");
 
 	vga_write("REGISTERS DUMP: \n");
 	vga_write("eax="); vga_write_hex(registers.eax); vga_write(" ebx="); vga_write_hex(registers.ebx); vga_write("\n");

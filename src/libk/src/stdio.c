@@ -39,13 +39,13 @@
 #endif
 
 // Displays a single string onto the VGA BIOS stream.
-int _k_puts(const char *s)
+int kputs(const char *s)
 {
-	return _k_printf("%s\n", s);
+	return kprintf("%s\n", s);
 }
 
 // write the byte specified by c to the VGA BIOS stream
-int _k_putchar(int ic)
+int kputchar(int ic)
 {
 	char c = (char) ic;
 	tty_write(&c, sizeof(c));
@@ -54,14 +54,14 @@ int _k_putchar(int ic)
 }
 
 // shall place output on the VGA BIOS stream
-static void _k_print(const char *data, size_t data_length)
+static void kprint(const char *data, size_t data_length)
 {
 	for (size_t i = 0; i < data_length; i++)
-		_k_putchar((int) ((const unsigned char*) data)[i]); 
+		kputchar((int) ((const unsigned char*) data)[i]); 
 }
 
 
-int _k_printf(const char * __restrict format, ... )
+int kprintf(const char * __restrict format, ... )
 {
 	va_list parameters;
 	va_start(parameters, format);
@@ -78,7 +78,7 @@ int _k_printf(const char * __restrict format, ... )
 			amount = 1;
 			while ( format[amount] && format[amount] != '%' )
 				amount++;
-			_k_print(format, amount);
+			kprint(format, amount);
 			format += amount;
 			written += amount;
 			continue;
@@ -101,13 +101,13 @@ int _k_printf(const char * __restrict format, ... )
 		{
 			format++;
 			char c = (char) va_arg(parameters, int /* char promotes to int */);
-			_k_print(&c, sizeof(c));
+			kprint(&c, sizeof(c));
 		}
 		else if ( *format == 's' )
 		{
 			format++;
 			const char* s = va_arg(parameters, const char*);
-			_k_print(s, strlen(s));
+			kprint(s, strlen(s));
 		}
 		else
 		{

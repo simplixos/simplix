@@ -33,6 +33,6 @@
 #include <bos/k/arch/x86/idt.h>
 
 void _k_halt() __attribute__((noreturn));
-void _k_panic(char *err_msg) __attribute__((noreturn));
+void _k_panic(char *err_msg, char *file, int line) __attribute__((noreturn));
 
 #endif // PANIC_H
