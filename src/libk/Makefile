@@ -25,9 +25,10 @@ RANLIB=../../cross/os-toolchain/bin/i686-elf-ranlib
 
 CFLAGS=-O2 -std=gnu99 -ffreestanding -fbuiltin -Wall -Wextra -D__bos_libk -I../include
 
-SOURCES=./src/string.c \
-	./src/stdlib.c \
-	./src/stdio.c
+SOURCES=./src/stdio.c	\
+	./src/string.c	\
+	./src/stdlib.c	\
+
 OBJDIR=obj
 
 OBJS = $(patsubst %.c,obj/%.libk.o,$(SOURCES)) # objects named with .a extension

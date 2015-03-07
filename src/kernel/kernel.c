@@ -36,6 +36,7 @@
 #include <bos/k/arch/x86/irq.h>
 #include <bos/k/arch/x86/page.h>
 #include <bos/k/arch/x86/panic.h>
+#include <bos/k/arch/x86/serial.h>
 #else
 #endif
 
@@ -64,6 +65,9 @@ void _k_early()
 // Our kernel's first function: kmain
 void _k_main()
 {
+	tty_init();
+	serial_init();
+
 	// Print logo
         vga_write(ASCII_LOGO);
 

@@ -24,7 +24,8 @@ AS=../cross/os-toolchain/bin/nasm
 STRIP=../cross/os-toolchain/bin/i686-elf-strip
 
 INCLUDE=include/
-LIBDIR=sysroot/lib/
+LIBDIR=libk/obj/
+LIBS=-lk
 OBJ_DIR=obj
 BIN_DIR=../bin
 LIBK_DIR=libk
@@ -50,6 +51,7 @@ CSOURCES= 	kernel/arch/x86/io.c \
 		kernel/arch/x86/page.c \
 		hw/cpu/cpuid.c \
 		kernel/kernel.c	\
+		kernel/arch/x86/serial.c \
 
 ASMSOURCES= 	kernel/arch/x86/boot.s \
 		kernel/arch/x86/idt_asm.s \
@@ -91,6 +93,7 @@ CSOURCES_DEV= 	kernel/arch/x86/io.c \
 		kernel/arch/x86/page.c \
 		hw/cpu/cpuid.c \
 		kernel/kernel.c	\
+		kernel/arch/x86/serial.c \
 
 ASMSOURCES_DEV= kernel/arch/x86/boot.s \
 		kernel/arch/x86/idt_asm.s \
@@ -147,12 +150,12 @@ dev: $(CSOURCES) $(ASMSOURCES) $(KERNEL_DEV)
 
 stable: $(CSOURCES) $(ASMSOURCES) $(KERNEL_STABLE)
 
-$(KERNEL_DEV): $(LIBK) $(COBJECTS_DEV) $(ASMOBJECTS_DEV)
-	$(CC) $(LDFLAGS) $(CFLAGS_DEV) $(LIBK) $(ASMOBJECTS_DEV) $(COBJECTS_DEV) -o $@
+$(KERNEL_DEV): $(COBJECTS_DEV) $(ASMOBJECTS_DEV) $(LIBK)
+	$(CC) $(LDFLAGS) $(CFLAGS_DEV) $(ASMOBJECTS_DEV) $(COBJECTS_DEV) $(LIBK) -o $@
 
-$(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS)
+$(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS) $(LIBK)
 	rm -f $(KERNEL_STABLE)
-	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) -o $@
+	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBK) -o $@
 	$(STRIP) -s -g -v $(KERNEL_STABLE)
 
 obj/%.os: %.c

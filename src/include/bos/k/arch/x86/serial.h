@@ -4,11 +4,11 @@
  * File: include/bos/k/arch/x86/serial.h
  *
  * Description:
- *      Serial Port API's
+ *      Serial Port Driver (8250/16550)
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Rahul Ramesh
+ * Copyright (C) 2015 Aun-Ali Zaidi
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,15 @@
 /* Intel x86 uses 0x3F8 to 0x3Ff I/O mapped addresses for controlling UART Registers */
 
 #define SERIAL_HW_CLK		152000	//UART countdown timer
-#define SERIAL_BASE_ADDR_COM1 	0x3F8 	//COM1 IRQ4
-#define SERIAL_BASE_ADDR_COM2 	0x2F8 	//COM2 IRQ3
-#define SERIAL_BASE_ADDR_COM3 	0x3E8 	//COM3 IRQ4
-#define SERIAL_BASE_ADDR_COM4 	0x2E8 	//COM4 IRQ3
+#define SERIAL_BASE_ADDR_COM1 	0x3F8 	//COM1 @IRQ4
+#define SERIAL_BASE_ADDR_COM2 	0x2F8 	//COM2 @IRQ3
+#define SERIAL_BASE_ADDR_COM3 	0x3E8 	//COM3 @IRQ4
+#define SERIAL_BASE_ADDR_COM4 	0x2E8 	//COM4 @IRQ3
+#define SERIAL_BAUD		115200  //Our Baud rate
+#define SERIAL_OUT_DATA_READY	0x64	//Check if Empty Transmitter Holding Registe and Empty Data Holding Registers are set to 1 , also \
+					no framing errors
+#define	SERIAL_NO_DATA		-1
+#define SERIAL_IN_DATA_READY	0x01	//BIT 0 data ready set
 
 /*Interrupt Enable Bits*/
 
@@ -117,8 +122,8 @@
  *  1		 1		 0	UnUsed
  *  1		 1		 1	Space
  *  ---------------------------------
- * BIT 6				Divisor Latch Access Bit
- * BIT 7				Set Break Enable
+ * BIT 6				Set Break Enable
+ * BIT 7				Divisor Latch Access Bit
  */
 
 /*Modem Control Register*/
@@ -160,10 +165,10 @@
  * BIT 7		Carrier Detect
  */
 
-/* Define Offsets to UART registers*/
+/* Define Offsets to UART registers from base addr*/
 
-#define SERIAL_REC_BUF_REG 	0 	/* Receive Buffer in read mode  			{ DLAB = 0 } */
-#define SERIAL_TX_BUF_REG  	0	/* Transmitter Holding Buffer in write mode		{ DLAB = 0 } */
+#define SERIAL_REC_BUF_REG 	0 	/* Receive Buffer in (read) mode  			{ DLAB = 0 } */
+#define SERIAL_TX_BUF_REG  	0	/* Transmitter Holding Buffer in (write) mode		{ DLAB = 0 } */
 #define SERIAL_DIV_LATCH_LOW  	0	/* Divisor Low Byte					{ DLAB = 1 } */
 
 #define SERIAL_INTR_EN_REG 	1	/* Interrupt Enable (Read/Write)			{ DLAB = 0 } */
@@ -182,4 +187,10 @@
 
 #define SERIAL_SCRATCH_REG 	7	/* Scratch Register (Read/Write)			{ DLAB = X } */
 
+/*Functions*/
+
+
+void serial_init();
+void serial_write_string(const char * string);
+void serial_write_char(int c);
 #endif
