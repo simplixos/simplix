@@ -29,6 +29,7 @@
 #define	_IRQ_H
 
 #include <bos/k/common.h>
+#include <bos/k/arch/x86/idt.h>
 
 #define IRQ0_DEFAULT_OFFSET 0x20
 #define IRQ1_DEFAULT_OFFSET 0x28
@@ -45,9 +46,30 @@
 #define IRQ_EOI      0x20
 
 #define IRQ_PIC_8086_MODE 0x01
+
+#define IRQ_0 0
+#define IRQ_1 1
+#define IRQ_2 2
+#define IRQ_3 3
+#define IRQ_4 4
+#define IRQ_5 5
+#define IRQ_6 6
+#define IRQ_7 7
+#define IRQ_8 8
+#define IRQ_9 9
+#define IRQ_10 10
+#define IRQ_11 11
+#define IRQ_12 12
+#define IRQ_13 13
+#define IRQ_14 14
+#define IRQ_15 15
+
+#define IRQ_TYPE 6
+#define IRQ_TYPE 6
 // TODO: add other ints
 
 void irq_init();
 bool irq_test(uint8_t int_n);
+void register_irq_handler(interrupt_handler_t irq_handler_info,int irq);
 
 #endif

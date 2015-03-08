@@ -28,6 +28,7 @@ CFLAGS=-O2 -std=gnu99 -ffreestanding -fbuiltin -Wall -Wextra -D__bos_libk -I../i
 SOURCES=./src/stdio.c \
 	./src/stdlib.c \
 	./src/string.c
+
 OBJDIR=obj
 
 OBJS = $(patsubst %.c,obj/%.libk.o,$(SOURCES)) # objects named with .a extension

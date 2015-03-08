@@ -49,6 +49,9 @@ void _k_early()
 // The Kernel's Main Entrypoint : kmain
 void _k_main()
 {
+	tty_init();
+	serial_init();
+
 	// Print logo
         vga_write(ASCII_LOGO);
 

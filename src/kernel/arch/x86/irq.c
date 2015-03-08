@@ -27,12 +27,20 @@
  ************************************************************/
 
 #include <bos/k/arch/x86/irq.h>
-#include <bos/k/arch/x86/idt.h>
+
+#define MAX_IRQ	16
+
+/*Hold information of IRQ callback ptr and */
+typedef struct __irq_handler_info__
+{
+	interrupt_handler_t irq_handler_ptr;
+	int inuse;
+}irq_handler_info;
 
 uint8_t irq0_offset = IRQ0_DEFAULT_OFFSET;
 uint8_t irq1_offset = IRQ1_DEFAULT_OFFSET;
 
-interrupt_handler_t irq_handlers[16];
+irq_handler_info irq_handlers[MAX_IRQ];
 
 extern void irq0();
 extern void irq1();
@@ -51,7 +59,8 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-void irq_init() {
+void irq_init() 
+{
   uint8_t pic0_icw4, pic1_icw4;
   pic0_icw4 = inb(IRQ_PIC0_DATA);
   pic1_icw4 = inb(IRQ_PIC1_DATA);
@@ -82,19 +91,38 @@ void irq_init() {
   idt_fill_entry(irq1_offset + 13, (uint32_t) irq13, IDT_RING_0, IDT_INT_GATE_32);
   idt_fill_entry(irq1_offset + 14, (uint32_t) irq14, IDT_RING_0, IDT_INT_GATE_32);
   idt_fill_entry(irq1_offset + 15, (uint32_t) irq15, IDT_RING_0, IDT_INT_GATE_32);
+  
+  for(int i =0 ;i<MAX_IRQ ;i++)
+  {
+  	irq_handlers[i].inuse =0;
+	irq_handlers[i].irq_handler_ptr = NULL;
+  }
 }
 
-bool irq_is_irq(uint8_t int_n) {
+bool irq_is_irq(uint8_t int_n) 
+{
   return ((int_n >= irq0_offset && int_n < (irq0_offset + 8)) ||
           (int_n >= irq1_offset && int_n < (irq1_offset + 8))) ? TRUE : FALSE;
 }
 
-void irq_handler(regs_t regs) {
-  if (irq_handlers[regs.err_code] != NULL)
-    irq_handlers[regs.err_code](regs);
+void irq_handler(regs_t regs) 
+{
+  if (irq_handlers[regs.err_code].irq_handler_ptr != NULL)
+    irq_handlers[regs.err_code].irq_handler_ptr(regs);
 
   if (regs.err_code > 7)
-    outb(IRQ_PIC1_COMMAND, IRQ_EOI);
-  outb(IRQ_PIC0_COMMAND, IRQ_EOI);
+    outb(IRQ_PIC1_COMMAND, IRQ_EOI);//inform slave PIC of IRQ processing done
+  outb(IRQ_PIC0_COMMAND, IRQ_EOI);//inform master PIC of IRQ processing done
+}
+
+void register_irq_handler(interrupt_handler_t irq_handler_info ,int irq)
+{
+  if((irq >= IRQ_0) && (irq <= IRQ_15))
+  {
+    if(irq_handlers[irq].inuse == 0)
+    {
+      irq_handlers[irq].irq_handler_ptr = irq_handler_info;
+    }
+  }
 }
 
