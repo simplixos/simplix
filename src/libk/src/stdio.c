@@ -35,7 +35,7 @@
 #endif
 
 #ifdef __bos_libk
-#include <bos/k/tty.h>
+#include <bos/k/vga.h>
 #endif
 
 // Displays a single string onto the VGA BIOS stream.
@@ -48,7 +48,7 @@ int kputs(const char *s)
 int kputchar(int ic)
 {
 	char c = (char) ic;
-	tty_write(&c, sizeof(c));
+	vga_writestr(&c, sizeof(c));
 
 	return ic;
 }

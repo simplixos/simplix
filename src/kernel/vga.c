@@ -157,6 +157,13 @@ void vga_clear()
     move_cursor();
 }
 
+// Outputs a null-terminated ASCII string of a length 'len' to the montitor.
+void vga_writestr(char *c, size_t len)
+{
+	for (size_t i = 0; i < len; i++)
+		vga_put(c[i]);
+}
+
 // Outputs a null-terminated ASCII string to the monitor.
 void vga_write(char *c)
 {

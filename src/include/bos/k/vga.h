@@ -73,6 +73,7 @@ static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
 
 void vga_clear();
 void vga_write(char *c);
+void vga_writestr(char *c, size_t len);
 void vga_write_hex(uint32_t n);
 void vga_write_dec(uint32_t n);
 

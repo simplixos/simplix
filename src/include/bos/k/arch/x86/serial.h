@@ -37,8 +37,8 @@
 #define SERIAL_BASE_ADDR_COM3 	0x3E8 	//COM3 @IRQ4
 #define SERIAL_BASE_ADDR_COM4 	0x2E8 	//COM4 @IRQ3
 #define SERIAL_BAUD		115200  //Our Baud rate
-#define SERIAL_OUT_DATA_READY	0x64	//Check if Empty Transmitter Holding Registe and Empty Data Holding Registers are set to 1 , also \
-					no framing errors
+#define SERIAL_OUT_DATA_READY	0x64	//Check if Empty Transmitter Holding Registe and Empty Data Holding Registers are set to 1 , also
+					//no framing errors
 #define	SERIAL_NO_DATA		-1
 #define SERIAL_IN_DATA_READY	0x01	//BIT 0 data ready set
 
@@ -189,8 +189,9 @@
 
 /*Functions*/
 
-
+void tty_init();
 void serial_init();
 void serial_write_string(const char * string);
 void serial_write_char(int c);
-#endif
+
+#endif // SERIAL_H

@@ -34,11 +34,11 @@ OBJ_DIR=obj
 BIN_DIR=../bin
 LIBK_DIR=libk
 
-CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all
+CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_bos_k_libc
 ASFLAGS=-felf32
 LDFLAGS=-T linker.ld
 
-CFLAGS_DEV=-g -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all
+CFLAGS_DEV=-g -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_bos_k_libc
 ASFLAGS_DEV=-g -felf32
 
 ifeq ($(ARCH),x86)

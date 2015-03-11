@@ -34,11 +34,16 @@
 #include <bos/k/arch/x86/irq.h>
 #include <bos/k/arch/x86/page.h>
 #include <bos/k/arch/x86/panic.h>
+#include <bos/k/arch/x86/serial.h>
 #else
 #endif
 
 void init_x86()
 {
+	// Initialise TTY and Serial devices
+	tty_init();
+	serial_init();	
+
 	// FIRST enable paging and THEN load the real GDT!
         init_paging();
         gdt_install();
@@ -53,9 +58,4 @@ void init_x86()
         // Enable Interrupts
         int_enable();
         int_nmi_enable();
-}
-
-void timer_sample()
-{
-	
 }

@@ -49,22 +49,19 @@ void _k_early()
 // The Kernel's Main Entrypoint : kmain
 void _k_main()
 {
-	tty_init();
-	serial_init();
-
 	// Print logo
-        vga_write(ASCII_LOGO);
+        kprintf(ASCII_LOGO);
 
         // Display build an authoring info
-        vga_write("BasicOS ver. "BAS_VER_FUL"\n");
-        vga_write(AUTHOR_NOTE"\n");
-        vga_write(COMPILE_NOTE"\n\n");
+        kprintf("BasicOS ver. "BAS_VER_FUL"\n");
+        kprintf(AUTHOR_NOTE"\n");
+        kprintf(COMPILE_NOTE"\n\n");
 
 	// Display CPU info
 	cpu_info();
 
 	// Print a warm welcome!
-        vga_write("Hello, User!");
+        kprintf("Hello, User!");
 
 	// Fake kernel Panic
 	//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);

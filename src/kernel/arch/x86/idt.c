@@ -28,6 +28,9 @@
 #include <bos/k/arch/x86/idt.h>
 #include <bos/k/arch/x86/panic.h>
 
+#include <libk/stdio.h>
+#include <libk/string.h>
+
 idt_entry_t         idt_entries[256];
 idt_pointer_t       idt_pointer;
 interrupt_handler_t int_handlers[256];
@@ -121,11 +124,12 @@ void idt_fill_entry(int entry, uint32_t handler, uint8_t ring, uint8_t type) {
 
 void isr_handler(regs_t regs) {
 	char buf[64] = {0};
-	vga_write(buf);
-	vga_write("\n[EXCEPTION] interrupt ");
-	vga_write_hex(regs.int_no);
-	vga_write(" raised.\n");
-	vga_write(buf);
+	kprintf(buf);
+	//kprintf("\n[EXCEPTION] interrupt ");
+	//kprintf(regs.int_no);
+	//kprintf(" raised.\n");
+	kprintf("\n[EXCEPTION] Interrupt %d raised!\n", regs.int_no);
+	kprintf(buf);
 	if (int_handlers[regs.int_no] != NULL)
 		int_handlers[regs.int_no](regs);
 	_k_panic("Interrupt raised!", __FILE__, __LINE__);

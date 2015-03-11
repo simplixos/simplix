@@ -28,7 +28,7 @@
 
 #include <bos/k/arch/x86/irq.h>
 #include <bos/k/arch/x86/serial.h>
-#include <bos/k/vga.h>
+#include <bos/k/arch/x86/panic.h>
 
 #include <libk/stdio.h>
 #include <libk/string.h>
@@ -36,8 +36,8 @@
 
 static int serial_init_done = 0;
 
-#define CHECK_INIT_DONE(x) if(!x) { vga_write("serial device not found "); return;}
-#define CHECK_INIT_DONE_RET(x) if(!x) { vga_write("serial device not found "); return serial_init_done;}
+#define CHECK_INIT_DONE(x) if(!x) { kprintf("serial device not found "); return;}
+#define CHECK_INIT_DONE_RET(x) if(!x) { kprintf("serial device not found "); return serial_init_done;}
 
 /*prototype*/
 static void serial_irq_handler (regs_t);
@@ -46,74 +46,79 @@ static int serial_read_char(void);
 /* Initializes serial registers and installs IRQ3/4 ISR*/
 void serial_init()
 {
-  short int div_latch_val;
-  /* Disable all interrupts , set first bit to 0 */
-  outb(SERIAL_BASE_ADDR_COM1 + SERIAL_INTR_EN_REG, 	0x00);
+	short int div_latch_val;
+	/* Disable all interrupts , set first bit to 0 */
+	outb(SERIAL_BASE_ADDR_COM1 + SERIAL_INTR_EN_REG, 	0x00);
 
-  /* Enable DLAB (Divisor Latch Access Bit) , set 8th bit to 1 since we need to set baud */
-  outb(SERIAL_BASE_ADDR_COM1 + SERIAL_LINE_CTRL_REG , 	0x80);
-  
-  /* Set Baud Rate
-   * Divisor latch bytes has High byte(offset = 1) and Low Byte (offset = 0)
-   * Div Latch Val = clock/baud rate
-   */
-  div_latch_val = SERIAL_HW_CLK/SERIAL_BAUD;
+	/* Enable DLAB (Divisor Latch Access Bit) , set 8th bit to 1 since we need to set baud */
+	outb(SERIAL_BASE_ADDR_COM1 + SERIAL_LINE_CTRL_REG , 	0x80);
 
-  /*Set low byte and high byte of div latch*/
-  //TODO : uart clock required , hardcode baud to 115200
+	/* Set Baud Rate
+	 * Divisor latch bytes has High byte(offset = 1) and Low Byte (offset = 0)
+	 * Div Latch Val = clock/baud rate
+	 */
+	div_latch_val = SERIAL_HW_CLK/SERIAL_BAUD;
 
-  outb(SERIAL_BASE_ADDR_COM1 + SERIAL_DIV_LATCH_LOW, 0x0C/*div_latch_val*/); 
-  outb(SERIAL_BASE_ADDR_COM1 + SERIAL_DIV_LATCH_HI,  0x00/*div_latch_val>>8*/);
+	/*Set low byte and high byte of div latch*/
+	//TODO : uart clock required , hardcode baud to 115200
 
-  /* 8 bits, no parity, one stop bit ,disable divisor latch */
-  outb(SERIAL_BASE_ADDR_COM1 + SERIAL_LINE_CTRL_REG, 0x03);
+	outb(SERIAL_BASE_ADDR_COM1 + SERIAL_DIV_LATCH_LOW, /*0x0C*/div_latch_val); 
+	outb(SERIAL_BASE_ADDR_COM1 + SERIAL_DIV_LATCH_HI,  /*0x00*/div_latch_val>>8);
 
-  /* 8250 compability mode ,disable FIFO */
-  outb(SERIAL_BASE_ADDR_COM1 + SERIAL_FIFO_CTRL_REG, 0x00);
+	/* 8 bits, no parity, one stop bit ,disable divisor latch */
+	outb(SERIAL_BASE_ADDR_COM1 + SERIAL_LINE_CTRL_REG, 0x03);
 
-  /*Enable Interrupts*/
-  outb(SERIAL_BASE_ADDR_COM1 + SERIAL_INTR_EN_REG, 0x01);
+	/* 8250 compability mode ,disable FIFO */
+	outb(SERIAL_BASE_ADDR_COM1 + SERIAL_FIFO_CTRL_REG, 0x00);
 
-  /*register IRQ handlers*/
-  register_irq_handler(serial_irq_handler , IRQ_4);
-  register_irq_handler(serial_irq_handler , IRQ_3);
+	/*Enable Interrupts*/
+	outb(SERIAL_BASE_ADDR_COM1 + SERIAL_INTR_EN_REG, 0x01);
 
-  vga_write("IRQ 3 and IRQ 4 handlers registerd \n");
-  vga_write("Serial Init is done \n");
+	/*register IRQ handlers*/
+	register_irq_handler(serial_irq_handler , IRQ_4);
+	register_irq_handler(serial_irq_handler , IRQ_3);
 
-  if(inb(SERIAL_BASE_ADDR_COM1+5) == 0xFF)
-  {
-    vga_write("Serial Init failed ! no serial port \n");
-  }
-  else
-  {
-    /*clear any pending interrupts and TX buffer*/
-    inb(SERIAL_BASE_ADDR_COM1+SERIAL_INTR_IDENT_REG );
-    inb(SERIAL_BASE_ADDR_COM1+SERIAL_REC_BUF_REG );
-    serial_init_done = 1;
-    serial_write_string("Hi........... \n");
-    serial_write_string("Im rahul..........239283982^^&**$%^&*@ \n");
-    serial_write_string("Testing numbers 0123456789... \n");
-  }
+	kprintf("IRQ 3 and IRQ 4 handlers registerd \n");
+	kprintf("Serial Init is done \n");
+
+	if(inb(SERIAL_BASE_ADDR_COM1+5) == 0xFF)
+	{
+		kprintf("Serial Init failed! No serial port!\n");
+		_k_panic("[TTY] Serial device not found! Serial Init Failed!\n", __FILE__, __LINE__);
+	}
+	else
+	{
+		/*clear any pending interrupts and TX buffer*/
+		inb(SERIAL_BASE_ADDR_COM1+SERIAL_INTR_IDENT_REG );
+		inb(SERIAL_BASE_ADDR_COM1+SERIAL_REC_BUF_REG );
+		serial_init_done = 1;
+		serial_write_string("|BasicOS Serial TTY|\n");
+		serial_write_string("Serial Device: 8250 \n");
+		serial_write_string("\n> ");
+	}
 }
 
 /*IRQ callback*/
 static void serial_irq_handler (regs_t reg)
 {
-  CHECK_INIT_DONE(serial_init_done)
-  switch(reg.err_code)
-  {
-    case IRQ_3:	vga_write("Received IRQ 3 from COM3 port");
-    case IRQ_4:	vga_write("Received IRQ 4 from COM4 port");
-    		int data;
-	    	do
-	    	{
-	      	 data = serial_read_char();
-		 vga_put((char)data);
-	    	}while(data != SERIAL_NO_DATA);	
-		break;
-    default:vga_write("Received unknown IRQ");
-  }
+	CHECK_INIT_DONE(serial_init_done)
+	switch(reg.err_code)
+	{
+		case IRQ_3:
+			kprintf("Received IRQ 3 from COM3 port");
+			break;
+		case IRQ_4:
+			kprintf("Received IRQ 4 from COM4 port");
+			int data;
+			do {
+				data = serial_read_char();
+				kprintf((char *)data);
+			} while(data != SERIAL_NO_DATA);
+			break;
+		default:
+			kprintf("Received unknown IRQ");
+			break;
+	}
 }
 
 //FIXME A better routine
@@ -127,25 +132,24 @@ static void serial_delay(void)
 
 void serial_write_string(const char * string)
 {
-  CHECK_INIT_DONE(serial_init_done)
-  while(*string != '\0')
+	CHECK_INIT_DONE(serial_init_done)
+	while(*string != '\0')
 	serial_write_char(*string++);
 }
 
 void serial_write_char(int c)
 {
-  CHECK_INIT_DONE(serial_init_done)
-  int i;
-  for (i = 0; !(inb(SERIAL_BASE_ADDR_COM1 + SERIAL_LINE_STAT_REG) & SERIAL_OUT_DATA_READY) && i < 128; i++)
-  serial_delay();
-  outb(SERIAL_BASE_ADDR_COM1+SERIAL_TX_BUF_REG, c);
+	CHECK_INIT_DONE(serial_init_done)
+	int i;
+	for (i = 0; !(inb(SERIAL_BASE_ADDR_COM1 + SERIAL_LINE_STAT_REG) & SERIAL_OUT_DATA_READY) && i < 128; i++)
+		serial_delay();
+	outb(SERIAL_BASE_ADDR_COM1+SERIAL_TX_BUF_REG, c);
 }
 
 static int serial_read_char(void)
 {
-  CHECK_INIT_DONE_RET(serial_init_done)
-  if(!(inb(SERIAL_BASE_ADDR_COM1+SERIAL_LINE_STAT_REG) & SERIAL_IN_DATA_READY))
-        return SERIAL_NO_DATA;
-  return inb(SERIAL_BASE_ADDR_COM1+SERIAL_REC_BUF_REG);
+	CHECK_INIT_DONE_RET(serial_init_done)
+	if(!(inb(SERIAL_BASE_ADDR_COM1+SERIAL_LINE_STAT_REG) & SERIAL_IN_DATA_READY))
+		return SERIAL_NO_DATA;
+	return inb(SERIAL_BASE_ADDR_COM1+SERIAL_REC_BUF_REG);
 }
-

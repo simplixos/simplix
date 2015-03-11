@@ -29,7 +29,8 @@
 #define CPUID_H
 
 #include <bos/k/common.h>
-#include <bos/k/vga.h>
+
+#include <libk/stdio.h>
 
 // CPU Stepping
 #define CPU_STEP_1		1<<0
