@@ -47,7 +47,6 @@ CFLAGS+=	-D_x86
 CSOURCES= 	kernel/stack_protector.c \
 		kernel/arch/x86/x86.c \
 		kernel/arch/x86/io.c \
-		kernel/common.c \
 		kernel/vga.c \
 		kernel/arch/x86/tty.c \
 		kernel/arch/x86/gdt.c \
@@ -69,7 +68,7 @@ else ifeq ($(ARCH),x86_64) #64 bit support
 CFLAGS+=	-D_x86_64
 
 CSOURCES= 	kernel/arch/x86_64/io.c \
-		kernel/common.c kernel/vga.c \
+		kernel/vga.c \
 		kernel/arch/x86_64/tty.c \
 		kernel/arch/x86_64/gdt.c \
 		kernel/arch/x86_64/idt.c \
@@ -93,7 +92,6 @@ CFLAGS_DEV+=	-D_x86
 CSOURCES_DEV= 	kernel/stack_protector.c \
 		kernel/arch/x86/x86.c \
 		kernel/arch/x86/io.c \
-		kernel/common.c \
 		kernel/vga.c \
 		kernel/arch/x86/tty.c \
 		kernel/arch/x86/gdt.c \
@@ -115,7 +113,7 @@ else ifeq ($(ARCH),x86_64) #64 bit support
 CFLAGS_DEV+=	-D_x86_64
 
 CSOURCES_DEV= 	kernel/arch/x86_64/io.c \
-		kernel/common.c kernel/vga.c \
+		kernel/vga.c \
 		kernel/arch/x86_64/tty.c \
 		kernel/arch/x86_64/gdt.c \
 		kernel/arch/x86_64/idt.c \

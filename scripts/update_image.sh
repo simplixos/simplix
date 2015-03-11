@@ -16,11 +16,11 @@ mkdir -p isodir/boot/grub
 echo $PWD
 cp bin/basicosstable.bin ./isodir/boot/basicosstable.bin
 cp bin/basicosdev.bin ./isodir/boot/basicosdev.bin
-cp scripts/menu.lst ./isodir/boot/grub/menu.lst
+cp scripts/grub.cfg ./isodir/boot/grub/grub.cfg
 cp scripts/stage2_eltorito ./isodir/boot/grub/stage2_eltorito
 if [[ $platform == 'solaris' ]]; then
         mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o bin/basicos.iso isodir
 else
-        genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o bin/basicos.iso isodir
+	grub-mkrescue -o bin/basicos.iso isodir
 fi
 rm -r isodir

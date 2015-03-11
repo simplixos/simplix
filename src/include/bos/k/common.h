@@ -42,6 +42,12 @@
 	#include <bos/k/arch/x86/io.h>
 #endif
 
+#ifdef _bos_k_libc
+#include <libk/string.h>
+#include <libk/stdio.h>
+#include <libk/stdlib.h>
+#endif
+
 // Common data types
 
 #define TRUE	1
@@ -50,15 +56,5 @@
 #ifndef NULL
 	#define NULL ((void *)0)
 #endif // NULL
-
-/** Memory handling functions **/
-
-void *memclr(void *p, register unsigned long n);
-void *memcpy(void *restrict s1, const void *restrict s2, size_t n);
-void *memmove(void *s1, const void *s2, size_t n);
-void *memset(void *s, int c, size_t n);
-
-/** String manipulation functions **/
-size_t strlen(const char *s);
 
 #endif // COMMON_H

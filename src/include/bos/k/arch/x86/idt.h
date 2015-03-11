@@ -31,6 +31,10 @@
 #include <bos/k/common.h>
 #include <bos/k/vga.h>
 
+#ifdef _bos_k_libc
+#include <libk/string.h>
+#endif
+
 #define IDT_TASK_GATE_32 1 | 1 << 2
 #define IDT_INT_GATE_16  1 << 1 | 1 << 2
 #define IDT_INT_GATE_32  1 << 1 | 1 << 2 | 1 << 3
