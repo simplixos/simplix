@@ -48,7 +48,7 @@ int kputs(const char *s)
 int kputchar(int ic)
 {
 	char c = (char) ic;
-	vga_writestr(&c, sizeof(c));
+	vga_put(c);
 
 	return ic;
 }
