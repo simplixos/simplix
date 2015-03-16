@@ -1,0 +1,110 @@
+This Document will cover how this kernel program sets up GDT
+
+GDT is supported by BasicOS kernel to support segmentation and ensure protection
+
+Before going to GDT setup , I would be liberal enough to explain what GDT is and what registers are required to get
+it up and running.
+
+The x86 segmentation unit operates on virtual address which uses GDT to derive a linear address.
+A virtual address is 2part:
+1. 16 bit Segment selector
+2. 32 bit Offset Address
+
+The 16 bit segment selector provides info on the 
+1. index - 13bit index to gdt containing segment descriptor
+2. Table indicator (TI)  0 = GDT 1 =LDT
+3. Requestor Privilege Level(RPL)
+
+15-------------3----2-----0
++--------------+----+-----+
++  Index       + TI + RPL +
++--------------+----+-----+
+
+Next is a Segment descriptor that stores information regarding a segment and is 64byte in size.
+
+The CPU makes sure that the right base address and size of GDT/LDT is loaded into gdtr/ldtr register after setting it up.
+
+A segment selector holds information of the location of segment descriptor with in GDT
+
+Segment selector.index * 8 + base address of (GDT/LDT) = linear address
+
+From the segment selector.TI , CPU knows which table GDT/LDT to load in gdtr/ldtr register.
+
+Multiplication factor of 8 is required since each descriptor is 8 bytes long and to point to the next one , it needs to advance 8 bytes
+to the beginning of the required descriptor.
+
+/***************************/
+ Segment Descriptor Structure
+/***************************/
+
+Consists of :
+1. Base address : 32 bits
+2. Limit 	: 20 bits
+3. Access 	:  4 bits
+4. Granulatiry 	:  8 bits
+------------------------
+Total		: 64 bits
+
+However the segment descriptor itself is not straight forward. Its a little bit scattered which leads to lots of bit manipulations
+while setting up.
+
+Granularity - 
+
+BIT_0 LIMIT_16
+BIT_1 LIMIT_17
+BIT_2 LIMIT_18
+BIT_3 LIMIT_19
+BIT_4 AVL -> ignored in basicos
+BIT_5 Always 0
+BIT_6 D(B) -> if 1- segement offsets are 32 bit , 0 - segment offsets are 16 bit
+BIT_7 Granularity -> 0 -segment size is in bytes 1 - segment size is on 4k page boundary size
+
+Access -
+
+BIT_0 TYPE_0  	->segement type 10 code segment , 2 data segment , 11 ?,9 ?
+BIT_1 TYPE_1 	->segement type 10 code segment , 2 data segment , 11 ?,9 ?
+BIT_2 TYPE_2 	->segement type 10 code segment , 2 data segment , 11 ?,9 ?
+BIT_3 TYPE_3	->segement type 10 code segment , 2 data segment , 11 ?,9 ?
+BIT_4 System	-> 0 if its a critical segment , 1 normal segment
+BIT_5 DPL_0	->Descriptor Privilege level 0 - Ring 0 higher protection kernel code , 3 - Ring 3 normal protection user code , Ring1,2 Unused
+BIT_6 DPL_1	->Descriptor Privilege level 0 - Ring 0 higher protection kernel code , 3 - Ring 3 normal protection user code , Ring1,2 Unused
+BIT_7 1
+
+Segement Descriptor Register
+
+0						15    16						                         31
++--------------------------------------------------------------------------------------------------------------------------------+
++  LIMIT (0 -15)				   -					BASE(0-15)			    	 +
++--------------------------------------------------------------------------------------------------------------------------------+
+
+
+32		39  40 41 42 43       44         45  46        47    48 49 50 51    52    53     54      55      56		 63
++--------------------------------------------------------------------------------------------------------------------------------+
++  BASE(16-23)	-    TYPE_X       - System -	  DPL_X   -    1  -   LIMIT_X    -  AVL -  0  -  D(B) -  Gran  -   BASE(24-31)   +
++--------------------------------------------------------------------------------------------------------------------------------+
+db 0xFF, 0xFF ,0, 0, 0 , 10011010b, 11001111b, 0
+
+Kernel runs in ring 0 protection scheme
+code db 0xFF, 0xFF ,0, 0, 0 , 10001010b, 11001111b, 0
+data db 0xFF, 0xFF ,0, 0, 0 , 10000010b, 11001111b, 0
+
+User runs in ring 3 protection scheme
+code db 0xFF, 0xFF ,0, 0, 0 , 11101010b, 11001111b, 0
+data db 0xFF, 0xFF ,0, 0, 0 , 11100010b, 11001111b, 0
+
+BasicOS installs a Trick GDT or bootstrap GDT to overcome the address translation issue since its a higher half kernel.
+Once the higher half kernel trick is done , it re initializes the GDT to a flat memory model.
+
+Basic OS will use segmentation at the least possible way to keep virtual memory management easier.
+
+The trick GDT has a base address of 0x40000000. Since base address of 0x40000000 + virtual memory offset will cause an overflow to
+start from 0. This helps to map kernel virtual address 0xC0000000 + 0x100000 <-> 0x100000
+
+Every gdt entry should contain a NULL setup which is basic protection scheme
+The next four are for code and data segment for kernel and user.
+Please not 
+
+TODO:A task state segment and support of thread specific objects.
+
+Later on once we jump into the kernel code , the GDT is set to flat memory model. 
+Here the base address is set to 0x0 and limit is set to 0xFFFFFFFF

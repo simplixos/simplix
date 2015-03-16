@@ -38,6 +38,8 @@
 #include <bos/k/vga.h>
 #endif
 
+#include <bos/k/arch/x86/serial.h>
+
 // Displays a single string onto the VGA BIOS stream.
 int kputs(const char *s)
 {
@@ -49,7 +51,11 @@ int kputchar(int ic)
 {
 	char c = (char) ic;
 	vga_put(c);
-
+	if(isSerialInitDone()) //Without init writing into console can cause strange lockups and reset
+	{
+		//TODO:write into a kernel buffer for debug rather than serial because its a User thing
+		serial_write_char(c);
+	}
 	return ic;
 }
 
@@ -108,6 +114,14 @@ int kprintf(const char * __restrict format, ... )
 			format++;
 			const char* s = va_arg(parameters, const char*);
 			kprint(s, strlen(s));
+		}
+		else if ( *format == 'd' )
+		{
+			format++;
+			int s = va_arg(parameters, int);
+			char buf[sizeof(int)+2]={0};
+			itoa(s,buf,10);
+			kprint(buf, strlen(buf));
 		}
 		else
 		{

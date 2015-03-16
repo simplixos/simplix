@@ -9,7 +9,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -152,4 +152,9 @@ static int serial_read_char(void)
 	if(!(inb(SERIAL_BASE_ADDR_COM1+SERIAL_LINE_STAT_REG) & SERIAL_IN_DATA_READY))
 		return SERIAL_NO_DATA;
 	return inb(SERIAL_BASE_ADDR_COM1+SERIAL_REC_BUF_REG);
+}
+
+int isSerialInitDone(void)
+{
+	return serial_init_done;
 }
