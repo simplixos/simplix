@@ -62,5 +62,6 @@ void init_paging()
                         "mov %%cr0, %%eax\n"
                         "orl $0x80000000, %%eax\n"
                         "mov %%eax, %%cr0\n" :: "m" (kernelpagedirPtr));
+	
 }
 
