@@ -8,7 +8,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -193,5 +193,5 @@ void tty_init();
 void serial_init();
 void serial_write_string(const char * string);
 void serial_write_char(int c);
-
+int isSerialInitDone(void);
 #endif // SERIAL_H

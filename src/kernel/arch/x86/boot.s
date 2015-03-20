@@ -37,6 +37,8 @@ MULTIBOOT_HEADER_MAGIC  equ 0x1BADB002
 MULTIBOOT_HEADER_FLAGS  equ MULTIBOOT_PAGE_ALIGN | MULTIBOOT_MEMORY_INFO
 MULTIBOOT_CHECKSUM      equ -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
 
+KERNEL_VIRTUAL_BASE equ 0xC0000000                  ; 3GB
+
 ; Multiboot header (needed to boot from GRUB)
 ALIGN 4
 multiboot_header:
@@ -46,6 +48,8 @@ multiboot_header:
 
 ; the kernel entry point
 start:
+	mov ecx ,eax ;save the magic number where grub stores in eax since we are loading trickgdt
+
         ; here's the trick: we load a GDT with a base address
         ; of 0x40000000 for the code (0x08) and data (0x10) segments
         lgdt [trickgdt]
@@ -64,6 +68,12 @@ higherhalf:
         ; by adding the base 0x40000000
 
         mov esp, sys_stack ; set up a new stack for our kernel
+
+	push ecx ; push bootloader magic that we saved
+
+	add ebx, KERNEL_VIRTUAL_BASE ;since ebx points to phy address add the kernel base address else will lead to triple fault
+
+	push ebx ; push multiboot structure pointer on the stack for _k_early
 
 	call _k_early ; jump to early setup functions in C
 

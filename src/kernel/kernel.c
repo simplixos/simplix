@@ -31,6 +31,7 @@
 
 #ifdef _x86
 	#include <bos/k/arch/x86/x86.h>
+	#include <bos/k/arch/x86/page_alloc.h>
 #else
 #endif
 
@@ -38,12 +39,13 @@
 
 #include <libk/stdio.h>
 
-void _k_early()
+void _k_early(multiboot_info_t* mbd , unsigned long lmagic)
 {
 	#ifdef _x86
 		init_x86();
 	#else
 	#endif
+	set_multiboot_info(mbd,lmagic);
 }
 
 // The Kernel's Main Entrypoint : kmain

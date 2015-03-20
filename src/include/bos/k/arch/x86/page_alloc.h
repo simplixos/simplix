@@ -1,14 +1,14 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: linker.ld
+ * File: include/bos/k/arch/x86/page_alloc.h
  * 
  * Description:
- * 	Script used to link the BasicOS kernel.
+ * 	Defines page allocation functions
  * 
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,44 +25,10 @@
  * 
  ***********************************************************************/
 
-OUTPUT_FORMAT("elf32-i386")
-OUTPUT_ARCH(i386)
-ENTRY(start)
+#ifndef PAGE_ALLOC_H
+#define PAGE_ALLOC_H
 
-SECTIONS
-{
-        . = 0x100000;
+#include <bos/k/arch/x86/multiboot.h>
 
-	setup_vm_address_begin = .;
-
-        .setup :
-        {
-                *(.setup)
-        }
-
-	setup_vm_address_end = .;
-
-        . += 0xC0000000;
-
-	kern_vm_address_begin = .;
-
-        .text : AT(ADDR(.text) - 0xC0000000)
-        {
-                *(.text)
-        }
-
-        .data ALIGN (4096) : AT(ADDR(.data) - 0xC0000000)
-        {
-                *(.data)
-                *(.rodata*)
-        }
-
-        .bss ALIGN (4096) : AT(ADDR(.bss) - 0xC0000000)
-        {
-                *(COMMON*)
-                *(.bss*)
-
-        }
-
-	kern_vm_address_end = .;
-}
+void set_multiboot_info(multiboot_info_t *info ,unsigned long magic);
+#endif // PAGE_ALLOC_H

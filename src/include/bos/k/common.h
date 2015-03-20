@@ -57,4 +57,6 @@
 	#define NULL ((void *)0)
 #endif // NULL
 
+#define UNUSED(x) (void)(x)
+
 #endif // COMMON_H

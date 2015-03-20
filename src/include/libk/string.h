@@ -9,7 +9,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ void *memset(void *s, int c, size_t n);
 
 // String Manipulation Function Prototypes
 size_t strlen(const char*);
+int itoa(int value, char *sp, int radix);
 
 #ifdef __cplusplus
 }

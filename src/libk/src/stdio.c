@@ -38,6 +38,8 @@
 #include <bos/k/vga.h>
 #endif
 
+#include <bos/k/arch/x86/serial.h>
+
 // Displays a single string onto the VGA BIOS stream.
 int kputs(const char *s)
 {
@@ -48,8 +50,12 @@ int kputs(const char *s)
 int kputchar(int ic)
 {
 	char c = (char) ic;
-	vga_writestr(&c, sizeof(c));
-
+	vga_put(c);
+	if(isSerialInitDone()) //Without init writing into console can cause strange lockups and reset
+	{
+		//TODO:write into a kernel buffer for debug rather than serial because its a User thing
+		serial_write_char(c);
+	}
 	return ic;
 }
 
@@ -109,6 +115,36 @@ int kprintf(const char * __restrict format, ... )
 			const char* s = va_arg(parameters, const char*);
 			kprint(s, strlen(s));
 		}
+		else if ( *format == 'd' )
+		{
+			format++;
+			int s = va_arg(parameters, int);
+			char buf[sizeof(int)+20]={0};
+			itoa(s,buf,10);
+			kprint(buf, strlen(buf));
+		}
+		else if ( *format == 'u' )
+		{
+			format++;
+			unsigned int s = va_arg(parameters, unsigned int);
+			char buf[sizeof(unsigned int)+20]={0};
+			itoa(s,buf,10);
+			kprint(buf, strlen(buf));
+		}
+		else if ( *format == 'x' )
+		{
+			format++;
+			unsigned int s = va_arg(parameters, unsigned int);
+			char buf[sizeof(unsigned int)+20]={0};
+			itoa(s,buf,16);
+			kprint(buf, strlen(buf));
+		}
+		else if ( *format == 'h' )
+		{
+			format++;
+			unsigned int s = va_arg(parameters, unsigned int);
+			kprintf_write_hex(s);
+		}
 		else
 		{
 			goto incomprehensible_conversion;
@@ -119,3 +155,45 @@ int kprintf(const char * __restrict format, ... )
  
 	return written;
 }
+
+void kprintf_write_hex(uint32_t n)
+{
+    int tmp;
+
+    kputchar("0x");
+
+    char noZeroes = 1;
+
+    int i;
+    for (i = 28; i > 0; i -= 4)
+    {
+        tmp = (n >> i) & 0xF;
+        if (tmp == 0 && noZeroes != 0)
+        {
+            continue;
+        }
+    
+        if (tmp >= 0xA)
+        {
+            noZeroes = 0;
+            kputchar (tmp-0xA+'a' );
+        }
+        else
+        {
+            noZeroes = 0;
+            kputchar( tmp+'0' );
+        }
+    }
+  
+    tmp = n & 0xF;
+    if (tmp >= 0xA)
+    {
+        kputchar (tmp-0xA+'a');
+    }
+    else
+    {
+        kputchar (tmp+'0');
+    }
+
+}
+

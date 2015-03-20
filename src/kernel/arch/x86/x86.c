@@ -35,6 +35,7 @@
 #include <bos/k/arch/x86/page.h>
 #include <bos/k/arch/x86/panic.h>
 #include <bos/k/arch/x86/serial.h>
+#include <bos/k/arch/x86/page_alloc.h>
 #else
 #endif
 
@@ -51,6 +52,10 @@ void init_x86()
 	// Initialize Interrupt Descriptor Tables and Interrupt Request Handler
 	idt_init();
         irq_init();
+
+	//Map our pages
+	//TODO
+	page_map_init(NULL,NULL);
 
         // Clear the screen
         vga_clear();
