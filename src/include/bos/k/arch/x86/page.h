@@ -32,11 +32,14 @@
 #include <bos/k/common.h>
 #include <bos/k/vga.h>
 
-// Declare the page directory and a page table, both 4kb-aligned
-unsigned long kernelpagedir[1024] __attribute__ ((aligned (4096)));
-unsigned long lowpagetable[1024] __attribute__ ((aligned (4096)));
+#include <bos/k/arch/x86/page_defines.h>
 
-// Function Declerations
+// Declare the page directory and a page table, both 4kb-aligned
+unsigned long kernelpagedir[PG_DIR_ENTRIES] 	__attribute__ ((aligned (PG_ALIGN_SIZE)));
+unsigned long lowpagetable[PG_TBL_ENTRIES] 	__attribute__ ((aligned (PG_ALIGN_SIZE)));
+
+
+// Function Declarations
 
 // This function fills the page directory and the page table,
 // then enables paging by putting the address of the page directory

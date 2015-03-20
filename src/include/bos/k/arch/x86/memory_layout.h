@@ -1,14 +1,14 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: linker.ld
+ * File: include/bos/k/arch/x86/memory_layout.h
  * 
- * Description:
- * 	Script used to link the BasicOS kernel.
+ * Description: Data that defines kernel Virtual and Physical memory
+ *
  * 
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,45 +24,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  ***********************************************************************/
+#ifndef MEM_LAYOUT_H
+#define MEM_LAYOUT_H
 
-OUTPUT_FORMAT("elf32-i386")
-OUTPUT_ARCH(i386)
-ENTRY(start)
 
-SECTIONS
-{
-        . = 0x100000;
+extern unsigned int setup_vm_address_begin;
+extern unsigned int setup_vm_address_end;
+extern unsigned int kern_vm_address_begin;
+extern unsigned int kern_vm_address_end;
 
-	setup_vm_address_begin = .;
 
-        .setup :
-        {
-                *(.setup)
-        }
+#define KERN_START kern_vm_address_begin
+#define KERN_END kern_vm_address_end
 
-	setup_vm_address_end = .;
+#define KERN_SIZE (kern_vm_address_end - kern_vm_address_end)/1024  //Size of kern In terms of KB
 
-        . += 0xC0000000;
+#define WRAP_ADDR 0x40000000
 
-	kern_vm_address_begin = .;
+#define virt_to_phy(addr) (addr + WRAP_ADDR)
 
-        .text : AT(ADDR(.text) - 0xC0000000)
-        {
-                *(.text)
-        }
-
-        .data ALIGN (4096) : AT(ADDR(.data) - 0xC0000000)
-        {
-                *(.data)
-                *(.rodata*)
-        }
-
-        .bss ALIGN (4096) : AT(ADDR(.bss) - 0xC0000000)
-        {
-                *(COMMON*)
-                *(.bss*)
-
-        }
-
-	kern_vm_address_end = .;
-}
+#endif
