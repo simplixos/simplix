@@ -165,6 +165,7 @@ void vga_writestr(char *c, size_t len)
 		vga_put(c[i]);
 }
 */
+
 // Outputs a null-terminated ASCII string to the monitor.
 void vga_write(char *c)
 {

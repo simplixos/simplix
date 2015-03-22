@@ -72,6 +72,7 @@ static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
 /** VGA Handling Functions (OBSOLETE - just used to compile without warings, for now...)**/
 
 void vga_clear();
+void vga_put(char c);
 void vga_write(char *c);
 void vga_writestr(char *c, size_t len);
 void vga_write_hex(uint32_t n);

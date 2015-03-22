@@ -43,15 +43,19 @@ void init_x86()
 {
 	// Initialise TTY and Serial devices
 	tty_init();
-	serial_init();	
+	serial_init();
 
 	// FIRST enable paging and THEN load the real GDT!
         init_paging();
         gdt_install();
-        
+
 	// Initialize Interrupt Descriptor Tables and Interrupt Request Handler
 	idt_init();
         irq_init();
+
+	// Enable Interrupts
+	int_enable();
+	int_nmi_enable();
 
 	//Map our pages
 	//TODO
@@ -59,8 +63,4 @@ void init_x86()
 
         // Clear the screen
         vga_clear();
-
-        // Enable Interrupts
-        int_enable();
-        int_nmi_enable();
 }
