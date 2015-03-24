@@ -30,5 +30,5 @@
 
 #include <bos/k/arch/x86/multiboot.h>
 
-void set_multiboot_info(multiboot_info_t *info ,unsigned long magic);
+void page_map_init(multiboot_info_t *info , unsigned long magic);
 #endif // PAGE_ALLOC_H

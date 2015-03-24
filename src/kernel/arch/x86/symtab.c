@@ -1,11 +1,10 @@
 /***********************************************************************
  * BasicOS Operating System
- *
- * File: kernel/arch/x86/x86.c
- *
- * Description:
- *      x86 specific code.
- *
+ * 
+ * File: kernel/arch/x86/symbtab.c
+ * 
+ * Description: Implementation of a symbol table.
+ * 
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
@@ -19,47 +18,31 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
+ * 
  ***********************************************************************/
+ 
+#include <bos/k/arch/x86/symtab.h>
+#include <libk/string.h>
 
-#include <bos/k/arch/x86/x86.h>
+#define MAXNOSYMTABS	2
 
-#ifdef _x86
-#include <bos/k/arch/x86/gdt.h>
-#include <bos/k/arch/x86/idt.h>
-#include <bos/k/arch/x86/int.h>
-#include <bos/k/arch/x86/irq.h>
-#include <bos/k/arch/x86/page.h>
-#include <bos/k/arch/x86/panic.h>
-#include <bos/k/arch/x86/serial.h>
-#include <bos/k/arch/x86/page_alloc.h>
-#else
-#endif
+symbol_tab_entry_t symtab_entries[MAXNOSYMTABS];
+static no_symtab_entries =0;
 
-void init_x86(multiboot_info_t* mbd , unsigned long lmagic)
+int add_symb_entry(int type , char *start ,char *end , char *name)
 {
-		// Initialise TTY and Serial devices
-		tty_init();
-		serial_init();	
-		
-		//Map our pages
-		page_map_init(mbd,lmagic);
-		
-		// FIRST enable paging and THEN load the real GDT!
-		init_paging();
-		gdt_install();
-        
-		// Initialize Interrupt Descriptor Tables and Interrupt Request Handler
-		idt_init();
-		irq_init();
-
-		// Clear the screen
-		vga_clear();
-
-		// Enable Interrupts
-		int_enable();
-		int_nmi_enable();
+	int retval = 0;
+	if(no_symtab_entries >= MAXNOSYMTABS) return retval; //an error ran out of space
+	
+	symbol_tab_entry_t *current_entry = &symtab_entries[no_symtab_entries];
+	current_entry->type=type;
+	current_entry->start=start;
+	current_entry->end=end;
+	memcpy(&current_entry->name,name,strlen(name));
+	no_symtab_entries++;
+	
+	return retval;
 }

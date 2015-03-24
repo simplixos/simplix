@@ -1,15 +1,14 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: include/bos/k/common.h
+ * File: include/bos/k/arch/x86/symtab.h
  * 
- * Description:
- * 	Defines common data types and I/O manipulation function 
- * 	prototypes.
+ * Description: API to work with symbol tables. Can hold symbols for both AOUT and ELF.
+ *
  * 
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,40 +24,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  ***********************************************************************/
+#ifndef SYMBOL_TABLE_H
+#define SYMBOL_TABLE_H
 
-#ifndef COMMON_H
-#define COMMON_H
+//Add more here later
+#define SYMBOL_TYPE_AOUT 	1
+#define SYMBOL_TYPE_ELF 	2
 
-#include <bos/k/defs.h>
+#define SYMBOL_NAME_LEN		32
 
-#ifdef __GNUC__
-	#include <stddef.h>
-	#include <stdarg.h>
-	#include <stdbool.h>
-	#include <stdint.h>
+typedef struct __symbol_tab_entry__
+{
+	int type;
+	char *start;
+	char *end;
+	char name[SYMBOL_NAME_LEN];
+}symbol_tab_entry_t;
+
+int add_symb_entry(int type , char *start ,char *end , char *name);
 #endif
-
-#ifdef _x86
-	#include <bos/k/arch/x86/io.h>
-#endif
-
-#ifdef _bos_k_libc
-#include <libk/string.h>
-#include <libk/stdio.h>
-#include <libk/stdlib.h>
-#endif
-
-// Common data types
-
-#define TRUE	1
-#define FALSE	0
-
-#ifndef NULL
-	#define NULL ((void *)0)
-#endif // NULL
-
-#define UNUSED(x) (void)(x)
-
-typedef	unsigned long	vm_offset_t;
-
-#endif // COMMON_H

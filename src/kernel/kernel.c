@@ -42,16 +42,16 @@
 void _k_early(multiboot_info_t* mbd , unsigned long lmagic)
 {
 	#ifdef _x86
-		init_x86();
+		init_x86(mbd,lmagic);
 	#else
 	#endif
-	set_multiboot_info(mbd,lmagic);
 }
 
 // The Kernel's Main Entrypoint : kmain
 void _k_main()
 {
-	// Print logo
+	
+		// Print logo
         kprintf(ASCII_LOGO);
 
         // Display build an authoring info
@@ -59,15 +59,16 @@ void _k_main()
         kprintf(AUTHOR_NOTE"\n");
         kprintf(COMPILE_NOTE"\n\n");
 
-	// Display CPU info
-	cpu_info();
+		// Display CPU info
+		cpu_info();
 
-	// Print a warm welcome!
+		// Print a warm welcome!
         kprintf("Hello, User!");
 
-	// Fake kernel Panic
-	//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);
-
+		// Fake kernel Panic
+		//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);
+		
         // Hang up the computer
         for (;;);
+        
 }

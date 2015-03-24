@@ -59,6 +59,7 @@ CSOURCES= 	kernel/stack_protector.c \
 		kernel/kernel.c	\
 		kernel/arch/x86/serial.c \
 		kernel/arch/x86/page_allocator.c \
+		kernel/arch/x86/symtab.c \
 
 ASMSOURCES= 	kernel/arch/x86/boot.s \
 		kernel/arch/x86/idt_asm.s \
@@ -105,6 +106,7 @@ CSOURCES_DEV= 	kernel/stack_protector.c \
 		kernel/kernel.c	\
 		kernel/arch/x86/serial.c \
 		kernel/arch/x86/page_allocator.c \
+		kernel/arch/x86/symtab.c \
 
 ASMSOURCES_DEV= kernel/arch/x86/boot.s \
 		kernel/arch/x86/idt_asm.s \

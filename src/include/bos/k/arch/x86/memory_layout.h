@@ -39,8 +39,10 @@ extern unsigned int kern_vm_address_end;
 
 #define KERN_SIZE (kern_vm_address_end - kern_vm_address_end)/1024  //Size of kern In terms of KB
 
+#define MAX_KERN_VM_ADDR 0x
 #define WRAP_ADDR 0x40000000
 
+#define KERNEL_VIRTUAL_BASE 0xC0000000
 #define virt_to_phy(addr) (addr + WRAP_ADDR)
 
 #endif
