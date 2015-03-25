@@ -27,12 +27,19 @@
 #ifndef MEM_LAYOUT_H
 #define MEM_LAYOUT_H
 
+typedef	unsigned long	vm_offset_t;
+typedef unsigned int 	natural_t; // this can be a pointer or an integer 
+typedef natural_t 	vm_size_t;
+
+#define KERNEL_VM_START_ADDRESS		0xC0000000
+
+#define phystokv(a)	((vm_offset_t)(a) + KERNEL_VM_START_ADDRESS)
+#define kvtophys(a)	((vm_offset_t)(a) - KERNEL_VM_START_ADDRESS)
 
 extern unsigned int setup_vm_address_begin;
 extern unsigned int setup_vm_address_end;
 extern unsigned int kern_vm_address_begin;
 extern unsigned int kern_vm_address_end;
-
 
 #define KERN_START kern_vm_address_begin
 #define KERN_END kern_vm_address_end

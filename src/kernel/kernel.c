@@ -52,23 +52,24 @@ void _k_main()
 {
 	
 		// Print logo
-        kprintf(ASCII_LOGO);
+		kprintf(ASCII_LOGO);
 
-        // Display build an authoring info
-        kprintf("BasicOS ver. "BAS_VER_FUL"\n");
-        kprintf(AUTHOR_NOTE"\n");
-        kprintf(COMPILE_NOTE"\n\n");
+		// Display build an authoring info
+		kprintf("BasicOS ver. "BAS_VER_FUL"\n");
+		kprintf(AUTHOR_NOTE"\n");
+		kprintf(COMPILE_NOTE"\n\n");
 
 		// Display CPU info
 		cpu_info();
 
 		// Print a warm welcome!
-        kprintf("Hello, User!");
+		kprintf("Hello, User!");
 
+		//start_phy_alloc_test();
 		// Fake kernel Panic
 		//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);
 		
-        // Hang up the computer
-        for (;;);
+		// Hang up the computer
+		for (;;);
         
 }
