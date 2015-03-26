@@ -1,14 +1,13 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: include/bos/k/arch/x86/page_alloc.h
+ * File: kernel/arch/x86/symbtab.c
  * 
- * Description:
- * 	Defines page allocation functions
+ * Description: Implementation of a symbol table.
  * 
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
+ * Copyright (C) 2015 Aun-Ali Zaidi
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,15 +23,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  ***********************************************************************/
+ 
+#include <bos/k/arch/x86/symtab.h>
+#include <libk/string.h>
 
-#ifndef PAGE_ALLOC_H
-#define PAGE_ALLOC_H
+#define MAXNOSYMTABS	2
 
-#define E_PHY_MEM_ALLOC_FAIL 0x100
+symbol_tab_entry_t symtab_entries[MAXNOSYMTABS];
+static int no_symtab_entries =0;
 
-#include <bos/k/arch/x86/multiboot.h>
-
-void page_map_init(multiboot_info_t *info , unsigned long magic);
-uint32_t phy_page_alloc( vm_offset_t *out_addr);
-
-#endif // PAGE_ALLOC_H
+int add_symb_entry(int type , char *start ,char *end , char *name)
+{
+	int retval = 0;
+	if(no_symtab_entries >= MAXNOSYMTABS) return retval; //an error ran out of space
+	
+	symbol_tab_entry_t *current_entry = &symtab_entries[no_symtab_entries];
+	current_entry->type=type;
+	current_entry->start=start;
+	current_entry->end=end;
+	memcpy(&current_entry->name,name,strlen(name));
+	no_symtab_entries++;
+	
+	return retval;
+}

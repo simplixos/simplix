@@ -1,10 +1,10 @@
 /***********************************************************************
  * BasicOS Operating System
  * 
- * File: include/bos/k/arch/x86/page_alloc.h
+ * File: include/bos/k/arch/x86/symtab.h
  * 
- * Description:
- * 	Defines page allocation functions
+ * Description: API to work with symbol tables. Can hold symbols for both AOUT and ELF.
+ *
  * 
  * License:
  * BasicOS Operating System - An experimental operating system.
@@ -24,15 +24,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  * 
  ***********************************************************************/
+#ifndef SYMBOL_TABLE_H
+#define SYMBOL_TABLE_H
 
-#ifndef PAGE_ALLOC_H
-#define PAGE_ALLOC_H
+//Add more here later
+#define SYMBOL_TYPE_AOUT 	1
+#define SYMBOL_TYPE_ELF 	2
 
-#define E_PHY_MEM_ALLOC_FAIL 0x100
+#define SYMBOL_NAME_LEN		32
 
-#include <bos/k/arch/x86/multiboot.h>
+typedef struct __symbol_tab_entry__
+{
+	int type;
+	char *start;
+	char *end;
+	char name[SYMBOL_NAME_LEN];
+}symbol_tab_entry_t;
 
-void page_map_init(multiboot_info_t *info , unsigned long magic);
-uint32_t phy_page_alloc( vm_offset_t *out_addr);
-
-#endif // PAGE_ALLOC_H
+int add_symb_entry(int type , char *start ,char *end , char *name);
+#endif

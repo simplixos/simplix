@@ -39,28 +39,27 @@
 #else
 #endif
 
-void init_x86()
+void init_x86(multiboot_info_t* mbd , unsigned long lmagic)
 {
-	// Initialise TTY and Serial devices
-	tty_init();
-	serial_init();
+		// Initialise TTY and Serial devices
+		tty_init();
+		serial_init();	
+		
+		//Map our physical space
+		page_map_init(mbd,lmagic);
+		
+		// FIRST enable paging and THEN load the real GDT!
+		init_paging();
+		gdt_install();
+        
+		// Initialize Interrupt Descriptor Tables and Interrupt Request Handler
+		idt_init();
+		irq_init();
 
-	// FIRST enable paging and THEN load the real GDT!
-        init_paging();
-        gdt_install();
-
-	// Initialize Interrupt Descriptor Tables and Interrupt Request Handler
-	idt_init();
-        irq_init();
-
-	// Enable Interrupts
-	int_enable();
-	int_nmi_enable();
-
-	//Map our pages
-	//TODO
-	page_map_init(NULL,NULL);
-
-        // Clear the screen
-        vga_clear();
+		// Enable Interrupts
+		int_enable();
+		int_nmi_enable();
+		
+		// Clear the screen
+		vga_clear();
 }

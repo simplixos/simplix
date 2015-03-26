@@ -42,17 +42,9 @@
 // The Kernel's Early Entrypoint : kearly
 void _k_early(multiboot_info_t* mbd, unsigned long lmagic)
 {
-	// Print Logo
-	kprintf(ASCII_LOGO);
-
-	// Display build and authoring info
-	kprintf("BasicOS ver. "BAS_VER_FUL"\n");
-	kprintf(AUTHOR_NOTE"\n");
-	kprintf(COMPILE_NOTE"\n\n");
-
-	#ifdef _x86
-		init_x86();
-
+		#ifdef _x86
+		init_x86(mbd,lmagic);
+		
 		// Print Logo
 		kprintf(ASCII_LOGO);
 
@@ -61,22 +53,21 @@ void _k_early(multiboot_info_t* mbd, unsigned long lmagic)
 		kprintf(AUTHOR_NOTE"\n");
 		kprintf(COMPILE_NOTE"\n\n");
 
-		set_multiboot_info(mbd, lmagic);
-
 		cpu_info();
-	#else
-	#endif
+		#endif
 }
 
 // The Kernel's Main Entrypoint : kmain
 void _k_main()
 {
-	// Print a warm welcome!
-        kprintf("Hello, User!");
+		// Print a warm welcome!
+		kprintf("Hello, User!");
 
-	// Fake kernel Panic
-	//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);
-
-        // Hang up the computer
-        for (;;);
+		//start_phy_alloc_test();
+		// Fake kernel Panic
+		//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);
+		
+		// Hang up the computer
+		for (;;);
+        
 }

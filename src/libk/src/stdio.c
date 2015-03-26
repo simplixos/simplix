@@ -121,7 +121,7 @@ int kprintf(const char * __restrict format, ... )
 		{
 			format++;
 			int s = va_arg(parameters, int);
-			char buf[sizeof(int)+20]={0};
+			char buf[sizeof(int)+20]={'\0'};
 			itoa(s,buf,10);
 			kprint(buf, strlen(buf));
 		}
@@ -129,7 +129,7 @@ int kprintf(const char * __restrict format, ... )
 		{
 			format++;
 			unsigned int s = va_arg(parameters, unsigned int);
-			char buf[sizeof(unsigned int)+20]={0};
+			char buf[sizeof(unsigned int)+20]={'\0'};
 			itoa(s,buf,10);
 			kprint(buf, strlen(buf));
 		}
@@ -137,7 +137,7 @@ int kprintf(const char * __restrict format, ... )
 		{
 			format++;
 			unsigned int s = va_arg(parameters, unsigned int);
-			char buf[sizeof(unsigned int)+20]={0};
+			char buf[sizeof(unsigned int)+20]={'\0'};
 			itoa(s,buf,16);
 			kprint(buf, strlen(buf));
 		}
@@ -154,7 +154,5 @@ int kprintf(const char * __restrict format, ... )
 	}
 
 	va_end(parameters);
-
-	return written;
 }
 

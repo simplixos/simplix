@@ -59,4 +59,6 @@
 
 #define UNUSED(x) (void)(x)
 
+typedef	unsigned long	vm_offset_t;
+
 #endif // COMMON_H
