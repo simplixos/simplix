@@ -46,7 +46,7 @@ struct test_input
 //typedef struct test_input  phy_mmap_params;
 
 struct test_input params[TEST_CASES]= 	{
-					{0x0,0xFFFFFFFF,0,0,0}
+					{0x0,0x00100,0,0,0}
 				};
 void start_phy_alloc_test()
 {
@@ -63,12 +63,12 @@ void start_phy_alloc_test()
 		
 		if(ret != E_PHY_MEM_ALLOC_FAIL)
 		{
-			printf("Mem alloc suceeded for test case [%d] start =[0x%x] end = [0x%x]!!! outaddr = [0x%x] \n",i,start,end,out_addr);
-			printf("phy last = [0x%x] , phy first = [0x%x] next avail [0x%x] \n",phys_last_addr,phys_first_addr,phy_next_avail_addr);
+			kprintf("Mem alloc suceeded for test case [%d] start =[0x%x] end = [0x%x]!!! outaddr = [0x%x] \n",i,start,end,out_addr);
+			kprintf("phy last = [0x%x] , phy first = [0x%x] next avail [0x%x] \n",phys_last_addr,phys_first_addr,phy_next_avail_addr);
 		}
 		else
 		{
-			printf("Mem alloc failed !!! [0x%x] \n",out_addr);
+			kprintf("Mem alloc failed !!! [0x%x] \n",out_addr);
 		}
 	}
 }

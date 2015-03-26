@@ -31,8 +31,8 @@
 
 /* Check if the bit BIT in FLAGS is set. */
 #define CHECK_FLAG(flags,bit)   ((flags) & (1 << (bit)))
-
-#define FATAL_ASSERT(x,s) if(x) _k_panic(" %s Error =[%d] %s Line [%d] \n",s,x, __FILE__, __LINE__);
+#define FATAL_ASSERT(x,s) if(x) _k_panic(" Error =[%d] %s Line [%d] \n",x, __FILE__, __LINE__);
+#define page_align(x)	((vm_offset_t)((((vm_offset_t)(x)) + PAGE_MASK) & ~PAGE_MASK))
 
 /*All static variables*/
 static bool isMultiBootInfoSet; //by default is 0 so false
@@ -53,15 +53,14 @@ multiboot_uint32_t elf_shndx;
 
 /*Need variables to track allocation*/
 
-static multiboot_info_t multiBootInfo;
 static bool isMultiBootInfoSet; // By default it is set to 0
 
 vm_offset_t phys_first_addr ;
 vm_offset_t phys_last_addr;
-vm_offset_t phy_next_avail_addr;
+vm_offset_t phy_next_avail_addr =1;
 
 /*proto*/
-static uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , bool page_alloc_needed , uint32_t alloc_size);
+uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , bool page_alloc_needed , uint32_t alloc_size);
 
 /*Calls this after enabling paging since page pointers are dereferenced*/
 void page_map_init(multiboot_info_t *info , unsigned long lmagic)
@@ -187,14 +186,17 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 		/*physically map these*/
 		if(cmdline_start_pa)
 		{
-			//ret = phy_mmap(cmdline_start_pa,cmdline_end_pa,&phy_cmdline,0,0); //store the command line info
-			//FATAL_ASSERT(ret,"Phy mmap failed for command line")
+			kprintf("cmdline_start_pa = 0x%x cmdline_end_pa = 0x%x",cmdline_start_pa,cmdline_end_pa);
+			ret = phy_mmap(cmdline_start_pa,cmdline_end_pa,&phy_cmdline,0,0); //store the command line info
+			FATAL_ASSERT(ret,"Phy mmap failed for command line")
+			kprintf("cmd phy last = [0x%x] , phy first = [0x%x] next avail [0x%x] \n",phys_last_addr,phys_first_addr,phy_next_avail_addr);
 		}
 
 		if(mods_start_pa)
 		{
-			//ret = phy_mmap(mods_start_pa,mods_end_pa,&phy_modstart,0,0);
-			//FATAL_ASSERT(ret,"Phy mmap failed for modules")
+			ret = phy_mmap(mods_start_pa,mods_end_pa,&phy_modstart,0,0);
+			FATAL_ASSERT(ret,"Phy mmap failed for modules")
+			kprintf("mod phy last = [0x%x] , phy first = [0x%x] next avail [0x%x] \n",phys_last_addr,phys_first_addr,phy_next_avail_addr);
 		}
 }		
 
@@ -202,7 +204,7 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 /*Call this before allocating the rest of the memory*/
 /*Copies data into new vm offset*/
 //out addr is a reallocated address in physical space
-static uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , bool page_alloc_needed , uint32_t alloc_size)
+uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , bool page_alloc_needed , uint32_t alloc_size)
 {
 	bool ret = 0;
 	
@@ -224,11 +226,12 @@ static uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_
 	vm_offset_t needed;
 	if(page_alloc_needed)
 	{
+		phy_next_avail_addr = page_align(phy_next_avail_addr);
 		needed = alloc_size +1;
 		if(needed > (phys_last_addr - phy_next_avail_addr) ) goto error;
-		//goto copy;//No need to copy since we want only allocation
-		goto advance;
-		//Align it to the page
+		*out_addr = phy_next_avail_addr;
+		phy_next_avail_addr+=needed;
+		//TODO:Align the return address to the page
 		return ret;
 	}
 	else
@@ -244,27 +247,20 @@ static uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_
 		vm_offset_t skip_bytes =1;
 		skip_bytes+= end - phy_next_avail_addr;
 		phy_next_avail_addr+=skip_bytes;
-		goto copy;
+		memcpy((void *)phystokv(phy_next_avail_addr) , (void *)phystokv(start) , needed);
 		phy_next_avail_addr-=skip_bytes;
 		memcpy((void *)phystokv(phy_next_avail_addr) , (void *)phystokv(phy_next_avail_addr+skip_bytes) , needed);
-		goto advance;
+		*out_addr = phy_next_avail_addr;
+		phy_next_avail_addr+=needed;
 		return ret;
 	}
 	else
 	{
-		goto copy;
-		goto advance;
-		return ret;
-	}
-	
-	copy:
-		//Lets copy the data
 		memcpy((void *)phystokv(phy_next_avail_addr) , (void *)phystokv(start) , needed);
-	
-	advance:
-		//Lets assign and advance
 		*out_addr = phy_next_avail_addr;
 		phy_next_avail_addr+=needed;
+		return ret;
+	}
 	
 	error:
 		//allocation failure

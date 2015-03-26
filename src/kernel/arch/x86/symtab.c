@@ -30,7 +30,7 @@
 #define MAXNOSYMTABS	2
 
 symbol_tab_entry_t symtab_entries[MAXNOSYMTABS];
-static no_symtab_entries =0;
+static int no_symtab_entries =0;
 
 int add_symb_entry(int type , char *start ,char *end , char *name)
 {

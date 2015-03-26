@@ -29,6 +29,7 @@
 #define PAGE_DEFS_H
 
 #define PG_ALIGN_SIZE		4096	// 4 Kb
+#define PAGE_MASK 		(PG_ALIGN_SIZE-1)
 
 #define BOOT_PG_DIR_INDEX	0	// Points to VMA of setup section
 #define KERN_PG_DIR_INDEX	768	// Points to VMA of kernel sections
