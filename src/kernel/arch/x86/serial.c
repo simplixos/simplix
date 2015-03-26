@@ -4,7 +4,7 @@
  * File: kernel/arch/x86/serial.c
  *
  * Description:
- *       Source file contains implementation of Basic Serial Driver. 
+ *       Source file contains implementation of Basic Serial Driver.
  *	 Serial driver for 8250
  *
  * License:
@@ -38,6 +38,8 @@ static int serial_init_done = 0;
 
 #define CHECK_INIT_DONE(x) if(!x) { kprintf("serial device not found "); return;}
 #define CHECK_INIT_DONE_RET(x) if(!x) { kprintf("serial device not found "); return serial_init_done;}
+
+#define SERIAL_DEVICE "8250"
 
 /*prototype*/
 static void serial_irq_handler (regs_t);
@@ -92,9 +94,8 @@ void serial_init()
 		inb(SERIAL_BASE_ADDR_COM1+SERIAL_INTR_IDENT_REG );
 		inb(SERIAL_BASE_ADDR_COM1+SERIAL_REC_BUF_REG );
 		serial_init_done = 1;
-		serial_write_string("|BasicOS Serial TTY|\n");
-		serial_write_string("Serial Device: 8250 \n");
-		serial_write_string("\n> ");
+		serial_write_string("serial_device: " SERIAL_DEVICE"\n");
+		serial_write_string("Serial init complete!\n");
 	}
 }
 

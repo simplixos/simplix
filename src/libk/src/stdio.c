@@ -46,36 +46,38 @@ int kputs(const char *s)
 	return kprintf("%s\n", s);
 }
 
-// write the byte specified by c to the VGA BIOS stream
+// Write the byte specified by c to the VGA BIOS stream
 int kputchar(int ic)
 {
 	char c = (char) ic;
+
 	vga_put(c);
-	if(isSerialInitDone()) //Without init writing into console can cause strange lockups and reset
+	if(isSerialInitDone()) // Without init writing into console can cause strange lockups and reset
 	{
-		//TODO:write into a kernel buffer for debug rather than serial because its a User thing
+		//TODO: Write into a kernel buffer for debug rather than serial because its a User thing
 		serial_write_char(c);
 	}
+
 	return ic;
 }
 
-// shall place output on the VGA BIOS stream
+// Write a string output onto the VGA BIOS stream
 static void kprint(const char *data, size_t data_length)
 {
 	for (size_t i = 0; i < data_length; i++)
 		kputchar((int) ((const unsigned char*) data)[i]); 
 }
 
-
+// Write a concatenated string output to the TYY output.
 int kprintf(const char * __restrict format, ... )
 {
 	va_list parameters;
 	va_start(parameters, format);
- 
+
 	int written = 0;
 	size_t amount;
 	bool rejected_bad_specifier = false;
- 
+
 	while ( *format != '\0' )
 	{
 		if ( *format != '%' )
@@ -89,12 +91,12 @@ int kprintf(const char * __restrict format, ... )
 			written += amount;
 			continue;
 		}
- 
+
 		const char* format_begun_at = format;
- 
+
 		if ( *(++format) == '%' )
 			goto print_c;
- 
+
 		if ( rejected_bad_specifier )
 		{
 		incomprehensible_conversion:
@@ -102,7 +104,7 @@ int kprintf(const char * __restrict format, ... )
 			format = format_begun_at;
 			goto print_c;
 		}
- 
+
 		if ( *format == 'c' )
 		{
 			format++;
@@ -143,53 +145,14 @@ int kprintf(const char * __restrict format, ... )
 		{
 			format++;
 			unsigned int s = va_arg(parameters, unsigned int);
-			kprintf_write_hex(s);
+			vga_write_hex(s);
 		}
 		else
 		{
 			goto incomprehensible_conversion;
 		}
 	}
- 
+
 	va_end(parameters);
- 
-	return written;
-}
-
-void kprintf_write_hex(uint32_t n)
-{
-	int tmp;
-
-	char noZeroes = 1;
-
-	int i;
-	for (i = 28; i > 0; i -= 4)
-	{
-		tmp = (n >> i) & 0xF;
-		if (tmp == 0 && noZeroes != 0)
-		{
-			continue;
-		}
-
-		if (tmp >= 0xA)
-		{
-			noZeroes = 0;
-			kputchar (tmp-0xA+'a' );
-		}
-		else
-		{
-			noZeroes = 0;
-			kputchar( tmp+'0' );
-		}
-	}
-	tmp = n & 0xF;
-	if (tmp >= 0xA)
-	{
-		kputchar (tmp-0xA+'a');
-	}
-	else
-	{
-		kputchar (tmp+'0');
-	}
 }
 

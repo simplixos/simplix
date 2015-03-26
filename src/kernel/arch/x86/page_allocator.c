@@ -24,16 +24,15 @@
  * 
  ***********************************************************************/
 
- #include <bos/k/arch/x86/page.h>
- #include <bos/k/arch/x86/memory_layout.h>
- #include <bos/k/arch/x86/multiboot.h>
- #include <bos/k/arch/x86/page_alloc.h>
+#include <bos/k/arch/x86/page.h>
+#include <bos/k/arch/x86/memory_layout.h>
+#include <bos/k/arch/x86/multiboot.h>
+#include <bos/k/arch/x86/page_alloc.h>
 
 /* Check if the bit BIT in FLAGS is set. */
 #define CHECK_FLAG(flags,bit)   ((flags) & (1 << (bit)))
 
 #define FATAL_ASSERT(x,s) if(x) _k_panic(" %s Error =[%d] %s Line [%d] \n",s,x, __FILE__, __LINE__);
-
 
 /*All static variables*/
 static bool isMultiBootInfoSet; //by default is 0 so false
@@ -54,6 +53,9 @@ multiboot_uint32_t elf_shndx;
 
 /*Need variables to track allocation*/
 
+static multiboot_info_t multiBootInfo;
+static bool isMultiBootInfoSet; // By default it is set to 0
+
 vm_offset_t phys_first_addr ;
 vm_offset_t phys_last_addr;
 vm_offset_t phy_next_avail_addr;
@@ -69,10 +71,10 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 
 		/* Am I booted by a Multiboot-compliant boot loader? */
 		if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
-        {
+		{
 			kprintf ("Invalid magic number: 0x%x\n", (unsigned) magic);
-           return;
-        }
+			return;
+		}
 		else
 		{
 			kprintf(" \n \n Kernel is Loaded by multiboot bootloader !\n");
@@ -86,7 +88,7 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 				kprintf ("mem_lower = %u KB, mem_upper = %u KB\n",(unsigned) mbi->mem_lower, (unsigned) mbi->mem_upper);
 
 		kprintf("RAM size is %d KB \n",mbi->mem_lower+mbi->mem_upper);
-       /* Is boot_device valid? */
+		/* Is boot_device valid? */
 		if (CHECK_FLAG (mbi->flags, 1))
 				kprintf ("boot_device = 0x%x\n", (unsigned) mbi->boot_device);
 
@@ -100,7 +102,7 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
      
 		/* Are mods_* valid? */
 		if (CHECK_FLAG (mbi->flags, 3))
-        {
+		{
 			multiboot_module_t *mod;
 			int i;
      
@@ -112,25 +114,25 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 				
 			mods_start_pa 	= 	mbi->mods_addr;
 			mods_end_pa		=	mods_start_pa + mbi->mods_count * sizeof(multiboot_module_t);
-        }
+		}
      
 		/* Bits 4 and 5 are mutually exclusive! */
 		if (CHECK_FLAG (mbi->flags, 4) && CHECK_FLAG (mbi->flags, 5))
-        {
+		{
 			kprintf ("Both bits 4 and 5 are set.\n");
 			return;
-        }
+		}
      
 		/* Is the symbol table of a.out valid? */
 		if (CHECK_FLAG (mbi->flags, 4))
-        {
+		{
 			multiboot_aout_symbol_table_t *multiboot_aout_sym = &(mbi->u.aout_sym);     
 			kprintf ("multiboot_aout_symbol_table: tabsize = 0x%0x, ""strsize = 0x%x, addr = 0x%x\n",(unsigned) multiboot_aout_sym->tabsize,(unsigned) multiboot_aout_sym->strsize,(unsigned) multiboot_aout_sym->addr);
-        }
+		}
      
 		/* Is the section header table of ELF valid? */
 		if (CHECK_FLAG (mbi->flags, 5))
-        {
+		{
 			multiboot_elf_section_header_table_t *multiboot_elf_sec = &(mbi->u.elf_sec);
 			kprintf ("multiboot_elf_sec: num = %u, size = 0x%x,"" addr = 0x%x, shndx = 0x%x\n",(unsigned) multiboot_elf_sec->num, (unsigned) multiboot_elf_sec->size,(unsigned) multiboot_elf_sec->addr, (unsigned) multiboot_elf_sec->shndx);
 			elf_num = multiboot_elf_sec->num;
@@ -138,22 +140,22 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 			elf_addr = (vm_offset_t)phystokv(multiboot_elf_sec->addr);
 			elf_shndx = multiboot_elf_sec->shndx;
 			//ELF support to add into symbol table
-        }
+		}
      
 		/* Are mmap_* valid? */
 		if (CHECK_FLAG (mbi->flags, 6))
-        {
+		{
 			multiboot_memory_map_t *mmap;
 			kprintf ("\n-----------------------Memory map------------------- \n");
 			kprintf ("mmap_addr = 0x%x, mmap_length = 0x%x\n",(unsigned) mbi->mmap_addr, (unsigned) mbi->mmap_length);
 			mbi->mmap_addr += KERNEL_VIRTUAL_BASE;
 			for (mmap = (multiboot_memory_map_t *) mbi->mmap_addr;
-                (unsigned long) mmap < mbi->mmap_addr + mbi->mmap_length;
-                mmap = (multiboot_memory_map_t *) ((unsigned long) mmap
+				(unsigned long) mmap < mbi->mmap_addr + mbi->mmap_length;
+					mmap = (multiboot_memory_map_t *) ((unsigned long) mmap
                                          + mmap->size + sizeof (mmap->size)))
 			{
 				kprintf (" map_adr = 0x%x size = 0x%x, base_addr = 0x%x%x, length = 0x%x%x, type = 0x%x \n",mmap,(unsigned int) mmap->size,mmap->addr >> 32,mmap->addr & 0xffffffff,mmap->len >> 32,mmap->len & 0xffffffff,(unsigned int) mmap->type);
-                if (mmap->type == 0x1) //Take the usable region
+				if (mmap->type == 0x1) //Take the usable region
 				{
 					unsigned long long start = mmap->addr, end = mmap->addr + mmap->len;
 					if (start >= 0x100000000ULL) 
@@ -175,9 +177,9 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 				}
 			}
 			isMultiBootMmapAvail = true; //it means we found a map to work with
-         }
-         kprintf ("---------------------End of Memory map----------------- \n \n \n");
-         kprintf("usable physical memory region found from 0x%x to 0x%x\n",phys_first_addr, phys_last_addr);
+		}
+		kprintf ("---------------------End of Memory map----------------- \n \n \n");
+		kprintf("usable physical memory region found from 0x%x to 0x%x\n",phys_first_addr, phys_last_addr);
          
 		isMultiBootInfoSet = true;
 		uint32_t ret;

@@ -1,12 +1,12 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
+ *
  * File: kernel/arch/x86page.c
- * 
+ *
  * Description:
  * 	Functions dealing with initializing and managing the Kernel
  * 	Paging Table.
- * 
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
@@ -20,16 +20,16 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
- 
- #include <bos/k/arch/x86/page.h>
- #include <bos/k/arch/x86/memory_layout.h>
 
-/*Boot Paging*/
+#include <bos/k/arch/x86/page.h>
+#include <bos/k/arch/x86/memory_layout.h>
+
+/* Boot-time Paging */
 
 // This function fills the page directory and the page table,
 // then enables paging by putting the address of the page directory
@@ -40,29 +40,29 @@ void init_paging()
         void *kernelpagedirPtr = 0;
         void *lowpagetablePtr = 0;
         int k = 0;
- 
+
         kernelpagedirPtr = (void *)virt_to_phy((char *)kernelpagedir);  // Translate the page directory from
-                                                                // virtual address to physical address
-        lowpagetablePtr =  (void *)virt_to_phy((char *)lowpagetable);    // Same for the page table
- 
+                                                                	// virtual address to physical address
+        lowpagetablePtr =  (void *)virt_to_phy((char *)lowpagetable);   // Same for the page table
+
         // Counts from 0 to 1023 to...
         for (k = 0; k < PG_TBL_ENTRIES; k++)
         {
-                lowpagetable[k] = (k * 4096) | PTE_P | PTE_W;     // ...map the first 4MB of memory into the page table...
+                lowpagetable[k] = (k * 4096) | PTE_P | PTE_W;		// ...map the first 4MB of memory into the page table...
         }
 	for (k = 0; k < PG_DIR_ENTRIES; k++)
 	{
- 	                kernelpagedir[k] = 0;                   // ...and clear the page directory entries
+ 	                kernelpagedir[k] = 0;				// ...and clear the page directory entries
 	}
 
         // Fills the addresses 0...4MB and 3072MB...3076MB of the page directory
         // with the same page table
- 
+
         kernelpagedir[BOOT_PG_DIR_INDEX] = kernelpagedir[KERN_PG_DIR_INDEX] = (unsigned long)lowpagetablePtr | PTE_P | PTE_W;
- 
+
         // Copies the address of the page directory into the CR3 register and, finally, enables paging!
- 
-        asm volatile (  
+
+        asm volatile (
 			//"movl %%cr4, %%eax"
   			//"orl $(CR4_PSE), %%eax"
   			//"movl %%eax, %%cr4\n"

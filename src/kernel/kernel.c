@@ -1,11 +1,11 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
+ *
  * File: kernel/kernel.c
- * 
+ *
  * Description:
  * 	This is the entry point for the main kernel.
- * 
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
@@ -19,10 +19,10 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
 
 #include <bos/k/common.h>
@@ -39,29 +39,27 @@
 
 #include <libk/stdio.h>
 
-void _k_early(multiboot_info_t* mbd , unsigned long lmagic)
+// The Kernel's Early Entrypoint : kearly
+void _k_early(multiboot_info_t* mbd, unsigned long lmagic)
 {
-	#ifdef _x86
+		#ifdef _x86
 		init_x86(mbd,lmagic);
-	#else
-	#endif
+		
+		// Print Logo
+		kprintf(ASCII_LOGO);
+
+		// Display build and authoring info
+		kprintf("BasicOS ver. "BAS_VER_FUL"\n");
+		kprintf(AUTHOR_NOTE"\n");
+		kprintf(COMPILE_NOTE"\n\n");
+
+		cpu_info();
+		#endif
 }
 
 // The Kernel's Main Entrypoint : kmain
 void _k_main()
 {
-	
-		// Print logo
-		kprintf(ASCII_LOGO);
-
-		// Display build an authoring info
-		kprintf("BasicOS ver. "BAS_VER_FUL"\n");
-		kprintf(AUTHOR_NOTE"\n");
-		kprintf(COMPILE_NOTE"\n\n");
-
-		// Display CPU info
-		cpu_info();
-
 		// Print a warm welcome!
 		kprintf("Hello, User!");
 

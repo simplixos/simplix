@@ -28,9 +28,9 @@
 #ifndef PAGE_ALLOC_H
 #define PAGE_ALLOC_H
 
-#include <bos/k/arch/x86/multiboot.h>
-
 #define E_PHY_MEM_ALLOC_FAIL 0x100
+
+#include <bos/k/arch/x86/multiboot.h>
 
 void page_map_init(multiboot_info_t *info , unsigned long magic);
 uint32_t phy_page_alloc( vm_offset_t *out_addr);

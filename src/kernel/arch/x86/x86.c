@@ -45,7 +45,7 @@ void init_x86(multiboot_info_t* mbd , unsigned long lmagic)
 		tty_init();
 		serial_init();	
 		
-		//Map our pages
+		//Map our physical space
 		page_map_init(mbd,lmagic);
 		
 		// FIRST enable paging and THEN load the real GDT!
@@ -56,10 +56,10 @@ void init_x86(multiboot_info_t* mbd , unsigned long lmagic)
 		idt_init();
 		irq_init();
 
-		// Clear the screen
-		vga_clear();
-
 		// Enable Interrupts
 		int_enable();
 		int_nmi_enable();
+		
+		// Clear the screen
+		vga_clear();
 }
