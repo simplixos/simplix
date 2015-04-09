@@ -1,12 +1,12 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
+ *
  * File: include/bos/k/common.h
- * 
+ *
  * Description:
  * 	Defines common data types and I/O manipulation function 
  * 	prototypes.
- * 
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
@@ -20,10 +20,10 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
 
 #ifndef COMMON_H
@@ -59,6 +59,8 @@
 
 #define UNUSED(x) (void)(x)
 
-typedef	unsigned long	vm_offset_t;
+#ifdef _x86
+	typedef	unsigned long vm_offset_t;
+#endif
 
 #endif // COMMON_H

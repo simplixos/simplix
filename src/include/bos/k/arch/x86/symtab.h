@@ -1,11 +1,11 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
+ *
  * File: include/bos/k/arch/x86/symtab.h
- * 
+ *
  * Description: API to work with symbol tables. Can hold symbols for both AOUT and ELF.
  *
- * 
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
@@ -19,15 +19,15 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
 #ifndef SYMBOL_TABLE_H
 #define SYMBOL_TABLE_H
 
-//Add more here later
+// TODO: Add more symbols for suported formats later on.
 #define SYMBOL_TYPE_AOUT 	1
 #define SYMBOL_TYPE_ELF 	2
 
@@ -39,7 +39,8 @@ typedef struct __symbol_tab_entry__
 	char *start;
 	char *end;
 	char name[SYMBOL_NAME_LEN];
-}symbol_tab_entry_t;
+} symbol_tab_entry_t;
 
 int add_symb_entry(int type , char *start ,char *end , char *name);
+
 #endif

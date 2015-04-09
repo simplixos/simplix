@@ -60,7 +60,6 @@ CSOURCES= 	kernel/stack_protector.c \
 		kernel/arch/x86/serial.c \
 		kernel/arch/x86/page_allocator.c \
 		kernel/arch/x86/symtab.c \
-		kernel/arch/x86/phy_page_alloc_test.c \
 
 ASMSOURCES= 	kernel/arch/x86/boot.s \
 		kernel/arch/x86/idt_asm.s \
@@ -108,7 +107,6 @@ CSOURCES_DEV= 	kernel/stack_protector.c \
 		kernel/arch/x86/serial.c \
 		kernel/arch/x86/page_allocator.c \
 		kernel/arch/x86/symtab.c \
-		kernel/arch/x86/phy_page_alloc_test.c \
 
 ASMSOURCES_DEV= kernel/arch/x86/boot.s \
 		kernel/arch/x86/idt_asm.s \
@@ -137,9 +135,13 @@ ASMSOURCES_DEV= kernel/arch/x86_64/boot.s \
 else #not come here
 endif
 
+ifeq ($(TESTS),1)
+CSOURCES= kernel/arch/x86/phy_page_alloc_test.c \
+CSOURCES_DEV= kernel/arch/x86/phy_page_alloc_test.c
+endif
+
 KERNEL_DEV=$(BIN_DIR)/basicosdev.bin
 KERNEL_STABLE=$(BIN_DIR)/basicosstable.bin
-
 
 COBJECTS_DEV = $(patsubst %.c,obj/%.od,$(CSOURCES_DEV)) # developer objects named with .od extension
 ASMOBJECTS_DEV = $(patsubst %.s,obj/%.sod,$(ASMSOURCES_DEV))# developer ASM objects named with .sod extension

@@ -154,5 +154,6 @@ int kprintf(const char * __restrict format, ... )
 	}
 
 	va_end(parameters);
+	return 0;
 }
 
