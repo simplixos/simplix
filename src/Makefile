@@ -58,7 +58,7 @@ CSOURCES= 	kernel/stack_protector.c \
 		hw/cpu/cpuid.c \
 		kernel/kernel.c	\
 		kernel/arch/x86/serial.c \
-		kernel/arch/x86/page_allocator.c \
+		kernel/arch/x86/phy_allocator.c \
 		kernel/arch/x86/symtab.c \
 		kernel/arch/x86/phy_page_alloc_test.c \
 
@@ -106,7 +106,7 @@ CSOURCES_DEV= 	kernel/stack_protector.c \
 		hw/cpu/cpuid.c \
 		kernel/kernel.c	\
 		kernel/arch/x86/serial.c \
-		kernel/arch/x86/page_allocator.c \
+		kernel/arch/x86/phy_allocator.c \
 		kernel/arch/x86/symtab.c \
 		kernel/arch/x86/phy_page_alloc_test.c \
 

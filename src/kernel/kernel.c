@@ -31,7 +31,7 @@
 
 #ifdef _x86
 	#include <bos/k/arch/x86/x86.h>
-	#include <bos/k/arch/x86/page_alloc.h>
+	#include <bos/k/arch/x86/phy_alloc.h>
 #else
 #endif
 

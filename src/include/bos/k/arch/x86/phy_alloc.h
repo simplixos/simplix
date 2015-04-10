@@ -25,8 +25,8 @@
  * 
  ***********************************************************************/
 
-#ifndef PAGE_ALLOC_H
-#define PAGE_ALLOC_H
+#ifndef PHY_ALLOC_H
+#define PHY_ALLOC_H
 
 #define E_PHY_MEM_ALLOC_FAIL 0x100
 
@@ -35,4 +35,4 @@
 void page_map_init(multiboot_info_t *info , unsigned long magic);
 uint32_t phy_page_alloc( vm_offset_t *out_addr);
 
-#endif // PAGE_ALLOC_H
+#endif // PHY_ALLOC_H

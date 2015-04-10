@@ -152,7 +152,7 @@ int kprintf(const char * __restrict format, ... )
 			goto incomprehensible_conversion;
 		}
 	}
-
+	//kprint("\n",1);
 	va_end(parameters);
 }
 
