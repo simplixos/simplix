@@ -29,8 +29,18 @@
 #include <bos/k/arch/x86/page.h>
 #include <bos/k/arch/x86/memory_layout.h>
 
+#define FATAL_ASSERT(x) if(x) _k_panic(" Error =[%d] %s Line [%d] \n",x, __FILE__, __LINE__);
+
+/*extern from phy_allocator.c*/
+extern vm_offset_t phys_first_addr ;
+extern vm_offset_t phys_last_addr;
 /* Boot-time Paging */
 
+/*Globals*/
+struct vm_page_dir page_dir ; //We allocate memory
+struct vm_page_dir *dir_ptr;
+
+#if 1
 // This function fills the page directory and the page table,
 // then enables paging by putting the address of the page directory
 // into the CR3 register and setting the 31st bit into the CR0 one
@@ -72,4 +82,73 @@ void init_paging()
                         "orl $0x80000001, %%eax\n"
                         "mov %%eax, %%cr0\n" :: "m" (kernelpagedirPtr));
 }
+#endif
 
+#if 0
+void init_paging()
+{
+		/*typedec*/
+		vm_offset_t addr;
+		uint32_t ret;
+		vm_offset_t start;
+		
+		/*2 level page table*/
+		
+		/*Allocate space for one page directory table and assign*/
+		dir_ptr = &page_dir;
+		ret = phy_page_alloc(&addr);
+		FATAL_ASSERT(ret)
+		dir_ptr->pg_base_dir = phystokv(addr);
+		kprintf("dir_ptr->pg_base_dir 0x%x phys_first_addr [0x%x] phys_last_addr [0x%x] \n",dir_ptr->pg_base_dir,phys_first_addr,phys_last_addr);
+		
+		/*map all physical address and set a page table entry for them*/
+		for (start = phystokv(phys_first_addr); start >= phystokv(phys_first_addr) && start < phystokv(phys_last_addr); )
+		{
+			/*advance to the right page directory base*/
+			vm_offset_t pg_addr;
+			pt_entry * 	pg_table_base_entry = 	(pt_entry *)dir_ptr + linear_to_pd_entry_num(kvtolin(start));
+			pt_entry * 	pg_table_entry		=	NULL;
+			pt_entry *  temp_pte;
+			
+			/*Allocate mem for a page table*/
+			phy_page_alloc(&pg_addr);
+			FATAL_ASSERT(ret)
+			pg_table_entry = (pt_entry *)phystokv(pg_addr);
+		
+			kprintf("Page Table Entry allocated ptr = [0x%x] start [0x%x] pg_table_base_entry [0x%x]\n",pg_table_entry,start,pg_table_base_entry);
+			/*Initialize the Page directory*/
+			//Mark this page directory as Write only
+			*pg_table_base_entry = (vm_offset_t)(kvtophys(pg_table_entry) | PTE_P | PTE_W);
+			
+			for(temp_pte = pg_table_entry;temp_pte <  pg_table_entry + num_pg_table_entries;temp_pte++)//Walk through 4096 bytes of page table in increment of 4bytes
+			{
+				/*Unused*/
+				if ((temp_pte - pg_table_entry) < ptenum(start))
+				{
+					*temp_pte = 0;
+				}
+				else
+				{
+					/*We come here , so we might be on a page corresponding to our kernel code/data ,so mark as present*/
+					if ((start >= (vm_offset_t) kern_vm_address_begin) && (start + PG_ALIGN_SIZE <= (vm_offset_t)kern_vm_address_end))
+					{
+						*temp_pte = (vm_offset_t)(kvtophys(pg_table_entry) | PTE_P);
+					}
+					else
+					{
+						//mark as present and writeable
+						*temp_pte = (vm_offset_t)(kvtophys(pg_table_entry) | PTE_P | PTE_W);
+					}
+					start+=PG_ALIGN_SIZE;
+				}
+			}
+		}
+		//TODO: remove arch specific code out of here.
+		asm volatile (
+						"mov %0, %%eax\n"
+                        "mov %%eax, %%cr3\n"
+                        "mov %%cr0, %%eax\n"
+                        "orl $0x80000001, %%eax\n"
+                        "mov %%eax, %%cr0\n" :: "m" (dir_ptr->pg_base_dir));
+}
+#endif

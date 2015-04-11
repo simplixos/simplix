@@ -24,7 +24,7 @@
  *
  ***********************************************************************/
 #include <bos/k/common.h>
-#include <bos/k/arch/x86/page_alloc.h>
+#include <bos/k/arch/x86/phy_alloc.h>
 #include <bos/k/arch/x86/memory_layout.h>
 #include <bos/k/arch/x86/multiboot.h>
 

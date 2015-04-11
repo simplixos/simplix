@@ -28,15 +28,8 @@
 #include <bos/k/arch/x86/x86.h>
 
 #ifdef _x86
-#include <bos/k/arch/x86/gdt.h>
-#include <bos/k/arch/x86/idt.h>
-#include <bos/k/arch/x86/int.h>
-#include <bos/k/arch/x86/irq.h>
-#include <bos/k/arch/x86/page.h>
-#include <bos/k/arch/x86/panic.h>
 #include <bos/k/arch/x86/serial.h>
-#include <bos/k/arch/x86/multiboot.h>
-#include <bos/k/arch/x86/page_alloc.h>
+#include <bos/k/arch/x86/phy_alloc.h>
 #else
 #endif
 

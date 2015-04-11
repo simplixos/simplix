@@ -32,24 +32,39 @@ typedef unsigned int 	natural_t;	// This can either be a pointer or an integer.
 typedef natural_t 	vm_size_t;
 
 #define KERNEL_VM_START_ADDRESS		0xC0000000
+#define WRAP_ADDR 					0x40000000
 
 #define phystokv(a)	((vm_offset_t)(a) + KERNEL_VM_START_ADDRESS)
 #define kvtophys(a)	((vm_offset_t)(a) - KERNEL_VM_START_ADDRESS)
 
-extern unsigned int setup_vm_address_begin;
-extern unsigned int setup_vm_address_end;
-extern unsigned int kern_vm_address_begin;
-extern unsigned int kern_vm_address_end;
+#define kvtolin(a)	((vm_offset_t)(a) + WRAP_ADDR)
 
-#define KERN_START kern_vm_address_begin
-#define KERN_END kern_vm_address_end
+// linear address is 32  bits ,skim off 22 bits because thats the page directory and divide by page size to get page number
+#define linear_to_pd_entry_num(a)	(((a) >> 22) & 0x3ff)
+
+extern char kern_vm_address_begin;
+extern char kern_vm_address_end;
+extern char setup_vm_address_begin;
+extern char setup_vm_address_end;
+
+#define KERN_START &kern_vm_address_begin
+#define KERN_END &kern_vm_address_end
+#define SETUP_START &setup_vm_address_begin
+#define SETUP_END &setup_vm_address_end
 
 #define KERN_SIZE (kern_vm_address_end - kern_vm_address_end)/1024  // Size of kernel In terms of KB
 
 #define MAX_KERN_VM_ADDR 0x
-#define WRAP_ADDR 0x40000000
 
-#define KERNEL_VIRTUAL_BASE 0xC0000000
+#define KERNEL_VIRTUAL_BASE 0xC0000000UL
+
+#define LINEAR_MIN_KERNEL_ADDRESS	(KERNEL_VIRTUAL_BASE)
+#define LINEAR_MAX_KERNEL_ADDRESS	(0xffffffffUL)
+
 #define virt_to_phy(addr) (addr + WRAP_ADDR)
+
+#define num_pg_table_entries	((((unsigned long)(1)) << 12)/sizeof(natural_t))
+
+#define ptenum(a)	(((a) >> 12) & 0x1ff) //gives index in page table
 
 #endif
