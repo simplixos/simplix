@@ -1,15 +1,15 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: include/libk/stdlib.h
+ * File: lib/libk/string/_memclr.c
  *
  * Description:
- *      Standard LibC related functions..
+ *      memclr - clear bytes in memory
  *      This file is part of the BasicOS Kernel LibC.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,20 +26,28 @@
  *
  ***********************************************************************/
 
-#ifndef _K_STDLIB_H
-#define _K_STDLIB_H
+#include <string.h>
 
-#include <libk/sys/cdefs.h>
+/** Memory Clear Function, memclr
+ * The memclr() function shall clear the n bytes
+ * (each interpreted as an unsigned long) of the
+ * object pointed to by p.
+ *
+ * @param  p Memory location to clear
+ * @param  n Number of bytes to clear
+ * @return   Return end of memory location
+ */
+void *memclr(void *p, register unsigned long n)
+{
+	register long *l;
+  register char *s;
+  register unsigned long m;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-__attribute__((__noreturn__))
-void abort(void);
-
-#ifdef __cplusplus
+	l = p;
+  m = n / sizeof(long);
+  while (m-- > 0) *l++ = 0;
+	s = (char *) l;
+  n = n % sizeof(long);
+  while (n-- > 0) *s++ = 0;
+  return(p);
 }
-#endif
-
-#endif // _K_STDLIB_H

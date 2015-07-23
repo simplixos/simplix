@@ -8,7 +8,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,9 +81,9 @@
  */
 
 /*FIFO Control Register*/
- 
+
 /*
- * BIT 0		Enable FIFOs , write 0 to clear FIFO 
+ * BIT 0		Enable FIFOs , write 0 to clear FIFO
  * BIT 1		Clear Receive FIFO
  * BIT 2		Clear Transmit FIFO
  * BIT 3		DMA Mode Select
@@ -139,7 +139,7 @@
  * BIT 7		Reserved
  */
 
-/* Line Status Register */  
+/* Line Status Register */
 
 /*			Error registers
  * BIT 0		Data Ready
@@ -152,7 +152,7 @@
  * BIT 7		Error in Received FIFO
  */
 
-/* Modem Status Register */  
+/* Modem Status Register */
 
 /*			Status of modem
  * BIT 0		Delta Clear To Send

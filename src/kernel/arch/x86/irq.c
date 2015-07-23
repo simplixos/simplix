@@ -4,12 +4,12 @@
  * File: kernel/arch/x86/irq.c
  *
  * Description:
- *      Handles initialization of IRQ and setup of highe level
+ *      Handles initialization of IRQ and setup of higher level
  *	interface.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-void irq_init() 
+void irq_init()
 {
   uint8_t pic0_icw4, pic1_icw4;
   pic0_icw4 = inb(IRQ_PIC0_DATA);
@@ -91,7 +91,7 @@ void irq_init()
   idt_fill_entry(irq1_offset + 13, (uint32_t) irq13, IDT_RING_0, IDT_INT_GATE_32);
   idt_fill_entry(irq1_offset + 14, (uint32_t) irq14, IDT_RING_0, IDT_INT_GATE_32);
   idt_fill_entry(irq1_offset + 15, (uint32_t) irq15, IDT_RING_0, IDT_INT_GATE_32);
-  
+
   for(int i =0 ;i<MAX_IRQ ;i++)
   {
   	irq_handlers[i].inuse =0;
@@ -99,13 +99,13 @@ void irq_init()
   }
 }
 
-bool irq_is_irq(uint8_t int_n) 
+bool irq_is_irq(uint8_t int_n)
 {
   return ((int_n >= irq0_offset && int_n < (irq0_offset + 8)) ||
           (int_n >= irq1_offset && int_n < (irq1_offset + 8))) ? TRUE : FALSE;
 }
 
-void irq_handler(regs_t regs) 
+void irq_handler(regs_t regs)
 {
   if (irq_handlers[regs.err_code].irq_handler_ptr != NULL)
     irq_handlers[regs.err_code].irq_handler_ptr(regs);
@@ -125,4 +125,3 @@ void register_irq_handler(interrupt_handler_t irq_handler_info ,int irq)
     }
   }
 }
-

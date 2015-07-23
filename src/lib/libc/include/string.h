@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: include/libk/string.h
+ * File: lib/libc/include/string.h
  *
  * Description:
  *      General purpose string manipulation and memory management.
@@ -9,7 +9,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #ifndef _STRING_H
 #define _STRING_H
 
-#include <libk/sys/cdefs.h>
+#include <sys/cdefs.h>
 
 #ifdef __GNUC__
 #include <stddef.h>
@@ -40,7 +40,7 @@ extern "C" {
 #endif
 
 // Memory Management Function Prototypes
-int memcmp(const void* aptr, const void* bptr, size_t size);
+int memcmp(const void* s1, const void* s2, size_t n);
 void *memclr(void *p, register unsigned long n);
 void *memcpy(void *restrict s1, const void *restrict s2, size_t n);
 void *memmove(void *s1, const void *s2, size_t n);
@@ -48,6 +48,7 @@ void *memset(void *s, int c, size_t n);
 
 // String Manipulation Function Prototypes
 size_t strlen(const char*);
+char *strcpy(char *restrict s1, const char *restrict s2);
 int itoa(int value, char *sp, int radix);
 
 #ifdef __cplusplus

@@ -8,7 +8,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,16 +30,11 @@
 #include <bos/k/vga.h>
 #include <bos/k/tty.h>
 
-#ifdef _bos_k_libc
-#include <libk/string.h>
-#include <libk/stdio.h>
-#endif
-
 size_t tty_row;
 size_t tty_column;
 uint8_t tty_color;
 uint16_t* tty_buffer;
- 
+
 void tty_init(void)
 {
 	tty_row = 0;
@@ -55,18 +50,18 @@ void tty_init(void)
 		}
 	}
 }
- 
+
 void tty_setcolor(uint8_t color)
 {
 	tty_color = color;
 }
- 
+
 void tty_putentryat(char c, uint8_t color, size_t x, size_t y)
 {
 	const size_t index = y * VGA_WIDTH + x;
 	tty_buffer[index] = make_vgaentry(c, color);
 }
- 
+
 void tty_putchar(char c)
 {
 	tty_putentryat(c, tty_color, tty_column, tty_row);
@@ -79,13 +74,13 @@ void tty_putchar(char c)
 		}
 	}
 }
- 
+
 void tty_write(const char* data, size_t size)
 {
 	for ( size_t i = 0; i < size; i++ )
 		tty_putchar(data[i]);
 }
- 
+
 void tty_writestr(const char* data)
 {
 	tty_write(data, strlen(data));

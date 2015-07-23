@@ -8,7 +8,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,9 +61,6 @@ vm_offset_t phys_first_addr ;
 vm_offset_t phys_last_addr;
 vm_offset_t phy_next_avail_addr =16*1024*1024; //By default point to 16 MB
 
-/* Function Prototype */
-uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , bool page_alloc_needed , uint32_t alloc_size);
-
 /* Calls this after enabling paging since page pointers are dereferenced */
 void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 {
@@ -109,7 +106,7 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 		if (CHECK_FLAG (mbi.flags, 3))
 		{
 			multiboot_module_t *mod;
-			int i;
+			unsigned int i;
 
 			kprintf ("mods_count = %d, mods_addr = 0x%x\n",(int) mbi.mods_count, (int) mbi.mods_addr);
 			for (i = 0, mod = (multiboot_module_t *) mbi.mods_addr;i < mbi.mods_count;i++, mod++)
@@ -118,7 +115,7 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 			}
 
 			mods_start_pa 	= 	mbi.mods_addr;
-			mods_end_pa		=	mods_start_pa + mbi.mods_count * sizeof(multiboot_module_t);
+			mods_end_pa	=	mods_start_pa + mbi.mods_count * sizeof(multiboot_module_t);
 		}
 
 		/* Bits 4 and 5 are mutually exclusive! */
@@ -131,7 +128,7 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 		/* Is the symbol table of a.out valid? */
 		if (CHECK_FLAG (mbi.flags, 4))
 		{
-			multiboot_aout_symbol_table_t *multiboot_aout_sym = &(mbi.u.aout_sym);     
+			multiboot_aout_symbol_table_t *multiboot_aout_sym = &(mbi.u.aout_sym);
 			kprintf ("multiboot_aout_symbol_table: tabsize = 0x%0x, ""strsize = 0x%x, addr = 0x%x\n",(unsigned) multiboot_aout_sym->tabsize,(unsigned) multiboot_aout_sym->strsize,(unsigned) multiboot_aout_sym->addr);
 		}
 
@@ -160,7 +157,7 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
                                          + mmap->size + sizeof (mmap->size)))
 			{
 				unsigned long long start = mmap->addr, end = mmap->addr + mmap->len;
-				if (start >= 0x100000000ULL) 
+				if (start >= 0x100000000ULL)
 				{
 					kprintf("Ignoring %luMiB RAM region above 4GiB\n", (unsigned long) (mmap->len >> 20));
 				}
@@ -251,7 +248,7 @@ uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , 
 		}
 
 		//make sure we dont touch kernel phy address
-		if((phy_next_avail_addr >= kvtophys(KERN_START)) && (phy_next_avail_addr <= kvtophys(KERN_END))) 
+		if((phy_next_avail_addr >= kvtophys(KERN_START)) && (phy_next_avail_addr <= kvtophys(KERN_END)))
 		{
 			kprintf("%s %d [in kern ]phy_next_avail_addr = [0x%x] alloc_size = [0x%x] \n",__FUNCTION__,__LINE__,phy_next_avail_addr,alloc_size);
 			vm_offset_t skip_bytes =1;
@@ -276,7 +273,7 @@ uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , 
 			if(needed > (phys_last_addr - phy_next_avail_addr) ) goto error;
 			*out_addr = phy_next_avail_addr;
 			phy_next_avail_addr+=needed;
-			//TODO:Align the return address to the page
+			//TODO: Align the return address to the page
 			return ret;
 		}
 		else

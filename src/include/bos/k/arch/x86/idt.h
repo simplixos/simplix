@@ -8,7 +8,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,10 +30,6 @@
 
 #include <bos/k/common.h>
 #include <bos/k/vga.h>
-
-#ifdef _bos_k_libc
-#include <libk/string.h>
-#endif
 
 #define IDT_TASK_GATE_32 1 | 1 << 2
 #define IDT_INT_GATE_16  1 << 1 | 1 << 2
@@ -61,9 +57,9 @@ typedef struct idt_pointer {
 
 struct regs {
   uint32_t ds;
-  uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax; 
-  uint32_t int_no, err_code;    
-  uint32_t eip, cs, eflags, useresp, ss; 
+  uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
+  uint32_t int_no, err_code;
+  uint32_t eip, cs, eflags, useresp, ss;
 };
 
 typedef struct regs regs_t, *pregs_t;

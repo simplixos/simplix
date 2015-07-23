@@ -8,7 +8,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,42 +32,54 @@
 #ifdef _x86
 	#include <bos/k/arch/x86/x86.h>
 	#include <bos/k/arch/x86/phy_alloc.h>
+	#include <hw/cpuid.h>
 #else
 #endif
 
-#include <hw/cpuid.h>
+#include <stdio.h>
 
-#include <libk/stdio.h>
-
-// The Kernel's Early Entrypoint : kearly
+/** The Kernel's Early Entrpoint function, kearly.
+ *
+ * This section is called within the initial trampoline/boot
+ * assembly after the initial bootup process. It then
+ * continues the setup by setting up CPU-specific features.
+ *
+ * @param mbd 	 Pointer to Multiboot info passed on by GRUB2
+ * @param lmagic Pointer to Multiboot Magic flag
+ */
 void _k_early(multiboot_info_t* mbd, unsigned long lmagic)
 {
-		#ifdef _x86
+	#ifdef _x86
 		init_x86(mbd,lmagic);
-		
-		// Print Logo
-		kprintf(ASCII_LOGO);
-
-		// Display build and authoring info
-		kprintf("BasicOS ver. "BAS_VER_FUL"\n");
-		kprintf(AUTHOR_NOTE"\n");
-		kprintf(COMPILE_NOTE"\n\n");
 
 		cpu_info();
-		#endif
+	#endif
 }
 
-// The Kernel's Main Entrypoint : kmain
-void _k_main()
+/** The Kernel's Main Entrypoint function, kmain.
+ *
+ * This function is called right after the exiting of the kearly
+ * function. It is the kernel's main loop which then probes for
+ * devices, loads any kernel extensions, switches to usermode,
+ * calls init_servers to initialize the servers, and calls
+ * the SysV init daemon.
+ *
+ */
+void _k_main(void)
 {
-		// Print a warm welcome!
-		kprintf("Hello, User!");
+	// Print a warm welcome!
+	kprintf("Hello, User!\n");
 
-		//start_phy_alloc_test();
-		// Fake kernel Panic
-		//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);
-		
-		// Hang up the computer
-		for (;;);
-        
+	#ifdef TESTS
+		kprintf("\nSystem Tests: \n\n");
+
+		// Physical Memory Allocator Test
+		start_phy_alloc_test();
+	#endif
+
+	// Fake kernel Panic
+	//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);
+
+	// Hang up the computer
+	for (;;);
 }

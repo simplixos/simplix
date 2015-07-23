@@ -1,14 +1,14 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
+ *
  * File: include/bos/k/arch/x86/gdt.h
- * 
+ *
  * Description:
  * 	Defines GDT constants and related structs.
- * 
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,15 +19,15 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
 
 #ifndef GDT_H
 #define GDT_H
- 
+
 #include <bos/k/common.h>
 #include <bos/k/vga.h>
 
@@ -67,4 +67,3 @@ void gdt_install();
 void gdt_flush();
 
 #endif // GDT_H
- 

@@ -4,12 +4,12 @@
  * File: include/bos/k/common.h
  *
  * Description:
- * 	Defines common data types and I/O manipulation function 
+ * 	Defines common data types and I/O manipulation function
  * 	prototypes.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,9 +43,9 @@
 #endif
 
 #ifdef _bos_k_libc
-#include <libk/string.h>
-#include <libk/stdio.h>
-#include <libk/stdlib.h>
+	#include <string.h>
+	#include <stdio.h>
+	#include <stdlib.h>
 #endif
 
 // Common data types

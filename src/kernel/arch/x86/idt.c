@@ -8,7 +8,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +27,6 @@
 
 #include <bos/k/arch/x86/idt.h>
 #include <bos/k/arch/x86/panic.h>
-
-#include <libk/stdio.h>
-#include <libk/string.h>
 
 idt_entry_t         idt_entries[256];
 idt_pointer_t       idt_pointer;
@@ -125,9 +122,6 @@ void idt_fill_entry(int entry, uint32_t handler, uint8_t ring, uint8_t type) {
 void isr_handler(regs_t regs) {
 	char buf[64] = {0};
 	kprintf(buf);
-	//kprintf("\n[EXCEPTION] interrupt ");
-	//kprintf(regs.int_no);
-	//kprintf(" raised.\n");
 	kprintf("\n[EXCEPTION] Interrupt %d raised!\n", regs.int_no);
 	kprintf(buf);
 	if (int_handlers[regs.int_no] != NULL)

@@ -1,7 +1,7 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: libk/stdlib.c
+ * File: lib/libc/include/stdlib.h
  *
  * Description:
  *      Standard LibC related functions.
@@ -9,7 +9,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,19 +26,20 @@
  *
  ***********************************************************************/
 
-#include <libk/stdlib.h>
-#include <libk/stdio.h>
-#include <libk/string.h>
+#ifndef _K_STDLIB_H
+#define _K_STDLIB_H
 
-#ifdef _x86
-#include <bos/k/arch/x86/panic.h>
+#include <sys/cdefs.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
-
 __attribute__((__noreturn__))
-void abort(void)
-{
-	_k_panic("Kernel Panic: abort()\n");
-	__builtin_unreachable();
+void abort(void);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif // _K_STDLIB_H

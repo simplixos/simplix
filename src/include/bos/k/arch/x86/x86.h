@@ -8,7 +8,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,14 +40,5 @@
 #endif
 
 void init_x86();
-
-static inline uint64_t rdtsc()
-{
-	uint64_t ret;
-	asm volatile ( "rdtsc" : "=A"(ret) );
-	return ret;
-}
-
-void timer_sample();
 
 #endif

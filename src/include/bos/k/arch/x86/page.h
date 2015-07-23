@@ -1,15 +1,15 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
+ *
  * File: include/bos/k/arch/x86/page.h
- * 
+ *
  * Description:
  * 	Defines Kernel Paging related constants, tables, and
  * 	prototypes.
- * 
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
 
 #ifndef PAGE_H
@@ -75,7 +75,7 @@ struct vm_page_dir
 	pt_entry 		pg_base_dir; // unsigned int so we will store all virtual addresses only here 0 <-> 4gb
 } __attribute__ ((aligned (PG_ALIGN_SIZE)));
 
-#define PAGE_SHIFT				12 
+#define PAGE_SHIFT				12
 #define NUM_PG_TBL_ENTRIES		(1<<PAGE_SHIFT/sizeof(pt_entry_t))
 
 #if 1

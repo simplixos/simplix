@@ -1,14 +1,14 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
+ *
  * File: kernel/vga.c
- * 
+ *
  * Description:
  * 	Functions used to control ASCII-text on a VGA Display.
- * 
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,10 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
 
 #include <bos/k/vga.h>
@@ -82,7 +82,7 @@ void vga_put(char c)
     uint8_t backColour = 0;
     uint8_t foreColour = 15;
 
-    // The attribute byte is made up of two nibbles - the lower being the 
+    // The attribute byte is made up of two nibbles - the lower being the
     // foreground colour, and the upper the background colour.
     uint8_t  attributeByte = (backColour << 4) | (foreColour & 0x0F);
     // The attribute byte is the top 8 bits of the word we have to send to the
@@ -192,7 +192,7 @@ void vga_write_hex(uint32_t n)
         {
             continue;
         }
-    
+
         if (tmp >= 0xA)
         {
             noZeroes = 0;
@@ -204,7 +204,7 @@ void vga_write_hex(uint32_t n)
             vga_put( tmp+'0' );
         }
     }
-  
+
     tmp = n & 0xF;
     if (tmp >= 0xA)
     {

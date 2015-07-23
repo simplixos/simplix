@@ -1,15 +1,15 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: include/libk/stdio.h
+ * File: lib/libk/stdlib/_abort.c
  *
  * Description:
- *      Standard input and output handling functions.
+ *      abort - generate an abnormal process abort
  *      This file is part of the BasicOS Kernel LibC.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,21 +26,21 @@
  *
  ***********************************************************************/
 
-#ifndef _STDIO_H
-#define _STDIO_H
+#include <stdlib.h>
 
-#include <libk/sys/cdefs.h>
-
-#ifdef __cplusplus
-extern "C" {
+#ifdef __bos_k_libc
+  #ifdef _x86
+    #include <bos/k/arch/x86/panic.h>
+  #endif
 #endif
 
-int kprintf(const char* __restrict, ...);
-int kputchar(int);
-int kputs(const char *);
-
-#ifdef __cplusplus
+/** Abnormal Exit, abort
+ * The abort() function shall cause abnormal process
+ * termination to occur.
+ */
+__attribute__((__noreturn__))
+void abort(void)
+{
+	_k_panic("Kernel Panic: abort()\n", __FILE__, __LINE__);
+	__builtin_unreachable();
 }
-#endif
-
-#endif // _STDIO_H

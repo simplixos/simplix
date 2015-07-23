@@ -1,15 +1,15 @@
 /***********************************************************************
  * BasicOS Operating System
  *
- * File: libk/stdio.c
+ * File: lib/libk/stdio/_kprintf.c
  *
  * Description:
- *      Standard LibC related functions.
+ *      Displays a concatenated
  *      This file is part of the BasicOS Kernel LibC.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,24 +26,24 @@
  *
  ***********************************************************************/
 
-#include <libk/string.h>
-#include <libk/stdio.h>
+#include <stdio.h>
+#include <string.h>
 
 #ifdef __GNUC__
-#include <stdbool.h>
-#include <stdarg.h>
+  #include <stdbool.h>
+  #include <stdarg.h>
 #endif
 
-#ifdef __bos_libk
-#include <bos/k/vga.h>
+#ifdef __bos_k_libc
+  #include <bos/k/vga.h>
+  #include <bos/k/arch/x86/serial.h>
 #endif
 
-#include <bos/k/arch/x86/serial.h>
-
-// Displays a single string onto the VGA BIOS stream.
-int kputs(const char *s)
+// Print a string output onto the output stream
+static void kprint(const char *data, size_t data_length)
 {
-	return kprintf("%s\n", s);
+	for (size_t i = 0; i < data_length; i++)
+		kputchar((int) ((const unsigned char*) data)[i]);
 }
 
 // Write the byte specified by c to the VGA BIOS stream
@@ -51,6 +51,7 @@ int kputchar(int ic)
 {
 	char c = (char) ic;
 
+  // TODO: MOVE THIS OUT OF HERE!!! ASAP!!!
 	vga_put(c);
 	if(isSerialInitDone()) // Without init writing into console can cause strange lockups and reset
 	{
@@ -61,15 +62,8 @@ int kputchar(int ic)
 	return ic;
 }
 
-// Write a string output onto the VGA BIOS stream
-static void kprint(const char *data, size_t data_length)
-{
-	for (size_t i = 0; i < data_length; i++)
-		kputchar((int) ((const unsigned char*) data)[i]); 
-}
-
 // Write a concatenated string output to the TYY output.
-int kprintf(const char * __restrict format, ... )
+int _kprintf(const char * __restrict format, ... )
 {
 	va_list parameters;
 	va_start(parameters, format);
@@ -156,4 +150,3 @@ int kprintf(const char * __restrict format, ... )
 	va_end(parameters);
 	return 0;
 }
-

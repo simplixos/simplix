@@ -6,7 +6,7 @@ BasicOS
 
 ![Demo1](https://aunali1.com/demo1.png)
 
-This repository contains the sample code for my personal
+This repository contains the complete code for my personal
 operating system.
 
 All code in this repository is subject to the terms in the
@@ -16,7 +16,7 @@ LICENSE document.
 
 To compile this operating system your build system must have the following prerequisites:
 
-    * POSIX Compliant Operating System (Linux, BSD, etc.)
+    * POSIX Compliant Operating System (Linux, BSD, etc.) (Cygwin also works.)
     * GCC-4.8.x C Compiler Toolchain
     * G++-4.8.x C++ Compiler Toolchain
     * Binutils 2.22.x

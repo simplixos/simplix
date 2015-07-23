@@ -7,7 +7,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,12 +23,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  ***********************************************************************/
-#include <bos/k/common.h>
+
 #include <bos/k/arch/x86/phy_alloc.h>
 #include <bos/k/arch/x86/memory_layout.h>
 #include <bos/k/arch/x86/multiboot.h>
-
-#include <libk/stdio.h>
 
 #define TEST_CASES 1
 
@@ -55,6 +53,7 @@ struct test_input params[TEST_CASES]= 	{
 					 0,
 					 0}
 					};
+
 // Physical Allocation test case.
 void start_phy_alloc_test()
 {

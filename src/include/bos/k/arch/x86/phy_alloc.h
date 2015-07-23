@@ -33,6 +33,8 @@
 #include <bos/k/arch/x86/multiboot.h>
 #include <bos/k/arch/x86/panic.h>
 
+uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , bool page_alloc_needed , uint32_t alloc_size);
+
 void page_map_init(multiboot_info_t *info, unsigned long magic);
 uint32_t phy_page_alloc(vm_offset_t *out_addr);
 

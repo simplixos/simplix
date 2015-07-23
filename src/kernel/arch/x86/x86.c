@@ -4,11 +4,11 @@
  * File: kernel/arch/x86/x86.c
  *
  * Description:
- *      x86 specific code.
+ * 	x86 specific code.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,34 +26,49 @@
  ***********************************************************************/
 
 #include <bos/k/arch/x86/x86.h>
+#include <bos/k/defs.h>
 
 #ifdef _x86
-#include <bos/k/arch/x86/serial.h>
-#include <bos/k/arch/x86/phy_alloc.h>
+	#include <bos/k/arch/x86/serial.h>
+	#include <bos/k/arch/x86/phy_alloc.h>
 #else
 #endif
 
+/** x86 Specific Initialization Code, init_x86.
+ *
+ * This section is called from the _k_early function in
+ * kernel/kernel.c and initializes the x86 cpu.
+ *
+ */
 void init_x86(multiboot_info_t* mbd, unsigned long lmagic)
 {
-		// Initialise TTY and Serial devices
-		tty_init();
-		serial_init();
+	// Initialise TTY and Serial devices
+	//tty_init();
+	serial_init();
 
-		// Map our physical space
-		page_map_init(mbd, lmagic);
+	// FIRST enable paging and THEN load the real GDT!
+	init_paging();
+	gdt_install();
 
-		// FIRST enable paging and THEN load the real GDT!
-		init_paging();
-		gdt_install();
+	// Initialize Interrupt Descriptor Tables and Interrupt Request Handler
+	idt_init();
+	irq_init();
 
-		// Initialize Interrupt Descriptor Tables and Interrupt Request Handler
-		idt_init();
-		irq_init();
+	// Enable Interrupts
+	int_enable();
+	int_nmi_enable();
 
-		// Enable Interrupts
-		int_enable();
-		int_nmi_enable();
+	// Print Logo
+	kprintf(ASCII_LOGO);
 
-		// Clear the screen
-		vga_clear();
+	// Display build and authoring info
+	vga_write("BasicOS ver. "BAS_VER_FUL"\n");
+	vga_write(AUTHOR_NOTE"\n");
+	vga_write(COMPILE_NOTE"\n\n");
+
+	// Map our physical space
+	page_map_init(mbd, lmagic);
+
+	// Clear the screen
+	//vga_clear();
 }

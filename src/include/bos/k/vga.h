@@ -1,15 +1,15 @@
 /***********************************************************************
  * BasicOS Operating System
- * 
+ *
  * File: include/bos/k/vga.h
- * 
+ *
  * Description:
  * 	Defines VGA screen buffer, memory locations, and other
  * 	VGA screen related constants.
- * 
+ *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  ***********************************************************************/
 
 #ifndef VGA_H
@@ -56,7 +56,7 @@ static inline uint8_t make_color(enum vga_color fg, enum vga_color bg)
 {
 	return fg | bg << 4;
 }
- 
+
 static inline uint16_t make_vgaentry(char c, uint8_t color)
 {
 	uint16_t c16 = c;
@@ -66,7 +66,7 @@ static inline uint16_t make_vgaentry(char c, uint8_t color)
 
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
- 
+
 static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
 
 /** VGA Handling Functions (OBSOLETE - just used to compile without warings, for now...)**/

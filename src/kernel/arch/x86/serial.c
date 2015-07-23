@@ -9,7 +9,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,10 +29,6 @@
 #include <bos/k/arch/x86/irq.h>
 #include <bos/k/arch/x86/serial.h>
 #include <bos/k/arch/x86/panic.h>
-
-#include <libk/stdio.h>
-#include <libk/string.h>
-#include <libk/stdlib.h>
 
 static int serial_init_done = 0;
 
@@ -64,7 +60,7 @@ void serial_init()
 	/*Set low byte and high byte of div latch*/
 	//TODO : uart clock required , hardcode baud to 115200
 
-	outb(SERIAL_BASE_ADDR_COM1 + SERIAL_DIV_LATCH_LOW, /*0x0C*/div_latch_val); 
+	outb(SERIAL_BASE_ADDR_COM1 + SERIAL_DIV_LATCH_LOW, /*0x0C*/div_latch_val);
 	outb(SERIAL_BASE_ADDR_COM1 + SERIAL_DIV_LATCH_HI,  /*0x00*/div_latch_val>>8);
 
 	/* 8 bits, no parity, one stop bit ,disable divisor latch */

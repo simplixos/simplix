@@ -4,11 +4,11 @@
  * File: hw/cpu/cpuid.c
  *
  * Description:
- *      Functions detecting CPUID and CPU features.
+ *      Functions detecting CPU and CPU features.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,90 +27,112 @@
 
 #include <hw/cpuid.h>
 
-#define cpuid(func,ax,bx,cx,dx)\
-	__asm__ __volatile__ ("cpuid":\
-	"=a" (ax), "=b" (bx), "=c" (cx), "=d" (dx) : "a" (func));
+#ifdef __GNUC__
+	#include <cpuid.h>
+	#ifdef __clang__
+		#define _CLANG_CPUID
+	#else
+		#define _GCC_CPUID
+	#endif
+#else
+	#define __get_cpuid(func,ax,bx,cx,dx)\
+		__asm__ __volatile__ ("cpuid":\
+		"=a" (ax), "=b" (bx), "=c" (cx), "=d" (dx) : "a" (func));
+#endif
 
 // Retrieve the maximum function callable using cpuid
 uint32_t cpuid_maxcall()
 {
-	uint32_t eax, ebx, ecx, edx;
-	cpuid(0, eax, ebx, ecx, edx);
-	return eax;
-}
-
-// Retrive the processors manufacturing stepping
-uint32_t cpuid_general_info()
-{
-	uint32_t eax, ebx, ecx, edx;
-	cpuid(1, eax, ebx, ecx, edx);
-	return eax;
+	#ifdef _CLANG_CPUID
+		int maxcall = __get_cpuid_max(0x0, NULL);
+	#elif defined(_GCC_CPUID)
+		unsigned maxcall = __get_cpuid_max(0x0, NULL);
+	#endif
+	return (uint32_t)maxcall;
 }
 
 // This will retrieve the CPU features available
 // returns the content of the edx register containing available features
 uint32_t cpuid_features()
 {
-	uint32_t eax, ebx, ecx, edx;
-	cpuid(1, eax, ebx, ecx, edx);
-	return edx;
+	unsigned eax, ebx, ecx, edx;
+	#ifdef _CLANG_CPUID
+		int features = __get_cpuid(1, &eax, &ebx, &ecx, &edx);
+	#elif defined(_GCC_CPUID)
+		unsigned features = __get_cpuid(1, &eax, &ebx, &ecx, &edx);
+	#endif
+	if (features == 0) return (uint32_t)0;
+	return (uint32_t)edx;
 }
 
 // This will retrieve the extended CPU features available
 // returns The content of the ecx register containing available extended features
 uint32_t cpuid_extended_features()
 {
-	uint32_t eax, ebx, ecx, edx;
-	cpuid(1, eax, ebx, ecx, edx);
-	return ecx;
+	unsigned eax, ebx, ecx, edx;
+	#ifdef _CLANG_CPUID
+		int extendedFeatures = __get_cpuid(1, &eax, &ebx, &ecx, &edx);
+	#elif defined(_GCC_CPUID)
+		unsigned extendedFeatures = __get_cpuid(1, &eax, &ebx, &ecx, &edx);
+	#endif
+	if (extendedFeatures == 0) return (uint32_t)0;
+	return (uint32_t)ecx;
 }
 
-/* -- Currently not Compiling!
+/* -- NOT WORKING : PAGE FAULT
 // Retrieve the processor name.
 // \param name Preallocated string containing at least room for 13 characters. Will
 // 	       contain the name of the processor.
 void cpuid_procname(char* name)
 {
   name[12] = 0;
-  u32int max_op;
-  cpuid(0, max_op, (u32int)name[0], (u32int)name[8], (u32int)name[4]);
+  uint32_t max_op;
+  __get_cpuid(0, max_op, (uint32_t)name[0], (uint32_t)name[8], (uint32_t)name[4]);
 }
 */
 
-void cpu_info()
+/** x86 CPUID Info Retrieval Function, cpu_info
+ *
+ * This function returns information retrieved from the
+ * CPUID x86 assembly instruction, such as CPU Name, Stepping,
+ * Model, Family, Processor Type, Extended Model, Extended
+ * Family, Features, and Extended Features.
+ *
+ */
+void cpu_info(void)
 {
+	unsigned eax, ebx, ecx, edx;
+	__get_cpuid(1, &eax, &ebx, &ecx, &edx);
+
 	char *procname;
 	//cpuid_procname(procname);
 	procname = "Unavailable";
 	kprintf("________________________________\n");
 	kprintf("|         Processor Info       |\n");
 	kprintf("********************************\n");
-	
-        // Processor Stepping, Model, Family, & Type
-        kprintf("     General Info: \n");
-        kprintf("     Stepping: ");
-        if (cpuid_general_info() & CPU_STEP_1) kprintf("1");
-        if (cpuid_general_info() & CPU_STEP_2) kprintf("2");
-        if (cpuid_general_info() & CPU_STEP_3) kprintf("3");
-        if (cpuid_general_info() & CPU_STEP_4) kprintf("4");
-        kprintf(" Model: ");
-        if (cpuid_general_info() & CPU_MODEL_4) kprintf("4");
-        if (cpuid_general_info() & CPU_MODEL_5) kprintf("5");
-        if (cpuid_general_info() & CPU_MODEL_6) kprintf("6");
-        if (cpuid_general_info() & CPU_MODEL_7) kprintf("7");
-        kprintf(" Family: ");
-        if (cpuid_general_info() & CPU_FAM_8)  kprintf("8");
-        if (cpuid_general_info() & CPU_FAM_9)  kprintf("9");
-        if (cpuid_general_info() & CPU_FAM_10) kprintf("10");
-        if (cpuid_general_info() & CPU_FAM_11) kprintf("11");
-        kprintf("\n");
-	
+
+	// Processor Stepping, Model, Family, & Type
+	kprintf("	General Info: \n");
+	kprintf("	Stepping: ");
+	kprintf("%d", eax & 0xF);
+	kprintf(" Model: ");
+	kprintf("%d", (eax >> 4) & 0xF);
+	kprintf(" Family: ");
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+	kprintf("%d", (eax >> 8) & 0xF);
+	#pragma GCC diagnostic pop
+	kprintf(" Extended Model: ");
+	kprintf("%d", (eax >> 16) & 0xF);
+	kprintf(" Extended Family: ");
+	kprintf("%d\n", (eax >> 20) & 0xFF);
+
 	kprintf("	Processor Name: \n");
 	kprintf("	"); kprintf(procname); kprintf("\n");
-	kprintf("	Processor Max cpuid Call: \n");
-	kprintf("	"); kprintf((char *)cpuid_maxcall()); kprintf("\n");
+	kprintf("	Processor Max 'cpuid' Calls: \n");
+	kprintf("	"); kprintf("%d\n", cpuid_maxcall());
+
 	kprintf("	Processor Features: \n");
-	
 	// Feature detection conditionals
 	if (cpuid_features() & CPU_FEATURE_FPU)	kprintf("	* FPU ");
 	if (cpuid_features() & CPU_FEATURE_VME) kprintf("VME ");
@@ -142,7 +164,7 @@ void cpu_info()
 	if (cpuid_features() & CPU_FEATURE_TM)  kprintf("TM ");
 	if (cpuid_features() & CPU_FEATURE_PBE) kprintf("PBE ");
 	kprintf("\n");
-	
+
 	// Processor Extended Features
 	kprintf("	Processor Extended Features: \n");
 	if (cpuid_extended_features() & CPU_FEATURE_EXT_SSE3) kprintf("	* SSE3 ");
@@ -156,8 +178,8 @@ void cpu_info()
 	kprintf("\n");
 
 	kprintf("________________________________\n");
-        kprintf("|         Processor Info       |\n");
-        kprintf("********************************\n");
+	kprintf("|         Processor Info       |\n");
+	kprintf("********************************\n");
 
 	kprintf("\n");
 	// TODO: Add CPUID detection for CPU built-in caches.

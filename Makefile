@@ -3,7 +3,7 @@
 #									      #
 # 	License:							      #
 #	BasicOS Operating System - An experimental operating system	      #
-#	Copyright (C) 2015 Aun-Ali Zaidi				      #
+#	Copyright (C) 2015 Aun-Ali Zaidi and its contributors.		      #
 #									      #
 #	This program is free software: you can redistribute it and/or modify  #
 #	it under the terms of the GNU General Public License as published by  #
@@ -19,9 +19,11 @@
 #	along with this program. If not, see <http://www.gnu.org/licenses/>.  #
 ###############################################################################
 
+.PHONY: help
+
 help:
 	@echo "Makefile for BasicOS Operating System."
-	@echo "Usage: make [ all | dev | stable | clean | distclean | help ] ARCH = x86 or x86_64" 
+	@echo "Usage: make [ all | debug | stable | clean | distclean | help ] ARCH = x86 or x86_64"
 	@echo ""
 	@echo
 
@@ -32,9 +34,9 @@ all:
 	./scripts/update_image.sh
 
 dev:
-	@echo "Building Bleeding-Edge Kernel!"
+	@echo "Building Bleeding-Edge Kernel with Debugging Symbols!"
 	@mkdir -p bin
-	make -C ./src dev
+	make -C ./src debug
 
 stable:
 	@echo "Building Stable Kernel!"
@@ -56,4 +58,3 @@ toolchain-x86_64:
 
 isoimage:
 	./scripts/update_image.sh
-

@@ -8,7 +8,7 @@
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,26 +29,6 @@
 #define CPUID_H
 
 #include <bos/k/common.h>
-
-#include <libk/stdio.h>
-
-// CPU Stepping
-#define CPU_STEP_1		1<<0
-#define CPU_STEP_2		1<<1
-#define CPU_STEP_3		1<<2
-#define CPU_STEP_4		1<<3
-
-// CPU Model
-#define CPU_MODEL_4		1<<4
-#define CPU_MODEL_5		1<<5
-#define CPU_MODEL_6		1<<6
-#define CPU_MODEL_7		1<<7
-
-// CPU Family
-#define CPU_FAM_8		1<<8
-#define CPU_FAM_9		1<<9
-#define CPU_FAM_10		1<<10
-#define CPU_FAM_11		1<<11
 
 // CPU Features
 
@@ -96,11 +76,10 @@
 // CPUID Funcs
 
 uint32_t cpuid_maxcall();
-uint32_t cpuid_general_info();
 uint32_t cpuid_features();
 uint32_t cpuid_extended_features();
 // TODO: implement cpuid func in inline asm/c to use with cpuid_procname
-// void cpuid_procname(char *name);
-void cpu_info();
+//void cpuid_procname(char *name);
+void cpu_info(void);
 
 #endif // CPUID_H

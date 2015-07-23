@@ -3,12 +3,12 @@
  *
  * File: include/bos/k/arch/x86/symtab.h
  *
- * Description: API to work with symbol tables. Can hold symbols for both AOUT and ELF.
- *
+ * Description:
+ * 	API to work with symbol tables. Can hold symbols for both AOUT and ELF.
  *
  * License:
  * BasicOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi , Rahul Ramesh
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@
 #ifndef SYMBOL_TABLE_H
 #define SYMBOL_TABLE_H
 
+#include <bos/k/common.h>
+
 // TODO: Add more symbols for suported formats later on.
 #define SYMBOL_TYPE_AOUT 	1
 #define SYMBOL_TYPE_ELF 	2
@@ -41,6 +43,6 @@ typedef struct __symbol_tab_entry__
 	char name[SYMBOL_NAME_LEN];
 } symbol_tab_entry_t;
 
-int add_symb_entry(int type , char *start ,char *end , char *name);
+int add_symb_entry(int type, char *start, char *end, char *name);
 
 #endif

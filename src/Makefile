@@ -3,7 +3,7 @@
 #									      #
 # 	License:							      #
 #	BasicOS Operating System - An experimental operating system	      #
-#	Copyright (C) 2015 Aun-Ali Zaidi				      #
+#	Copyright (C) 2015 Aun-Ali Zaidi and its contributors.		      #
 #									      #
 #	This program is free software: you can redistribute it and/or modify  #
 #	it under the terms of the GNU General Public License as published by  #
@@ -28,18 +28,24 @@ AS=../cross/os-toolchain/bin/nasm
 STRIP=../cross/os-toolchain/bin/i686-elf-strip
 
 INCLUDE=include/
-LIBDIR=libk/obj/
-LIBS=-lk
+INC_LIBC_DIR=lib/libc/include/
+INC_LIBPOSIX_DIR=lib/libposix/include/
+
+LIBDIR=lib/bin/
+LIBS=-lc -lposix
+
 OBJ_DIR=obj
 BIN_DIR=../bin
-LIBK_DIR=libk
 
-CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_bos_k_libc
+LIBC_DIR=lib/libc
+LIBPOSIX_DIR=lib/libposix
+
+CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -I$(INC_LIBC_DIR) -I$(INC_LIBPOSIX_DIR) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_bos_k_libc
 ASFLAGS=-felf32
 LDFLAGS=-T linker.ld
 
-CFLAGS_DEV=-g -std=gnu99 -I$(INCLUDE) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_bos_k_libc
-ASFLAGS_DEV=-g -felf32
+CFLAGS_DBG=-g -std=gnu99 -I$(INCLUDE) -I$(INC_LIBC_DIR) -I$(INC_LIBPOSIX_DIR) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_bos_k_libc
+ASFLAGS_DBG=-g -felf32
 
 ifeq ($(ARCH),x86)
 CFLAGS+=	-D_x86
@@ -60,11 +66,11 @@ CSOURCES= 	kernel/stack_protector.c \
 		kernel/arch/x86/serial.c \
 		kernel/arch/x86/phy_allocator.c \
 		kernel/arch/x86/symtab.c \
+		kernel/arch/x86/phy_page_alloc_test.c \
 
 ASMSOURCES= 	kernel/arch/x86/boot.s \
 		kernel/arch/x86/idt_asm.s \
 		kernel/arch/x86/isr.s \
-		kernel/test.s	\
 
 else ifeq ($(ARCH),x86_64) #64 bit support
 CFLAGS+=	-D_x86_64
@@ -84,14 +90,13 @@ CSOURCES= 	kernel/arch/x86_64/io.c \
 ASMSOURCES= 	kernel/arch/x86_64/boot.s \
 		kernel/arch/x86_64/idt_asm.s \
 		kernel/arch/x86_64/isr.s \
-		kernel/test.s	\
 else #not come here
 endif
 
 ifeq ($(ARCH),x86)
-CFLAGS_DEV+=	-D_x86
+CFLAGS_DBG+=	-D_x86
 
-CSOURCES_DEV= 	kernel/stack_protector.c \
+CSOURCES_DBG= 	kernel/stack_protector.c \
 		kernel/arch/x86/x86.c \
 		kernel/arch/x86/io.c \
 		kernel/vga.c \
@@ -107,16 +112,16 @@ CSOURCES_DEV= 	kernel/stack_protector.c \
 		kernel/arch/x86/serial.c \
 		kernel/arch/x86/phy_allocator.c \
 		kernel/arch/x86/symtab.c \
+		kernel/arch/x86/phy_page_alloc_test.c \
 
-ASMSOURCES_DEV= kernel/arch/x86/boot.s \
+ASMSOURCES_DBG= kernel/arch/x86/boot.s \
 		kernel/arch/x86/idt_asm.s \
 		kernel/arch/x86/isr.s \
-		kernel/test.s	\
 
 else ifeq ($(ARCH),x86_64) #64 bit support
-CFLAGS_DEV+=	-D_x86_64
+CFLAGS_DBG+=	-D_x86_64
 
-CSOURCES_DEV= 	kernel/arch/x86_64/io.c \
+CSOURCES_DBG= 	kernel/arch/x86_64/io.c \
 		kernel/vga.c \
 		kernel/arch/x86_64/tty.c \
 		kernel/arch/x86_64/gdt.c \
@@ -128,52 +133,52 @@ CSOURCES_DEV= 	kernel/arch/x86_64/io.c \
 		hw/cpu/cpuid.c \
 		kernel/kernel.c	\
 
-ASMSOURCES_DEV= kernel/arch/x86_64/boot.s \
+ASMSOURCES_DBG= kernel/arch/x86_64/boot.s \
 		kernel/arch/x86_64/idt_asm.s \
 		kernel/arch/x86_64/isr.s \
-		kernel/test.s	\
 else #not come here
 endif
 
 ifeq ($(TESTS),1)
-CSOURCES= kernel/arch/x86/phy_page_alloc_test.c \
-CSOURCES_DEV= kernel/arch/x86/phy_page_alloc_test.c
+CFLAGS+= -DTESTS
+CFLAGS_DBG+= -DTESTS
 endif
 
-KERNEL_DEV=$(BIN_DIR)/basicosdev.bin
-KERNEL_STABLE=$(BIN_DIR)/basicosstable.bin
+KERNEL_DBG=$(BIN_DIR)/basicos_dbg.bin
+KERNEL_STABLE=$(BIN_DIR)/basicos_stable.bin
 
-COBJECTS_DEV = $(patsubst %.c,obj/%.od,$(CSOURCES_DEV)) # developer objects named with .od extension
-ASMOBJECTS_DEV = $(patsubst %.s,obj/%.sod,$(ASMSOURCES_DEV))# developer ASM objects named with .sod extension
+COBJECTS_DBG = $(patsubst %.c,obj/%.od,$(CSOURCES_DBG)) # debug objects named with .od extension
+ASMOBJECTS_DBG = $(patsubst %.s,obj/%.sod,$(ASMSOURCES_DBG))# debug ASM objects named with .sod extension
 
 COBJECTS = $(patsubst %.c,obj/%.os,$(CSOURCES)) # stable objects named with .os extension
-ASMOBJECTS = $(patsubst %.s,obj/%.sos,$(ASMSOURCES))# stable ASM objects named with .os extension
+ASMOBJECTS = $(patsubst %.s,obj/%.sos,$(ASMSOURCES))# stable ASM objects named with .sos extension
 
 # add static libs here and provide a rule below
-LIBK=libk/obj/libk.a
+LIBC=$(LIBDIR)libc.a
+LIBPOSIX=$(LIBDIR)libposix.a
 
-$(COBJECTS_DEV): | obj
-$(ASMOBJECTS_DEV): | obj
+$(COBJECTS_DBG): | obj
+$(ASMOBJECTS_DBG): | obj
 obj:
-	@mkdir -p $@
+	@test -d $@ || mkdir $@
 
 $(COBJECTS): | obj
 $(ASMOBJECTS): | obj
 obj:
-	@mkdir -p $@
+	@test -d $@ || mkdir $@
 
-all: dev stable
+all: debug stable
 
-dev: $(CSOURCES) $(ASMSOURCES) $(KERNEL_DEV) 
+debug: $(CSOURCES) $(ASMSOURCES) $(KERNEL_DBG)
 
 stable: $(CSOURCES) $(ASMSOURCES) $(KERNEL_STABLE)
 
-$(KERNEL_DEV): $(COBJECTS_DEV) $(ASMOBJECTS_DEV) $(LIBK)
-	$(CC) $(LDFLAGS) $(CFLAGS_DEV) $(ASMOBJECTS_DEV) $(COBJECTS_DEV) $(LIBK) -o $@
+$(KERNEL_DBG): $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(LIBC) $(LIBPOSIX)
+	$(CC) $(LDFLAGS) $(CFLAGS_DBG) $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX) -o $@
 
-$(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS) $(LIBK)
+$(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS) $(LIBC) $(LIBPOSIX)
 	rm -f $(KERNEL_STABLE)
-	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBK) -o $@
+	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBC) $(LIBPOSIX) -o $@
 	$(STRIP) -s -g -v $(KERNEL_STABLE)
 
 obj/%.os: %.c
@@ -186,17 +191,20 @@ obj/%.sos: %.s
 
 obj/%.od: %.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS_DEV) -c $< -o $@
+	$(CC) $(CFLAGS_DBG) -c $< -o $@
 
 obj/%.sod: %.s
 	@mkdir -p $(@D)
-	$(AS) $(ASFLAGS_DEV)  $< -o $@
+	$(AS) $(ASFLAGS_DBG)  $< -o $@
 
-$(LIBK):
-	@cd $(LIBK_DIR) && $(MAKE) all #Any better way ?
+$(LIBC):
+	@cd $(LIBC_DIR) && $(MAKE) all #Any better way ?
+
+$(LIBPOSIX):
+	@cd $(LIBPOSIX_DIR) && $(MAKE) all
 
 clean:
-	@cd $(LIBK_DIR) && $(MAKE) clean
-	rm -rf $(COBJECTS) $(ASMOBJECTS) $(COBJECTS_DEV) $(ASMOBJECTS_DEV) $(KERNEL_DEV) $(OBJ_DIR) $(BIN_DIR)/basicosdev.bin \
-	$(BIN_DIR)/basicosstable.bin $(BIN_DIR)/basicos.iso
-
+	@cd $(LIBC_DIR) && $(MAKE) clean
+	@cd $(LIBPOSIX_DIR) && $(MAKE) clean
+	rm -rf $(COBJECTS) $(ASMOBJECTS) $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(KERNEL_DBG) $(OBJ_DIR) $(BIN_DIR)/basicos_dbg.bin \
+	$(BIN_DIR)/basicos_stable.bin $(BIN_DIR)/basicos.iso
