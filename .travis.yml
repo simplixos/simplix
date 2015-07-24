@@ -1,6 +1,13 @@
-compiler:
-  - gcc
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y flex bison nasm genisoimage qemu libgmp10 lib32gmp-dev libmpfr4 lib32mpfr-dev libmpc2 libmpc-dev
-script: make toolchain-x86 && make all ARCH=x86
+sudo: false
+addons:
+  apt:
+    packages:
+      - flex
+      - bison
+      - lib32gmp-dev
+      - lib32mpfr-dev
+      - libmpc-dev
+before_script:
+  - make toolchain-x86
+script:
+  - make all
