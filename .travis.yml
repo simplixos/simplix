@@ -4,9 +4,9 @@ addons:
     packages:
       - flex
       - bison
-      - lib32gmp-dev
-      - lib32mpfr-dev
-      - libmpc-dev
+      - libgmp-dev:i386
+      - libmpfr-dev:i386
+      - libmpc-dev:i386
 before_script:
   - make toolchain-x86
 script:
