@@ -1,12 +1,12 @@
-sudo: false
+sudo: true
 addons:
   apt:
     packages:
       - flex
       - bison
-      - libgmp-dev:i386
-      - libmpfr-dev:i386
-      - libmpc-dev:i386
+      - lib32gmp-dev
+      - lib32mpfr-dev
+      - libmpc-dev
 before_script:
   - make toolchain-x86
 script:
