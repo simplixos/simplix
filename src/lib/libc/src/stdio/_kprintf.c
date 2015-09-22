@@ -63,7 +63,7 @@ int kputchar(int ic)
 }
 
 // Write a concatenated string output to the TYY output.
-int _kprintf(const char * __restrict format, ... )
+int kprintf(const char * __restrict format, ... )
 {
 	va_list parameters;
 	va_start(parameters, format);
