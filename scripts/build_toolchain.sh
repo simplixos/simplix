@@ -33,6 +33,12 @@ platform='unknown'
 uname=$(uname)
 if [[ "$uname" == 'Linux' ]]; then
 	platform='linux'
+	if [ `getconf LONG_BIT` = "64" ]; then
+		wget https://dl.simplixos.org/toolchains/build/linux/x86_64/x86_64-linux-gnu_build-toolchain.tar.bz2
+		tar -xvf x86_64-linux-gnu_build-toolchain.tar.bz2
+		rm x86_64-linux-gnu_build-toolchain.tar.bz2
+		exit 0
+	fi
 elif [[ "$uname" == 'Darwin' ]]; then
 	platform='macos'
 elif [[ "$uname" == 'SunOS' ]]; then
@@ -51,9 +57,21 @@ wget http://ftp.gnu.org/gnu/binutils/binutils-2.25.tar.gz
 wget http://ftp.gnu.org/gnu/gcc/gcc-4.8.4/gcc-4.8.4.tar.bz2
 wget http://www.nasm.us/pub/nasm/releasebuilds/2.11.06/nasm-2.11.06.tar.gz
 
-tar -xzf binutils-2.25.tar.gz
-tar -xf gcc-4.8.4.tar.bz2
-tar -xzf nasm-2.11.06.tar.gz
+wget http://ftp.gnu.org/gnu/gmp/gmp-6.0.0a.tar.bz2
+wget http://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
+wget http://ftp.gnu.org/gnu/mpfr/mpfr-3.1.3.tar.gz
+wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.12.2.tar.bz2
+wget ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-0.18.1.tar.gz
+
+tar -xzvf binutils-2.25.tar.gz
+tar -xvf gcc-4.8.4.tar.bz2
+tar -xzvf nasm-2.11.06.tar.gz
+
+tar -xvf gmp-6.0.0a.tar.bz2
+tar -xzvf mpc-1.0.3.tar.gz
+tar -xzvf mpfr-3.1.3.tar.gz
+tar -xvf isl-0.12.2.tar.bz2
+tar -xzvf cloog-0.18.1.tar.gz
 
 rm -f *tar.gz
 rm -f *tar.bz2
@@ -71,6 +89,12 @@ else
 fi
 cd ..
 pwd
+
+mv gmp-6.0.0/ gcc-4.8.4/gmp/
+mv mpc-1.0.3/ gcc-4.8.4/mpc/
+mv mpfr-3.1.3/ gcc-4.8.4/mpfr/
+mv isl-0.12.2/ gcc-4.8.4/isl/
+mv cloog-0.18.1/ gcc-4.8.4/cloog/
 
 mkdir build-gcc
 cd build-gcc
