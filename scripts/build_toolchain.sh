@@ -34,7 +34,7 @@ uname=$(uname)
 if [[ "$uname" == 'Linux' ]]; then
 	platform='linux'
 	if [ `getconf LONG_BIT` = "64" ]; then
-		wget https://dl.simplixos.org/toolchains/build/linux/x86_64/x86_64-linux-gnu_build-toolchain.tar.bz2
+		wget http://dl.simplixos.org/toolchains/build/linux/x86_64/x86_64-linux-gnu_build-toolchain.tar.bz2
 		tar -xvf x86_64-linux-gnu_build-toolchain.tar.bz2
 		rm x86_64-linux-gnu_build-toolchain.tar.bz2
 		exit 0
