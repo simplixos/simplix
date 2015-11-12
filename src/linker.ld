@@ -37,6 +37,7 @@ SECTIONS
 
         .setup :
         {
+		*(.multiboot)
                 *(.setup)
         }
 

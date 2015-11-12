@@ -1,10 +1,10 @@
 #!/bin/sh
 
 ###############################################################################
-#	BasicOS Kernel i686 Toolchain Script				      #
+#	SimplixOS Kernel i686 Toolchain Script				      #
 #									      #
 # 	License:							      #
-#	BasicOS Operating System - An experimental operating system	      #
+#	SimplixOS Operating System - An experimental operating system	      #
 #	Copyright (C) 2015 Aun-Ali Zaidi and its contributors.		      #
 #									      #
 #	This program is free software: you can redistribute it and/or modify  #
@@ -25,7 +25,7 @@
 pwd=$(pwd)
 export PREFIX="$pwd/cross/os-toolchain"
 echo $PREFIX
-export TARGET=i686-elf
+export TARGET=i686-simplix
 echo $TARGET
 export PATH="$PREFIX/bin:$PATH"
 
@@ -53,25 +53,25 @@ mkdir src
 cd src
 pwd
 
-wget http://ftp.gnu.org/gnu/binutils/binutils-2.25.tar.gz
-wget http://ftp.gnu.org/gnu/gcc/gcc-4.8.4/gcc-4.8.4.tar.bz2
-wget http://www.nasm.us/pub/nasm/releasebuilds/2.11.06/nasm-2.11.06.tar.gz
+wget http://dl.simplixos.org/pub/toolchains/binutils/binutils-2.25.1.tar.bz2
+wget http://dl.simplixos.org/pub/toolchains/gcc/gcc-4.9.3/gcc-4.9.3.tar.bz2
+wget http://www.nasm.us/pub/nasm/releasebuilds/2.11.08/nasm-2.11.08.tar.gz
 
 wget http://ftp.gnu.org/gnu/gmp/gmp-6.0.0a.tar.bz2
 wget http://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
 wget http://ftp.gnu.org/gnu/mpfr/mpfr-3.1.3.tar.gz
-wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.12.2.tar.bz2
-wget ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-0.18.1.tar.gz
+wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.14.tar.bz2
+wget http://www.bastoul.net/cloog/pages/download/cloog-0.18.4.tar.gz
 
-tar -xzvf binutils-2.25.tar.gz
-tar -xvf gcc-4.8.4.tar.bz2
-tar -xzvf nasm-2.11.06.tar.gz
+tar -xzvf binutils-2.25.1.tar.bz2
+tar -xvf gcc-4.9.3.tar.bz2
+tar -xzvf nasm-2.11.08.tar.gz
 
 tar -xvf gmp-6.0.0a.tar.bz2
 tar -xzvf mpc-1.0.3.tar.gz
 tar -xzvf mpfr-3.1.3.tar.gz
-tar -xvf isl-0.12.2.tar.bz2
-tar -xzvf cloog-0.18.1.tar.gz
+tar -xvf isl-0.14.tar.bz2
+tar -xzvf cloog-0.18.4.tar.gz
 
 rm -f *tar.gz
 rm -f *tar.bz2
@@ -79,7 +79,7 @@ rm -f *tar.bz2
 mkdir build-binutils
 cd build-binutils
 pwd
-../binutils-2.25/configure --target=i686-elf --prefix="$pwd/cross/os-toolchain" --with-sysroot --disable-nls --disable-werror
+../binutils-2.25.1/configure --target=$TARGET --prefix=$PREFIX --with-sysroot --disable-nls --disable-werror
 if [[ $platform == 'solaris' ]]; then
 	gmake
 	gmake install
@@ -90,16 +90,16 @@ fi
 cd ..
 pwd
 
-mv gmp-6.0.0/ gcc-4.8.4/gmp/
-mv mpc-1.0.3/ gcc-4.8.4/mpc/
-mv mpfr-3.1.3/ gcc-4.8.4/mpfr/
-mv isl-0.12.2/ gcc-4.8.4/isl/
-mv cloog-0.18.1/ gcc-4.8.4/cloog/
+mv gmp-6.0.0/ gcc-4.9.3/gmp/
+mv mpc-1.0.3/ gcc-4.9.3/mpc/
+mv mpfr-3.1.3/ gcc-4.9.3/mpfr/
+mv isl-0.14/ gcc-4.9.3/isl/
+mv cloog-0.18.4/ gcc-4.9.3/cloog/
 
 mkdir build-gcc
 cd build-gcc
 pwd
-../gcc-4.8.4/configure --target=i686-elf --prefix="$pwd/cross/os-toolchain" --disable-nls --enable-languages=c,c++ --without-headers
+../gcc-4.9.3/configure --target=$TARGET --prefix=$PREFIX --disable-nls --enable-languages=c,c++ --without-headers
 if [[ $platform == 'solaris' ]]; then
 	gmake all-gcc
 	gmake all-target-libgcc
@@ -114,7 +114,7 @@ fi
 cd ..
 pwd
 
-cd nasm-2.11.06/
+cd nasm-2.11.08/
 ./configure --prefix="$pwd/cross/os-toolchain"
 if [[ $platform == 'solaris' ]]; then
 	gmake
@@ -130,7 +130,7 @@ cd ..
 rm -rf src/
 pwd
 
-os-toolchain/bin/i686-elf-gcc --version
+os-toolchain/bin/i686-simplix-gcc --version
 
 os-toolchain/bin/nasm -v
 

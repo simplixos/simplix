@@ -25,10 +25,6 @@
 ;---------------------------------------------------------------------------
 
 [BITS 32]		; 32 bit code
-[section .text]		; keep NASM happy
-[global start]		; make 'start' function global
-[extern _k_early]	; C kernel early events
-[extern _k_main]	; our C kernel main
 
 ; Multiboot constants
 MULTIBOOT_PAGE_ALIGN    equ 1<<0
@@ -39,6 +35,7 @@ MULTIBOOT_CHECKSUM      equ -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
 
 KERNEL_VIRTUAL_BASE equ 0xC0000000                  ; 3GB
 
+[section .multiboot]
 ; Multiboot header (needed to boot from GRUB)
 ALIGN 4
 multiboot_header:
@@ -46,6 +43,10 @@ multiboot_header:
         dd MULTIBOOT_HEADER_FLAGS
         dd MULTIBOOT_CHECKSUM
 
+[section .text]		; keep NASM happy
+[global start]		; make 'start' function global
+[extern _k_early]	; C kernel early events
+[extern _k_main]	; our C kernel main
 ; the kernel entry point
 start:
 	mov ecx ,eax ;save the magic number where grub stores in eax since we are loading trickgdt

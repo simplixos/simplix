@@ -23,9 +23,9 @@ include src/stdio/Makefile.obj
 include src/stdlib/Makefile.obj
 include src/string/Makefile.obj
 
-CC=../../../cross/os-toolchain/bin/i686-elf-gcc
-AR=../../../cross/os-toolchain/bin/i686-elf-ar
-RANLIB=../../../cross/os-toolchain/bin/i686-elf-ranlib
+CC=../../../cross/os-toolchain/bin/i686-simplix-gcc
+AR=../../../cross/os-toolchain/bin/i686-simplix-ar
+RANLIB=../../../cross/os-toolchain/bin/i686-simplix-ranlib
 
 INC_DIR=include/
 OS_INC_DIR=../../include/

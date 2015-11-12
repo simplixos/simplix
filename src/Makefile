@@ -23,9 +23,9 @@ ifndef ARCH
 $(error ARCH is not defined! Exiting!)
 endif
 
-CC=../cross/os-toolchain/bin/i686-elf-gcc
+CC=../cross/os-toolchain/bin/i686-simplix-gcc
 AS=../cross/os-toolchain/bin/nasm
-STRIP=../cross/os-toolchain/bin/i686-elf-strip
+STRIP=../cross/os-toolchain/bin/i686-simplix-strip
 
 INCLUDE=include/
 INC_LIBC_DIR=lib/libc/include/
