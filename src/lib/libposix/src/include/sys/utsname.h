@@ -1,16 +1,15 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: lib/libk/string/_strcpy.c
+ * File: sys/utsname.h
  *
  * Description:
- *      strcpy - copy a string and return a pointer to the end of the
- *      result
- *      This file is part of the BasicOS Kernel LibC.
+ *      Header that describes system name structures.
+ *      IEEE STD 1003.1, 2013 Edition
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
- * Copyright (C) 2015 Aun-Ali Zaidi and its contributors
+ * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,21 +26,19 @@
  *
  ***********************************************************************/
 
-#include <string.h>
+#ifndef _SYS_UTSNAME_H_
+#define _SYS_UTSNAME_H_
 
-/** String Copy Function, strcpy
- * The strcpy() function shall copy the string pointed
- * to by s2 (incluing the terminating NUL character) into
- * the array pointed to by s1.
- *
- * @param  s1 Destination array used in copy.
- * @param  s2 Source string used in copy.
- * @return    Destination object pointed to by s1.
- */
-char *strcpy(char *restrict s1, const char *restrict s2)
-{
-	char *tmp = s1;
+#define _UTS_LEN 64
 
-	while ((*s1++ == *s2++) != '\0');
-	return tmp;
-}
+struct utsname {
+  char sysname[_UTS_LEN + 1];  /* [XSI] Name of Operating System */
+  char nodename[_UTS_LEN + 1]; /* [XSI] Name of network node */
+  char release[_UTS_LEN + 1];  /* [XSI] Release level */
+  char version[_UTS_LEN + 1];  /* [XSI] Version level */
+  char machine[_UTS_LEN + 1];  /* [XSI] Hardware type */
+};
+
+int uname(struct utsname *name);
+
+#endif // _SYS_UTSNAME_H_

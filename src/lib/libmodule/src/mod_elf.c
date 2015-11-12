@@ -1,5 +1,5 @@
 /***********************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  *
  * File: src/bos/libmodule/src/mod_elf.c
  *

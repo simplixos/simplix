@@ -63,7 +63,7 @@ wget http://ftp.gnu.org/gnu/mpfr/mpfr-3.1.3.tar.gz
 wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.14.tar.bz2
 wget http://www.bastoul.net/cloog/pages/download/cloog-0.18.4.tar.gz
 
-tar -xzvf binutils-2.25.1.tar.bz2
+tar -xvf binutils-2.25.1.tar.bz2
 tar -xvf gcc-4.9.3.tar.bz2
 tar -xzvf nasm-2.11.08.tar.gz
 

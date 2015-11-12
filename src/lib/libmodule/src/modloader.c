@@ -1,5 +1,5 @@
 /***********************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  *
  * File: modules/modloader.c
  *

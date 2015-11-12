@@ -1,8 +1,8 @@
 ###############################################################################
-#       BasicOS Kernel LibC Makefile                                          #
+#       SimplixOS Kernel LibC Makefile                                        #
 #                                                                             #
 #       License:                                                              #
-#       BasicOS Operating System - An experimental operating system           #
+#       SimplixOS Operating System - An experimental operating system         #
 #       Copyright (C) 2015 Aun-Ali Zaidi and its contributors                 #
 #                                                                             #
 #       This program is free software: you can redistribute it and/or modify  #
@@ -60,4 +60,4 @@ obj/%.libc.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 clean:
-	rm -rf $(OBJS) $(OBJDIR)$(BIN) $(OBJDIR) $(BIN_DIR)/$(BIN)
+	rm -rf $(OBJS) $(OBJDIR)$(BIN) $(OBJDIR) $(BIN_DIR)/$(BIN) $(BIN)

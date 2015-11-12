@@ -1,8 +1,8 @@
 ###############################################################################
-#       BasicOS Kernel LibModule Makefile                                     #
+#       SimplixOS Kernel LibModule Makefile                                     #
 #                                                                             #
 #       License:                                                              #
-#       BasicOS Operating System - An experimental operating system           #
+#       SimplixOS Operating System - An experimental operating system           #
 #       Copyright (C) 2015 Aun-Ali Zaidi                                      #
 #                                                                             #
 #       This program is free software: you can redistribute it and/or modify  #
@@ -54,4 +54,4 @@ obj/%.libmod.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 clean:
-	rm -rf $(OBJS) $(BIN) $(OBJDIR)/$(BIN) $(OBJDIR)
+	rm -rf $(OBJS) $(BIN) $(OBJDIR)/$(BIN) $(OBJDIR) $(BIN)
