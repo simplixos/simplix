@@ -42,102 +42,19 @@ LIBPOSIX_DIR=lib/libposix
 
 CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -I$(INC_LIBC_DIR) -I$(INC_LIBPOSIX_DIR) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_bos_k_libc
 ASFLAGS=-felf32
-LDFLAGS=-T linker.ld
+# Architecture specific linker file. Specified in kernel/arch/$(ARCH)/linker-$(ARCH).ld
+LDFLAGS=-T $(LINK_SPEC)
 
 CFLAGS_DBG=-g -std=gnu99 -I$(INCLUDE) -I$(INC_LIBC_DIR) -I$(INC_LIBPOSIX_DIR) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_bos_k_libc
 ASFLAGS_DBG=-g -felf32
 
-ifeq ($(ARCH),x86)
-CFLAGS+=	-D_x86
+include kernel/Makefile.inc
+include kernel/arch/x86/Makefile.inc
+include hw/Makefile.inc
 
-CSOURCES= 	kernel/stack_protector.c \
-		kernel/arch/x86/x86.c \
-		kernel/arch/x86/io.c \
-		kernel/vga.c \
-		kernel/arch/x86/tty.c \
-		kernel/arch/x86/gdt.c \
-		kernel/arch/x86/idt.c \
-		kernel/arch/x86/panic.c \
-		kernel/arch/x86/irq.c \
-		kernel/arch/x86/int.c \
-		kernel/arch/x86/page.c \
-		hw/cpu/cpuid.c \
-		kernel/kernel.c	\
-		kernel/arch/x86/serial.c \
-		kernel/arch/x86/phy_allocator.c \
-		kernel/arch/x86/symtab.c \
-		kernel/arch/x86/phy_page_alloc_test.c \
+CSOURCES_DBG=$(CSOURCES)
+ASMSOURCES_DBG=$(ASMSOURCES)
 
-ASMSOURCES= 	kernel/arch/x86/boot.s \
-		kernel/arch/x86/idt_asm.s \
-		kernel/arch/x86/isr.s \
-
-else ifeq ($(ARCH),x86_64) #64 bit support
-CFLAGS+=	-D_x86_64
-
-CSOURCES= 	kernel/arch/x86_64/io.c \
-		kernel/vga.c \
-		kernel/arch/x86_64/tty.c \
-		kernel/arch/x86_64/gdt.c \
-		kernel/arch/x86_64/idt.c \
-		kernel/arch/x86_64/panic.c \
-		kernel/arch/x86_64/irq.c \
-		kernel/arch/x86_64/int.c \
-		kernel/arch/x86_64/page.c \
-		hw/cpu/cpuid.c \
-		kernel/kernel.c	\
-
-ASMSOURCES= 	kernel/arch/x86_64/boot.s \
-		kernel/arch/x86_64/idt_asm.s \
-		kernel/arch/x86_64/isr.s \
-else #not come here
-endif
-
-ifeq ($(ARCH),x86)
-CFLAGS_DBG+=	-D_x86
-
-CSOURCES_DBG= 	kernel/stack_protector.c \
-		kernel/arch/x86/x86.c \
-		kernel/arch/x86/io.c \
-		kernel/vga.c \
-		kernel/arch/x86/tty.c \
-		kernel/arch/x86/gdt.c \
-		kernel/arch/x86/idt.c \
-		kernel/arch/x86/panic.c \
-		kernel/arch/x86/irq.c \
-		kernel/arch/x86/int.c \
-		kernel/arch/x86/page.c \
-		hw/cpu/cpuid.c \
-		kernel/kernel.c	\
-		kernel/arch/x86/serial.c \
-		kernel/arch/x86/phy_allocator.c \
-		kernel/arch/x86/symtab.c \
-		kernel/arch/x86/phy_page_alloc_test.c \
-
-ASMSOURCES_DBG= kernel/arch/x86/boot.s \
-		kernel/arch/x86/idt_asm.s \
-		kernel/arch/x86/isr.s \
-
-else ifeq ($(ARCH),x86_64) #64 bit support
-CFLAGS_DBG+=	-D_x86_64
-
-CSOURCES_DBG= 	kernel/arch/x86_64/io.c \
-		kernel/vga.c \
-		kernel/arch/x86_64/tty.c \
-		kernel/arch/x86_64/gdt.c \
-		kernel/arch/x86_64/idt.c \
-		kernel/arch/x86_64/panic.c \
-		kernel/arch/x86_64/irq.c \
-		kernel/arch/x86_64/int.c \
-		kernel/arch/x86_64/page.c \
-		hw/cpu/cpuid.c \
-		kernel/kernel.c	\
-
-ASMSOURCES_DBG= kernel/arch/x86_64/boot.s \
-		kernel/arch/x86_64/idt_asm.s \
-		kernel/arch/x86_64/isr.s \
-else #not come here
-endif
 
 ifeq ($(TESTS),1)
 CFLAGS+= -DTESTS

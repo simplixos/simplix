@@ -81,5 +81,7 @@ void _k_main(void)
 	//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);
 
 	// Hang up the computer
-	for (;;);
+	for (int i = 0;; i++) {
+		kprintf("%d", i);
+	}
 }
