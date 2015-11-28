@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 ###############################################################################
 #	SimplixOS Kernel i686 Toolchain Script				      #
@@ -31,18 +31,50 @@ export PATH="$PREFIX/bin:$PATH"
 
 platform='unknown'
 uname=$(uname)
-if [[ "$uname" == 'Linux' ]]; then
+if [ "$uname" == 'Linux' ]; then
 	platform='linux'
 	if [ `getconf LONG_BIT` = "64" ]; then
-		wget http://dl.simplixos.org/toolchains/build/linux/x86_64/x86_64-linux-gnu_build-toolchain.tar.bz2
-		tar -xvf x86_64-linux-gnu_build-toolchain.tar.bz2
-		rm x86_64-linux-gnu_build-toolchain.tar.bz2
+		wget http://dl.simplixos.org/pub/toolchains/build/linux/x86_64/x86_64-unknown-linux-gnu_build-toolchain.tar.bz2
+		tar -xvf x86_64-unknown-linux-gnu_build-toolchain.tar.bz2
+		rm -f x86_64-unknown-linux-gnu_build-toolchain.tar.bz2
 		exit 0
 	fi
-elif [[ "$uname" == 'Darwin' ]]; then
+elif [ "$uname" == 'Darwin' ]; then
 	platform='macos'
-elif [[ "$uname" == 'SunOS' ]]; then
+	if [ `getconf LONG_BIT` = "64" ]; then
+		wget http://dl.simplixos.org/pub/toolchains/build/darwin/x86_64/x86_64-apple-darwin15.0.0_build-toolchain.tar.bz2
+		tar -xvf x86_64-apple-darwin15.0.0_build-toolchain.tar.bz2
+		rm -f x86_64-apple-darwin15.0.0_build-toolchain.tar.bz2
+		exit 0
+	fi
+elif [ "$uname" == 'SunOS' ]; then
 	platform='solaris'
+	if [ `getconf LONG_BIT` = "64" ]; then
+		wget http://dl.simplixos.org/pub/toolchains/build/solaris/x86_64/x86_64-pc-solaris2.11_build-toolchain.tar.bz2
+		tar -xvf x86_64-pc-solaris2.11_build-toolchain.tar.bz2
+		rm -f x86_64-pc-solaris2.11_build-toolchain.tar.bz2
+		exit 0
+	fi
+elif [ "$uname" == 'Cygwin' ]; then
+	platform='cygwin'
+	if [ `getconf LONG_BIT` = "64" ]; then
+		wget http://dl.simplixos.org/pub/toolchains/build/cygwin/x86_64/x86_64-pc-cygwin_build-toolchain.tar.bz2
+		tar -xvf x86_64-pc-cygwin_build-toolchain.tar.bz2
+		rm -f x86_64-pc-cygwin_build-toolchain.tar.bz2
+		exit 0
+	elif [ `getconf LONG_BIT` = "32" ]; then
+		wget https://dl.simplixos.org/pub/toolchains/build/cygwin/i686/i686-pc-cygwin_build-toolchain.tar.bz2
+		tar -xvf i686-pc-cygwin_build-toolchain.tar.bz2
+		rm -f i686-pc-cygwin_build-toolchain.tar.bz2
+		exit 0
+	fi
+elif [ "$uname" == 'FreeBSD' ]; then
+	platform='freebsd'
+	if [ `getconf LONG_BIT` = "64" ]; then
+		wget https://dl.simplixos.org/pub/toolchains/build/bsd/freebsd/x86_64/x86_64-freebsd10.1_build-toolchain.tar.bz2
+		tar -xjvf x86_64-freebsd10.1_build-toolchain.tar.bz2
+		rm -f x86_64-freebsd10.1_build-toolchain.tar.bz2
+	fi
 fi
 
 mkdir cross

@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 ###############################################################################
-#	BasicOS Kernel ISO Image Creation/Update Script			      #
+#	SimplixOS Kernel ISO Image Creation/Update Script		      #
 #									      #
 # 	License:							      #
-#	BasicOS Operating System - An experimental operating system	      #
+#	SimplixOS Operating System - An experimental operating system	      #
 #	Copyright (C) 2015 Aun-Ali Zaidi and its contributors.		      #
 #									      #
 #	This program is free software: you can redistribute it and/or modify  #
@@ -23,25 +23,29 @@
 
 platform='unknown'
 uname=$(uname)
-if [[ "$uname" == 'Linux' ]]; then
+if [ "$uname" == 'Linux' ]; then
         platform='linux'
-elif [[ "$uname" == 'Darwin' ]]; then
+elif [ "$uname" == 'Darwin' ]; then
         platform='macos'
-elif [[ "$uname" == 'SunOS' ]]; then
+elif [ "$uname" == 'SunOS' ]; then
         platform='solaris'
+elif [ "$uname" == 'Cygwin' ]; then
+	platform='cygwin'
+elif [ "$uname" == 'FreeBSD' ]; then
+	platform='freebsd'
 fi
 
 mkdir -p isodir
 mkdir -p isodir/boot
 mkdir -p isodir/boot/grub
 echo $PWD
-cp bin/basicos_stable.bin ./isodir/boot/basicos_stable.bin
-cp bin/basicos_dbg.bin ./isodir/boot/basicos_dbg.bin
+cp bin/simplixos_stable.bin ./isodir/boot/simplixos_stable.bin
+cp bin/simplixos_dbg.bin ./isodir/boot/simplixos_dbg.bin
 cp scripts/grub.cfg ./isodir/boot/grub/grub.cfg
 cp scripts/stage2_eltorito ./isodir/boot/grub/stage2_eltorito
-if [[ $platform == 'solaris' ]]; then
-        mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o bin/basicos.iso isodir
+if [ $platform == 'solaris' ]; then
+        mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o bin/simplixos.iso isodir
 else
-	grub-mkrescue -o bin/basicos.iso isodir
+	grub-mkrescue -o bin/simplixos.iso isodir
 fi
-rm -r isodir
+rm -rf isodir

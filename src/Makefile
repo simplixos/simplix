@@ -1,8 +1,8 @@
 ###############################################################################
-#	BasicOS Kernel Makefile						      #
+#	SimplixOS Kernel Makefile					      #
 #									      #
 # 	License:							      #
-#	BasicOS Operating System - An experimental operating system	      #
+#	SimplixOS Operating System - An experimental operating system	      #
 #	Copyright (C) 2015 Aun-Ali Zaidi and its contributors.		      #
 #									      #
 #	This program is free software: you can redistribute it and/or modify  #
@@ -55,14 +55,13 @@ include hw/Makefile.inc
 CSOURCES_DBG=$(CSOURCES)
 ASMSOURCES_DBG=$(ASMSOURCES)
 
-
 ifeq ($(TESTS),1)
 CFLAGS+= -DTESTS
 CFLAGS_DBG+= -DTESTS
 endif
 
-KERNEL_DBG=$(BIN_DIR)/basicos_dbg.bin
-KERNEL_STABLE=$(BIN_DIR)/basicos_stable.bin
+KERNEL_DBG=$(BIN_DIR)/simplixos_dbg.bin
+KERNEL_STABLE=$(BIN_DIR)/simplixos_stable.bin
 
 COBJECTS_DBG = $(patsubst %.c,obj/%.od,$(CSOURCES_DBG)) # debug objects named with .od extension
 ASMOBJECTS_DBG = $(patsubst %.s,obj/%.sod,$(ASMSOURCES_DBG))# debug ASM objects named with .sod extension
@@ -76,12 +75,12 @@ LIBPOSIX=$(LIBDIR)libposix.a
 
 $(COBJECTS_DBG): | obj
 $(ASMOBJECTS_DBG): | obj
-obj:
+obj::
 	@test -d $@ || mkdir $@
 
 $(COBJECTS): | obj
 $(ASMOBJECTS): | obj
-obj:
+obj::
 	@test -d $@ || mkdir $@
 
 all: debug stable
@@ -115,7 +114,7 @@ obj/%.sod: %.s
 	$(AS) $(ASFLAGS_DBG)  $< -o $@
 
 $(LIBC):
-	@cd $(LIBC_DIR) && $(MAKE) all #Any better way ?
+	@cd $(LIBC_DIR) && $(MAKE) all
 
 $(LIBPOSIX):
 	@cd $(LIBPOSIX_DIR) && $(MAKE) all
@@ -123,5 +122,4 @@ $(LIBPOSIX):
 clean:
 	@cd $(LIBC_DIR) && $(MAKE) clean
 	@cd $(LIBPOSIX_DIR) && $(MAKE) clean
-	rm -rf $(COBJECTS) $(ASMOBJECTS) $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(KERNEL_DBG) $(OBJ_DIR) $(BIN_DIR)/basicos_dbg.bin \
-	$(BIN_DIR)/basicos_stable.bin $(BIN_DIR)/basicos.iso
+	rm -rf $(COBJECTS) $(ASMOBJECTS) $(KERNEL_STABLE) $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(KERNEL_DBG) $(OBJ_DIR) $(BIN_DIR)
