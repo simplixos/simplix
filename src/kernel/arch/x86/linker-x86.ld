@@ -1,13 +1,13 @@
 /***********************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  * 
- * File: linker.ld
+ * File: kernel/arch/x86/linker-x86.ld
  * 
  * Description:
- * 	Script used to link the BasicOS kernel.
+ * 	Script used to link the x86 SimplixOS kernel.
  * 
  * License:
- * BasicOS Operating System - An experimental operating system.
+ * SimplixOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi
  *
  * This program is free software: you can redistribute it and/or modify

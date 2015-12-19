@@ -1,5 +1,5 @@
 /***********************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  *
  * File: bos/k/mods/mod_elf.h
  *
@@ -7,7 +7,7 @@
  *      Elf related header for ELF module loader.
  *
  * License:
- * BasicOS Operating System - An experimental operating system.
+ * SimplixOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify

@@ -45,7 +45,7 @@ kern_start = 0x100000;/*Load this program beginning from this address . Change l
 
 /*SECTIONS is called a command to setup bss , data ,code and various other segments*/
 
-/* use this "objdump -t basicos.bin " to check the address assignment for verification*/
+/* use this "objdump -t simplixos.bin " to check the address assignment for verification*/
 SECTIONS
 {
 
@@ -79,7 +79,7 @@ SECTIONS
 	end=.; //track end
 }
 
-BasicOs is a higher half kernel . It means virtual addresses with in kernel all start from 0xC0000000 + 0x10000
+SimplixOS is a higher half kernel . It means virtual addresses with in kernel all start from 0xC0000000 + 0x10000
 The primary purpose is isolated user processes virtual addresses from 1mb <-> 3gb
 
 Please note dont confuse with physical address as that will beging ox10000

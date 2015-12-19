@@ -1,5 +1,5 @@
 /************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  *
  * File: kernel/arch/x86/irq.c
  *
@@ -8,7 +8,7 @@
  *	interface.
  *
  * License:
- * BasicOS Operating System - An experimental operating system.
+ * SimplixOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -92,7 +92,7 @@ void irq_init()
   idt_fill_entry(irq1_offset + 14, (uint32_t) irq14, IDT_RING_0, IDT_INT_GATE_32);
   idt_fill_entry(irq1_offset + 15, (uint32_t) irq15, IDT_RING_0, IDT_INT_GATE_32);
 
-  for(int i =0 ;i<MAX_IRQ ;i++)
+  for(int i =0 ; i < MAX_IRQ; i++)
   {
   	irq_handlers[i].inuse =0;
 	irq_handlers[i].irq_handler_ptr = NULL;

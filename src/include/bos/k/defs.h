@@ -1,5 +1,5 @@
 /***********************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  *
  * File: include/bos/k/defs.h
  *
@@ -7,7 +7,7 @@
  * 	General constants used for versioning and authoring.
  *
  * License:
- * BasicOS Operating System - An experimental operating system.
+ * SimplixOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,13 +29,15 @@
 #define BAS_DEFS_H
 
 #define ASCII_LOGO \
-" __________               .__         ________    _________ \n" \
-" \\______   \\_____    _____|__| ____   \\_____  \\  /   _____/	\n" \
-"  |    |  _/\\__  \\  /  ___/  |/ ___\\   /   |   \\ \\_____  \\  \n" \
-"  |    |   \\ / __ \\_\\___ \\|  \\  \\___  /    |    \\/        \\ \n" \
-"  |______  /(____  /____  >__|\\___  > \\_______  /_______  / \n" \
-"         \\/      \\/     \\/        \\/          \\/        \\/  \n" \
-"=============================================================\n" \
+" _____ _                 _ _      _____ _____ \n" \
+"/  ___(_)               | (_)    |  _  /  ___| \n" \
+"\\ `--. _ _ __ ___  _ __ | |___  _| | | \\ `--.  \n" \
+" `--. \\ | '_ ` _ \\| '_ \\| | \\ \\/ / | | |`--. \\ \n" \
+"/\\__/ / | | | | | | |_) | | |>  <\\ \\_/ /\\__/ / \n" \
+"\\____/|_|_| |_| |_| .__/|_|_/_/\\_\\\\___/\\____/  \n" \
+"                  | |                          \n" \
+"                  |_|                          \n" \
+"=============================================== \n"
 
 #define BAS_VER_MAJ "0"
 #define BAS_VER_MIN "1c"
@@ -43,7 +45,7 @@
 #define BAS_VER_FUL BAS_VER_MAJ"."BAS_VER_MIN
 
 // UTS Specific Defines
-#define BAS_UTS_SYSNAME "BasicOS"
+#define BAS_UTS_SYSNAME "SimplixOS"
 #define BAS_UTS_RELEASE "v"BAS_VER_FUL
 #define BAS_UTS_VERSION "#1 SP "__DATE__" "__TIME__
 

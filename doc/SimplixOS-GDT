@@ -1,6 +1,6 @@
 This Document will cover how this kernel program sets up GDT
 
-GDT is supported by BasicOS kernel to support segmentation and ensure protection
+GDT is supported by SimplixOS kernel to support segmentation and ensure protection
 
 Before going to GDT setup , I would be liberal enough to explain what GDT is and what registers are required to get
 it up and running.
@@ -54,7 +54,7 @@ BIT_0 LIMIT_16
 BIT_1 LIMIT_17
 BIT_2 LIMIT_18
 BIT_3 LIMIT_19
-BIT_4 AVL -> ignored in basicos
+BIT_4 AVL -> ignored in simplixos
 BIT_5 Always 0
 BIT_6 D(B) -> if 1- segement offsets are 32 bit , 0 - segment offsets are 16 bit
 BIT_7 Granularity -> 0 -segment size is in bytes 1 - segment size is on 4k page boundary size
@@ -92,10 +92,10 @@ User runs in ring 3 protection scheme
 code db 0xFF, 0xFF ,0, 0, 0 , 11101010b, 11001111b, 0
 data db 0xFF, 0xFF ,0, 0, 0 , 11100010b, 11001111b, 0
 
-BasicOS installs a Trick GDT or bootstrap GDT to overcome the address translation issue since its a higher half kernel.
+SimplixOS installs a Trick GDT or bootstrap GDT to overcome the address translation issue since its a higher half kernel.
 Once the higher half kernel trick is done , it re initializes the GDT to a flat memory model.
 
-Basic OS will use segmentation at the least possible way to keep virtual memory management easier.
+Simplix OS will use segmentation at the least possible way to keep virtual memory management easier.
 
 The trick GDT has a base address of 0x40000000. Since base address of 0x40000000 + virtual memory offset will cause an overflow to
 start from 0. This helps to map kernel virtual address 0xC0000000 + 0x100000 <-> 0x100000

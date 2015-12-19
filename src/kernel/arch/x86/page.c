@@ -1,14 +1,14 @@
 /***********************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  *
- * File: kernel/arch/x86page.c
+ * File: kernel/arch/x86/page.c
  *
  * Description:
  * 	Functions dealing with initializing and managing the Kernel
  * 	Paging Table.
  *
  * License:
- * BasicOS Operating System - An experimental operating system.
+ * SimplixOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -36,8 +36,8 @@ extern vm_offset_t phys_first_addr ;
 extern vm_offset_t phys_last_addr;
 /* Boot-time Paging */
 
-/*Globals*/
-struct vm_page_dir page_dir ; //We allocate memory
+/* Globals */
+struct vm_page_dir page_dir; //We allocate memory
 struct vm_page_dir *dir_ptr;
 
 #if 1

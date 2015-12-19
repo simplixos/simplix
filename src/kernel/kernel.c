@@ -1,5 +1,5 @@
 /***********************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  *
  * File: kernel/kernel.c
  *
@@ -7,7 +7,7 @@
  * 	This is the entry point for the main kernel.
  *
  * License:
- * BasicOS Operating System - An experimental operating system.
+ * SimplixOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -81,7 +81,5 @@ void _k_main(void)
 	//_k_panic("[LOLZ] Just A test! ;)", __FILE__, __LINE__);
 
 	// Hang up the computer
-	for (int i = 0;; i++) {
-		kprintf("%d", i);
-	}
+	for (;;) ;
 }

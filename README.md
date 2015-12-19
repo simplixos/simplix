@@ -1,7 +1,7 @@
-BasicOS
-=======
+SimplixOS
+=========
 
-[![Build Status](https://travis-ci.org/aunali1/BasicOS.svg?branch=master)](https://travis-ci.org/aunali1/BasicOS)
+[![Build Status](https://travis-ci.org/aunali1/SimplixOS.svg?branch=master)](https://travis-ci.org/aunali1/SimplixOS)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/4010/badge.svg)](https://scan.coverity.com/projects/4010)
 
 ![Demo1](https://aunali1.com/demo1.png)
@@ -40,10 +40,6 @@ Or, if you want the 64-bit build toolchain:
 
 Once the toolchain has finished, run the following to compile the kernel:
 
-    $ make all
+    $ make all ARCH=x86
 
 Currently the kernel supports both x86 and x86_64, but x86 is the only architecture that compiles.
-
-To create a live ISO image of the operating system, execute the following:
-
-    $ make isoimage

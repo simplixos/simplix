@@ -1,13 +1,13 @@
 /***********************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  *
  * File: include/bos/k/arch/x86/memory_layout.h
  *
- * Description: Data that defines kernel Virtual and Physical memory
- *
+ * Description:
+ * 	Data that defines kernel Virtual and Physical memory.
  *
  * License:
- * BasicOS Operating System - An experimental operating system.
+ * SimplixOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify

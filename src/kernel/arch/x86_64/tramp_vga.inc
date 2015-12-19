@@ -1,5 +1,5 @@
 ;---------------------------------------------------------------------------
-;       BasicOS Operating System
+;       SimplixOS Operating System
 ;
 ;       File: kernel/arch/x86_64/tramp_vga.inc
 ;
@@ -7,7 +7,7 @@
 ;               Minimalistic VGA writing functions for 64-bit trampoline.
 ;
 ;       License:
-;       BasicOS Operating System - An experimental operating system
+;       SimplixOS Operating System - An experimental operating system
 ;       Copyright (C) 2015 Aun-Ali Zaidi
 ;
 ;       This program is free software: you can redistribute it and/or modify

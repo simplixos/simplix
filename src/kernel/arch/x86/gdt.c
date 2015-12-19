@@ -1,5 +1,5 @@
 /***********************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  *
  * File: kernel/arch/x86/gdt.c
  *
@@ -7,7 +7,7 @@
  * 	Functions that manage and setup the GDT.
  *
  * License:
- * BasicOS Operating System - An experimental operating system.
+ * SimplixOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,9 +47,9 @@ void gdt_install()
         gp.limit = (sizeof(struct gdt_entry) * 5) - 1;
         gp.base = (unsigned int)&gdt;
 
-        gdt_set_gate(0, 0, 0, 0, 0);				// Null sgment
+        gdt_set_gate(0, 0, 0, 0, 0);		    // Null sgment
         gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code Segment
-        gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);	// Data Segment
+        gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data Segment
         gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
 	gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
 

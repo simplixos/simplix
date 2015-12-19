@@ -1,5 +1,5 @@
 /***********************************************************************
- * BasicOS Operating System
+ * SimplixOS Operating System
  *
  * File: kernel/arch/x86/x86.c
  *
@@ -7,7 +7,7 @@
  * 	x86 specific code.
  *
  * License:
- * BasicOS Operating System - An experimental operating system.
+ * SimplixOS Operating System - An experimental operating system.
  * Copyright (C) 2015 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -62,13 +62,10 @@ void init_x86(multiboot_info_t* mbd, unsigned long lmagic)
 	kprintf(ASCII_LOGO);
 
 	// Display build and authoring info
-	vga_write("BasicOS ver. "BAS_VER_FUL"\n");
+	vga_write("SimplixOS ver. "BAS_VER_FUL"\n");
 	vga_write(AUTHOR_NOTE"\n");
 	vga_write(COMPILE_NOTE"\n\n");
 
 	// Map our physical space
 	page_map_init(mbd, lmagic);
-
-	// Clear the screen
-	//vga_clear();
 }
