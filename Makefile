@@ -3,7 +3,7 @@
 #									      #
 # 	License:							      #
 #	SimplixOS Operating System - An experimental operating system	      #
-#	Copyright (C) 2015 Aun-Ali Zaidi and its contributors.		      #
+#	Copyright (C) 2016 Aun-Ali Zaidi and its contributors.		      #
 #									      #
 #	This program is free software: you can redistribute it and/or modify  #
 #	it under the terms of the GNU General Public License as published by  #
@@ -23,9 +23,16 @@
 
 help:
 	@echo "Makefile for SimplixOS Operating System."
-	@echo "Usage: make [ all | debug | stable | clean | distclean | help ] ARCH = x86 or x86_64"
+	@echo "Usage: make [ deps | all | debug | stable | clean | distclean | help ] ARCH = x86 or x86_64"
 	@echo ""
 	@echo
+
+deps:
+	@echo "=== Retrieving Libraries ==="
+	@git submodule update --init
+	@echo "=== Retrieving Cross-Compiler Toolchain ==="
+	@bash ./scripts/build_toolchain.sh
+	@echo "=== Dependencies Complete ==="
 
 all:
 	@echo "Building Kernel and ISO!"
@@ -49,12 +56,6 @@ clean:
 distclean:
 	rm -rf cross/
 	make -C ./src clean
-
-toolchain-x86:
-	bash ./scripts/build_toolchain.sh
-
-toolchain-x86_64:
-	bash ./scripts/build_toolchain64.sh
 
 isoimage:
 	bash ./scripts/update_image.sh
