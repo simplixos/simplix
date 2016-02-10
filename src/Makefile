@@ -23,6 +23,14 @@ ifndef ARCH
 $(error ARCH is not defined! Exiting!)
 endif
 
+# Verbosity Control
+# TODO: Change it to support the use of different verbosity flags.
+ifdef V
+cmd = $1
+else
+cmd = @$(if $(value 2),echo "$2";)$1
+endif
+
 CC=../cross/os-toolchain/bin/i686-simplix-gcc
 AS=../cross/os-toolchain/bin/nasm
 STRIP=../cross/os-toolchain/bin/i686-simplix-strip
@@ -90,36 +98,56 @@ debug: $(CSOURCES) $(ASMSOURCES) $(KERNEL_DBG)
 stable: $(CSOURCES) $(ASMSOURCES) $(KERNEL_STABLE)
 
 $(KERNEL_DBG): $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(LIBC) $(LIBPOSIX)
-	$(CC) $(LDFLAGS) $(CFLAGS_DBG) $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX) -o $@
+	$(call cmd, \
+	$(CC) $(LDFLAGS) $(CFLAGS_DBG) $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX) -o $@, \
+	CC 	$(KERNEL_DBG))
 
 $(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS) $(LIBC) $(LIBPOSIX)
-	rm -f $(KERNEL_STABLE)
-	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBC) $(LIBPOSIX) -o $@
-	$(STRIP) -s -g -v $(KERNEL_STABLE)
+	$(call cmd, \
+	rm -f $(KERNEL_STABLE), \
+	RM 	$(KERNEL_STABLE))
+	$(call cmd, \
+	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBC) $(LIBPOSIX) -o $@, \
+	CC 	$(KERNEL_STABLE))
+	$(call cmd, \
+	$(STRIP) $(KERNEL_STABLE), \
+	STRIP  $(KERNEL_STABLE))
 
 obj/%.os: %.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(call cmd, \
+	$(CC) $(CFLAGS) -c $< -o $@, \
+	CC 	$<)
 
 obj/%.sos: %.s
 	@mkdir -p $(@D)
-	$(AS) $(ASFLAGS)  $< -o $@
+	$(call cmd, \
+	$(AS) $(ASFLAGS)  $< -o $@, \
+	AS 	$<)
 
 obj/%.od: %.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS_DBG) -c $< -o $@
+	$(call cmd, \
+	$(CC) $(CFLAGS_DBG) -c $< -o $@, \
+	CC 	$<)
 
 obj/%.sod: %.s
 	@mkdir -p $(@D)
-	$(AS) $(ASFLAGS_DBG)  $< -o $@
+	$(call cmd, \
+	$(AS) $(ASFLAGS_DBG)  $< -o $@, \
+	AS 	$<)
 
 $(LIBC):
-	@cd $(LIBC_DIR) && $(MAKE) all
+	@echo "Building libc:"
+	@cd $(LIBC_DIR) && $(MAKE) all V=$(V)
 
 $(LIBPOSIX):
-	@cd $(LIBPOSIX_DIR) && $(MAKE) all
+	@echo "Building libposix:"
+	@cd $(LIBPOSIX_DIR) && $(MAKE) all V=$(V)
 
 clean:
 	@cd $(LIBC_DIR) && $(MAKE) clean
 	@cd $(LIBPOSIX_DIR) && $(MAKE) clean
-	rm -rf $(COBJECTS) $(ASMOBJECTS) $(KERNEL_STABLE) $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(KERNEL_DBG) $(OBJ_DIR) $(BIN_DIR)
+	$(call cmd, \
+	rm -rf $(COBJECTS) $(ASMOBJECTS) $(KERNEL_STABLE) $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(KERNEL_DBG) $(OBJ_DIR) $(BIN_DIR), \
+	CLEAN kernel/ hw/cpuid/ ../bin/)

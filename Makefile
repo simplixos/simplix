@@ -35,27 +35,27 @@ deps:
 	@echo "=== Dependencies Complete ==="
 
 all:
-	@echo "Building Kernel and ISO!"
+	@echo "=== Building Kernel and ISO ==="
 	@mkdir -p bin
-	make -C ./src all
-	make -C . isoimage
+	@make -C ./src all
+	@make -C . isoimage
 
-dev:
-	@echo "Building Kernel with Debugging Symbols!"
+debug:
+	@echo "=== Building Kernel with Debugging Symbols ==="
 	@mkdir -p bin
-	make -C ./src debug
+	@make -C ./src debug
 
 stable:
-	@echo "Building Stable Kernel!"
+	@echo "=== Building Stable Kernel ==="
 	@mkdir -p bin
-	make -C ./src stable
+	@make -C ./src stable
 
 clean:
-	make -C ./src clean
+	@make -C ./src clean
 
 distclean:
 	rm -rf cross/
-	make -C ./src clean
+	@make -C ./src clean
 
 isoimage:
-	bash ./scripts/update_image.sh
+	@bash ./scripts/update_image.sh
