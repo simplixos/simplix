@@ -34,6 +34,8 @@ endif
 CC=../cross/os-toolchain/bin/i686-simplix-gcc
 AS=../cross/os-toolchain/bin/nasm
 STRIP=../cross/os-toolchain/bin/i686-simplix-strip
+OBJCOPY=../cross/os-toolchain/bin/i686-simplix-objcopy
+MV=mv
 
 INCLUDE=include/
 INC_LIBC_DIR=lib/libc/include/
@@ -101,6 +103,12 @@ $(KERNEL_DBG): $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(LIBC) $(LIBPOSIX)
 	$(call cmd, \
 	$(CC) $(LDFLAGS) $(CFLAGS_DBG) $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX) -o $@, \
 	CC 	$(KERNEL_DBG))
+	$(call cmd, \
+	$(OBJCOPY) --add-section .copyright=../scripts/copyright --set-section-flags .copyright=noload $(KERNEL_DBG) $(KERNEL_DBG)1, \
+	OBJCOPY $(KERNEL_DBG) $(KERNEL_DBG)1)
+	$(call cmd, \
+	$(MV) $(KERNEL_DBG)1 $(KERNEL_DBG), \
+	MV	$(KERNEL_DBG)1 $(KERNEL_DBG))
 
 $(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS) $(LIBC) $(LIBPOSIX)
 	$(call cmd, \
@@ -109,6 +117,12 @@ $(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS) $(LIBC) $(LIBPOSIX)
 	$(call cmd, \
 	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBC) $(LIBPOSIX) -o $@, \
 	CC 	$(KERNEL_STABLE))
+	$(call cmd, \
+	$(OBJCOPY) --add-section .copyright=../scripts/copyright --set-section-flags .copyright=noload $(KERNEL_STABLE) $(KERNEL_STABLE)1, \
+	OBJCOPY $(KERNEL_STABLE) $(KERNEL_STABLE)1)
+	$(call cmd, \
+	$(MV) $(KERNEL_STABLE)1 $(KERNEL_STABLE), \
+	MV	$(KERNEL_STABLE)1 $(KERNEL_STABLE))
 	$(call cmd, \
 	$(STRIP) $(KERNEL_STABLE), \
 	STRIP  $(KERNEL_STABLE))
