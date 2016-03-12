@@ -42,9 +42,9 @@ if [ "$uname" == 'Linux' ]; then
 elif [ "$uname" == 'Darwin' ]; then
 	platform='macos'
 	if [ `getconf LONG_BIT` = "64" ]; then
-		wget http://dl.simplixos.org/pub/toolchains/build/darwin/x86_64/x86_64-apple-darwin15.0.0_build-toolchain.tar.bz2
-		tar -xvf x86_64-apple-darwin15.0.0_build-toolchain.tar.bz2
-		rm -f x86_64-apple-darwin15.0.0_build-toolchain.tar.bz2
+		wget http://dl.simplixos.org/pub/toolchains/build/darwin/x86_64/x86_64-apple-darwin15.2.0_build-toolchain.tar.bz2
+		tar -xvf x86_64-apple-darwin15.2.0_build-toolchain.tar.bz2
+		rm -f x86_64-apple-darwin15.2.0_build-toolchain.tar.bz2
 		exit 0
 	fi
 elif [ "$uname" == 'SunOS' ]; then
