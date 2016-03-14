@@ -1,10 +1,10 @@
-/************************************************************
+/***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/arch/x86/io.h
+ * File: include/simplix/k/arch/x86/x86.h
  *
  * Description:
- *      x86 low-level I/O manipulation functions.
+ *      x86 specific init code.
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
@@ -23,18 +23,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- ************************************************************/
+ ***********************************************************************/
 
-#ifndef IO_H
-#define IO_H
+#ifndef X86_H
+#define X86_H
 
-#ifdef __GNUC__
-#include <stddef.h>
-#include <stdint.h>
+// x86 specific includes
+#ifdef _x86
+	#include <simplix/k/arch/x86/gdt.h>
+	#include <simplix/k/arch/x86/idt.h>
+	#include <simplix/k/arch/x86/int.h>
+	#include <simplix/k/arch/x86/irq.h>
+	#include <simplix/k/arch/x86/page.h>
+	#include <simplix/k/arch/x86/panic.h>
+#else
 #endif
 
-void outb(uint16_t port, uint8_t val);
-uint8_t inb(uint16_t port);
-uint16_t inw(uint16_t port);
+void init_x86();
 
 #endif

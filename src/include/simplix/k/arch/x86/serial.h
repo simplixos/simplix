@@ -1,7 +1,7 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/arch/x86/serial.h
+ * File: include/simplix/k/arch/x86/serial.h
  *
  * Description:
  *      Serial Port Driver (8250/16550)

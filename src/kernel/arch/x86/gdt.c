@@ -25,7 +25,7 @@
  *
  ***********************************************************************/
 
-#include <bos/k/arch/x86/gdt.h>
+#include <simplix/k/arch/x86/gdt.h>
 
 // Very simple: fills a GDT entry using the parameters
 void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran)

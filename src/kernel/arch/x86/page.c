@@ -26,8 +26,8 @@
  *
  ***********************************************************************/
 
-#include <bos/k/arch/x86/page.h>
-#include <bos/k/arch/x86/memory_layout.h>
+#include <simplix/k/arch/x86/page.h>
+#include <simplix/k/arch/x86/memory_layout.h>
 
 #define FATAL_ASSERT(x) if(x) _k_panic(" Error =[%d] %s Line [%d] \n",x, __FILE__, __LINE__);
 

@@ -1,7 +1,7 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/defs.h
+ * File: include/simplix/k/defs.h
  *
  * Description:
  * 	General constants used for versioning and authoring.
@@ -25,8 +25,8 @@
  *
  ***********************************************************************/
 
-#ifndef BAS_DEFS_H
-#define BAS_DEFS_H
+#ifndef SIMPLIX_DEFS_H
+#define SIMPLIX_DEFS_H
 
 #define ASCII_LOGO \
 " _____ _                 _ _      _____ _____ \n" \
@@ -39,15 +39,15 @@
 "                  |_|                          \n" \
 "=============================================== \n"
 
-#define BAS_VER_MAJ "0"
-#define BAS_VER_MIN "1c"
+#define SIMPLIX_VER_MAJ "0"
+#define SIMPLIX_VER_MIN "1"
 
-#define BAS_VER_FUL BAS_VER_MAJ"."BAS_VER_MIN
+#define SIMPLIX_VER_FUL SIMPLIX_VER_MAJ"."SIMPLIX_VER_MIN
 
 // UTS Specific Defines
-#define BAS_UTS_SYSNAME "SimplixOS"
-#define BAS_UTS_RELEASE "v"BAS_VER_FUL
-#define BAS_UTS_VERSION "#1 SP "__DATE__" "__TIME__
+#define SIMPLIX_UTS_SYSNAME "SimplixOS"
+#define SIMPLIX_UTS_RELEASE "v"SIMPLIX_VER_FUL
+#define SIMPLIX_UTS_VERSION "#1 SP "__DATE__" "__TIME__
 
 
 #ifdef __GNUC__
@@ -61,4 +61,4 @@
 #define AUTHOR_NOTE "written by Aun-Ali Zaidi."
 #define COMPILE_NOTE "Compiled on "__DATE__", "__TIME__", using "COMPILER
 
-#endif // BAS_DEFS_H
+#endif // SIMPLIX_DEFS_H

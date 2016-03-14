@@ -1,7 +1,7 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/vga.h
+ * File: include/simplix/k/vga.h
  *
  * Description:
  * 	Defines VGA screen buffer, memory locations, and other
@@ -29,7 +29,7 @@
 #ifndef VGA_H
 #define VGA_H
 
-#include <bos/k/common.h>
+#include <simplix/k/common.h>
 
 // VGA Colorspace
 enum vga_color
@@ -69,7 +69,7 @@ static const size_t VGA_HEIGHT = 25;
 
 static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
 
-/** VGA Handling Functions (OBSOLETE - just used to compile without warings, for now...)**/
+/** VGA Handling Functions (OBSOLETE - just used to compile without warings, for now...) **/
 
 void vga_clear();
 void vga_put(char c);

@@ -1,14 +1,15 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/arch/x86/page_alloc.h
+ * File: include/simplix/k/common.h
  *
  * Description:
- * 	Defines page allocation functions
+ * 	Defines common data types and I/O manipulation function
+ * 	prototypes.
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
- * Copyright (C) 2016 Aun-Ali Zaidi, Rahul Ramesh
+ * Copyright (C) 2016 Aun-Ali Zaidi and its contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,17 +26,41 @@
  *
  ***********************************************************************/
 
-#ifndef PHY_ALLOC_H
-#define PHY_ALLOC_H
+#ifndef COMMON_H
+#define COMMON_H
 
-#define E_PHY_MEM_ALLOC_FAIL 0x100
+#include <simplix/k/defs.h>
 
-#include <bos/k/arch/x86/multiboot.h>
-#include <bos/k/arch/x86/panic.h>
+#ifdef __GNUC__
+	#include <stddef.h>
+	#include <stdarg.h>
+	#include <stdbool.h>
+	#include <stdint.h>
+#endif
 
-uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , bool page_alloc_needed , uint32_t alloc_size);
+#ifdef _x86
+	#include <simplix/k/arch/x86/io.h>
+#endif
 
-void page_map_init(multiboot_info_t *info, unsigned long magic);
-uint32_t phy_page_alloc(vm_offset_t *out_addr);
+#ifdef _simplix_k_libc
+	#include <string.h>
+	#include <stdio.h>
+	#include <stdlib.h>
+#endif
 
-#endif // PHY_ALLOC_H
+// Common data types
+
+#define TRUE	1
+#define FALSE	0
+
+#ifndef NULL
+	#define NULL ((void *)0)
+#endif // NULL
+
+#define UNUSED(x) (void)(x)
+
+#ifdef _x86
+	typedef	unsigned long vm_offset_t;
+#endif
+
+#endif // COMMON_H

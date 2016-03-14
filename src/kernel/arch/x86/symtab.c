@@ -25,7 +25,7 @@
  *
  ***********************************************************************/
 
-#include <bos/k/arch/x86/symtab.h>
+#include <simplix/k/arch/x86/symtab.h>
 
 #define MAXNOSYMTABS	2
 

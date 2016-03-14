@@ -1,10 +1,11 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/arch/x86/symtab.h
+ * File: src/simplix/k/mods/modloader.h
  *
  * Description:
- * 	API to work with symbol tables. Can hold symbols for both AOUT and ELF.
+ *      Portable Module loader implementation data structs and
+ *	constants.
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
@@ -24,25 +25,37 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  ***********************************************************************/
-#ifndef SYMBOL_TABLE_H
-#define SYMBOL_TABLE_H
 
-#include <bos/k/common.h>
+#ifndef MODLOADER_H
+#define MODLOADER_H
 
-// TODO: Add more symbols for suported formats later on.
-#define SYMBOL_TYPE_AOUT 	1
-#define SYMBOL_TYPE_ELF 	2
+#ifdef __GNUC__
+	#include <stdint.h>
+	#include <stddef.h>
+#endif
 
-#define SYMBOL_NAME_LEN		32
+typedef uint16_t pid_t;
 
-typedef struct __symbol_tab_entry__
+typedef struct _lib_MOD
 {
-	int type;
-	char *start;
-	char *end;
-	char name[SYMBOL_NAME_LEN];
-} symbol_tab_entry_t;
+	int size;
+	int id;
+	//int lock;
+	char name[255];
+	uint32_t version;
+	void *exportTable;
+	uint32_t baseAddress;
+	struct _lib_MOD *next;
+	//TODO: Once memory manager & scheduler are complete, then add module mem.
+	//MOD_MEM *memptr;
+	//TODO: Add global constructors implmentation to suffice for entrypoint.
+	void *entrypointptr;
+	void *exit;
+} _lib_MOD;
 
-int add_symb_entry(int type, char *start, char *end, char *name);
+int modldr_registerLoader(void *funcptr);
+int modldr_unregisterLoader(void *funcptr);
+void modldr_initLoader(void);
+int* modldr_loader(char *name, char *image, char *loadaddress, int mode, char *p, char *workdir, pid_t *parent);
 
 #endif

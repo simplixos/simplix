@@ -25,10 +25,10 @@
  *
  ***********************************************************************/
 
-#include <bos/k/common.h>
+#include <simplix/k/common.h>
 
-#include <bos/k/vga.h>
-#include <bos/k/tty.h>
+#include <simplix/k/vga.h>
+#include <simplix/k/tty.h>
 
 size_t tty_row;
 size_t tty_column;

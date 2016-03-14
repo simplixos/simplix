@@ -28,7 +28,7 @@
 #ifndef CPUID_H
 #define CPUID_H
 
-#include <bos/k/common.h>
+#include <simplix/k/common.h>
 
 // CPU Features
 

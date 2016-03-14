@@ -25,7 +25,7 @@
  *
  ***********************************************************************/
 
-#include <bos/k/stack_protector.h>
+#include <simplix/k/stack_protector.h>
 
 uintptr_t __stack_chk_guard_magic = STACK_CHK_GUARD;
 

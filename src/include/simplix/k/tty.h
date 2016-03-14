@@ -1,7 +1,7 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/tty.h
+ * File: include/simplix/k/tty.h
  *
  * Description:
  *      Defines TTY writing functions.
@@ -28,7 +28,7 @@
 #ifndef TTY_H
 #define TTY_H
 
-#include <bos/k/common.h>
+#include <simplix/k/common.h>
 
 void tty_init(void);
 void tty_putchar(char c);

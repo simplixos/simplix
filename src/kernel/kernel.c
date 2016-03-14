@@ -25,13 +25,13 @@
  *
  ***********************************************************************/
 
-#include <bos/k/common.h>
-#include <bos/k/vga.h>
-#include <bos/k/defs.h>
+#include <simplix/k/common.h>
+#include <simplix/k/vga.h>
+#include <simplix/k/defs.h>
 
 #ifdef _x86
-	#include <bos/k/arch/x86/x86.h>
-	#include <bos/k/arch/x86/phy_alloc.h>
+	#include <simplix/k/arch/x86/x86.h>
+	#include <simplix/k/arch/x86/phy_alloc.h>
 	#include <hw/cpuid.h>
 #else
 #endif

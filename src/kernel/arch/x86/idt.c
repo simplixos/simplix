@@ -25,8 +25,8 @@
  *
  ***********************************************************************/
 
-#include <bos/k/arch/x86/idt.h>
-#include <bos/k/arch/x86/panic.h>
+#include <simplix/k/arch/x86/idt.h>
+#include <simplix/k/arch/x86/panic.h>
 
 idt_entry_t         idt_entries[256];
 idt_pointer_t       idt_pointer;
@@ -70,45 +70,45 @@ extern void idt_flush(uint32_t);
 void isr_handler(regs_t regs);
 
 void idt_init() {
-  idt_pointer.limit = (sizeof(idt_entry_t) * 256) - 1;
-  idt_pointer.base  = (uint32_t) &idt_entries;
-  memclr(&idt_entries, sizeof(idt_entry_t) * 256);
-  memclr(&int_handlers, sizeof(interrupt_handler_t) * 256);
+	idt_pointer.limit = (sizeof(idt_entry_t) * 256) - 1;
+	idt_pointer.base  = (uint32_t) &idt_entries;
+	memclr(&idt_entries, sizeof(idt_entry_t) * 256);
+	memclr(&int_handlers, sizeof(interrupt_handler_t) * 256);
 
-  idt_fill_entry(0, (uint32_t) isr0, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(1, (uint32_t) isr1, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(2, (uint32_t) isr2, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(3, (uint32_t) isr3, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(4, (uint32_t) isr4, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(5, (uint32_t) isr5, IDT_RING_0, IDT_TRAP_GATE_32);
-  idt_fill_entry(6, (uint32_t) isr6, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(7, (uint32_t) isr7, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(8, (uint32_t) isr8, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(9, (uint32_t) isr9, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(10, (uint32_t) isr10, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(11, (uint32_t) isr11, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(12, (uint32_t) isr12, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(13, (uint32_t) isr13, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(14, (uint32_t) isr14, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(15, (uint32_t) isr15, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(16, (uint32_t) isr16, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(17, (uint32_t) isr17, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(18, (uint32_t) isr18, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(19, (uint32_t) isr19, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(20, (uint32_t) isr20, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(21, (uint32_t) isr21, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(22, (uint32_t) isr22, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(23, (uint32_t) isr23, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(24, (uint32_t) isr24, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(25, (uint32_t) isr25, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(26, (uint32_t) isr26, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(27, (uint32_t) isr27, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(28, (uint32_t) isr28, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(29, (uint32_t) isr29, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(30, (uint32_t) isr30, IDT_RING_0, IDT_INT_GATE_32);
-  idt_fill_entry(31, (uint32_t) isr31, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(0, (uint32_t) isr0, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(1, (uint32_t) isr1, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(2, (uint32_t) isr2, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(3, (uint32_t) isr3, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(4, (uint32_t) isr4, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(5, (uint32_t) isr5, IDT_RING_0, IDT_TRAP_GATE_32);
+	idt_fill_entry(6, (uint32_t) isr6, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(7, (uint32_t) isr7, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(8, (uint32_t) isr8, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(9, (uint32_t) isr9, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(10, (uint32_t) isr10, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(11, (uint32_t) isr11, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(12, (uint32_t) isr12, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(13, (uint32_t) isr13, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(14, (uint32_t) isr14, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(15, (uint32_t) isr15, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(16, (uint32_t) isr16, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(17, (uint32_t) isr17, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(18, (uint32_t) isr18, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(19, (uint32_t) isr19, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(20, (uint32_t) isr20, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(21, (uint32_t) isr21, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(22, (uint32_t) isr22, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(23, (uint32_t) isr23, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(24, (uint32_t) isr24, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(25, (uint32_t) isr25, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(26, (uint32_t) isr26, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(27, (uint32_t) isr27, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(28, (uint32_t) isr28, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(29, (uint32_t) isr29, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(30, (uint32_t) isr30, IDT_RING_0, IDT_INT_GATE_32);
+	idt_fill_entry(31, (uint32_t) isr31, IDT_RING_0, IDT_INT_GATE_32);
 
-  idt_flush((uint32_t) &idt_pointer);
+	idt_flush((uint32_t) &idt_pointer);
 }
 
 void idt_fill_entry(int entry, uint32_t handler, uint8_t ring, uint8_t type) {

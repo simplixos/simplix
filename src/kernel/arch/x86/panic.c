@@ -25,9 +25,9 @@
  *
  ***********************************************************************/
 
-#include <bos/k/arch/x86/panic.h>
-#include <bos/k/arch/x86/idt.h>
-#include <bos/k/arch/x86/int.h>
+#include <simplix/k/arch/x86/panic.h>
+#include <simplix/k/arch/x86/idt.h>
+#include <simplix/k/arch/x86/int.h>
 
 __attribute__((noreturn))
 void _k_halt()

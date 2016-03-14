@@ -18,7 +18,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/arch/x86/multiboot.h
+ * File: include/simplix/k/arch/x86/multiboot.h
  *
  * Description:
  * 	Defines Kernel Paging related constants, tables, and

@@ -1,15 +1,14 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: src/bos/k/mods/modloader.h
+ * File: include/simplix/k/arch/x86/page_alloc.h
  *
  * Description:
- *      Portable Module loader implementation data structs and
- *	constants.
+ * 	Defines page allocation functions
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
- * Copyright (C) 2016 Aun-Ali Zaidi and its contributors.
+ * Copyright (C) 2016 Aun-Ali Zaidi, Rahul Ramesh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,36 +25,17 @@
  *
  ***********************************************************************/
 
-#ifndef MODLOADER_H
-#define MODLOADER_H
+#ifndef PHY_ALLOC_H
+#define PHY_ALLOC_H
 
-#ifdef __GNUC__
-	#include <stdint.h>
-	#include <stddef.h>
-#endif
+#define E_PHY_MEM_ALLOC_FAIL 0x100
 
-typedef uint16_t pid_t;
+#include <simplix/k/arch/x86/multiboot.h>
+#include <simplix/k/arch/x86/panic.h>
 
-typedef struct _lib_MOD
-{
-	int size;
-	int id;
-	//int lock;
-	char name[255];
-	uint32_t version;
-	void *exportTable;
-	uint32_t baseAddress;
-	struct _lib_MOD *next;
-	//TODO: Once memory manager & scheduler are complete, then add module mem.
-	//MOD_MEM *memptr;
-	//TODO: Add global constructors implmentation to suffice for entrypoint.
-	void *entrypointptr;
-	void *exit;
-} _lib_MOD;
+uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , bool page_alloc_needed , uint32_t alloc_size);
 
-int modldr_registerLoader(void *funcptr);
-int modldr_unregisterLoader(void *funcptr);
-void modldr_initLoader(void);
-int* modldr_loader(char *name, char *image, char *loadaddress, int mode, char *p, char *workdir, pid_t *parent);
+void page_map_init(multiboot_info_t *info, unsigned long magic);
+uint32_t phy_page_alloc(vm_offset_t *out_addr);
 
-#endif
+#endif // PHY_ALLOC_H

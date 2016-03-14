@@ -1,10 +1,10 @@
-/***********************************************************************
+/************************************************************
  * SimplixOS Operating System
  *
- * File: kernel/stack_protector.c
+ * File: include/simplix/k/arch/x86/int.h
  *
  * Description:
- *      Basic stack protector to prevent stack smashing.
+ *      Basic interrupt control.
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
@@ -23,21 +23,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- ***********************************************************************/
+ ************************************************************/
+#ifndef INT_H
+#define	INT_H
 
-#ifndef STACK_PROTECTOR_H
-#define STACK_PROTECTOR_H
+#include <simplix/k/common.h>
 
-#include <bos/k/common.h>
+#define INT_NMI_BIT     1 << 7
+#define INT_NMI_CONTROL 0x70
 
-#ifdef _x86
-	#include <bos/k/arch/x86/panic.h>
-#endif
+void int_disable();
+void int_enable();
+void int_nmi_disable();
+void int_nmi_enable();
 
-// TODO: Implement a randomized value during boot-time.
-#define STACK_CHK_GUARD 0x0999E9
-
-void __stack_chk_guard(void);
-void __stack_chk_fail(void) __attribute__((noreturn));
-
-#endif // STACK_PROTECTOR_H
+#endif // INT_H

@@ -1,10 +1,10 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/arch/x86/x86.h
+ * File: kernel/simplix/k/arch/x86/panic.c
  *
  * Description:
- *      x86 specific init code.
+ * 	 Functions deailing with kernel panic handling.
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
@@ -25,20 +25,14 @@
  *
  ***********************************************************************/
 
-#ifndef X86_H
-#define X86_H
+#ifndef PANIC_H
+#define PANIC_H
 
-// x86 specific includes
-#ifdef _x86
-	#include <bos/k/arch/x86/gdt.h>
-	#include <bos/k/arch/x86/idt.h>
-	#include <bos/k/arch/x86/int.h>
-	#include <bos/k/arch/x86/irq.h>
-	#include <bos/k/arch/x86/page.h>
-	#include <bos/k/arch/x86/panic.h>
-#else
-#endif
+#include <simplix/k/common.h>
+#include <simplix/k/vga.h>
+#include <simplix/k/arch/x86/idt.h>
 
-void init_x86();
+void _k_halt() __attribute__((noreturn));
+void _k_panic(char *err_msg, char *file, int line) __attribute__((noreturn));
 
-#endif
+#endif // PANIC_H

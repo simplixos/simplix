@@ -1,7 +1,7 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: bos/k/mods/mod_elf.h
+ * File: simplix/k/mods/mod_elf.h
  *
  * Description:
  *      Elf related header for ELF module loader.

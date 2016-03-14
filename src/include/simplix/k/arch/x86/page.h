@@ -1,7 +1,7 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/arch/x86/page.h
+ * File: include/simplix/k/arch/x86/page.h
  *
  * Description:
  * 	Defines Kernel Paging related constants, tables, and
@@ -29,8 +29,8 @@
 #ifndef PAGE_H
 #define PAGE_H
 
-#include <bos/k/common.h>
-#include <bos/k/vga.h>
+#include <simplix/k/common.h>
+#include <simplix/k/vga.h>
 
 #define PG_ALIGN_SIZE			4096	// 4 Kb
 #define PAGE_MASK 				(PG_ALIGN_SIZE-1)

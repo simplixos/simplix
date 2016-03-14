@@ -1,11 +1,10 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/common.h
+ * File: include/simplix/k/arch/x86/symtab.h
  *
  * Description:
- * 	Defines common data types and I/O manipulation function
- * 	prototypes.
+ * 	API to work with symbol tables. Can hold symbols for both AOUT and ELF.
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
@@ -25,42 +24,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  ***********************************************************************/
+#ifndef SYMBOL_TABLE_H
+#define SYMBOL_TABLE_H
 
-#ifndef COMMON_H
-#define COMMON_H
+#include <simplix/k/common.h>
 
-#include <bos/k/defs.h>
+// TODO: Add more symbols for suported formats later on.
+#define SYMBOL_TYPE_AOUT 	1
+#define SYMBOL_TYPE_ELF 	2
 
-#ifdef __GNUC__
-	#include <stddef.h>
-	#include <stdarg.h>
-	#include <stdbool.h>
-	#include <stdint.h>
+#define SYMBOL_NAME_LEN		32
+
+typedef struct __symbol_tab_entry__
+{
+	int type;
+	char *start;
+	char *end;
+	char name[SYMBOL_NAME_LEN];
+} symbol_tab_entry_t;
+
+int add_symb_entry(int type, char *start, char *end, char *name);
+
 #endif
-
-#ifdef _x86
-	#include <bos/k/arch/x86/io.h>
-#endif
-
-#ifdef _bos_k_libc
-	#include <string.h>
-	#include <stdio.h>
-	#include <stdlib.h>
-#endif
-
-// Common data types
-
-#define TRUE	1
-#define FALSE	0
-
-#ifndef NULL
-	#define NULL ((void *)0)
-#endif // NULL
-
-#define UNUSED(x) (void)(x)
-
-#ifdef _x86
-	typedef	unsigned long vm_offset_t;
-#endif
-
-#endif // COMMON_H

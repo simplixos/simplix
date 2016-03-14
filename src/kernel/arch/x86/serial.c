@@ -26,9 +26,9 @@
  *
  ***********************************************************************/
 
-#include <bos/k/arch/x86/irq.h>
-#include <bos/k/arch/x86/serial.h>
-#include <bos/k/arch/x86/panic.h>
+#include <simplix/k/arch/x86/irq.h>
+#include <simplix/k/arch/x86/serial.h>
+#include <simplix/k/arch/x86/panic.h>
 
 static int serial_init_done = 0;
 

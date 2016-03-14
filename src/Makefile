@@ -50,12 +50,12 @@ BIN_DIR=../bin
 LIBC_DIR=lib/libc
 LIBPOSIX_DIR=lib/libposix
 
-CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -I$(INC_LIBC_DIR) -I$(INC_LIBPOSIX_DIR) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_bos_k_libc
+CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -I$(INC_LIBC_DIR) -I$(INC_LIBPOSIX_DIR) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_simplix_k_libc
 ASFLAGS=-felf32
 # Architecture specific linker file. Specified in kernel/arch/$(ARCH)/linker-$(ARCH).ld
 LDFLAGS=-T $(LINK_SPEC)
 
-CFLAGS_DBG=-g -std=gnu99 -I$(INCLUDE) -I$(INC_LIBC_DIR) -I$(INC_LIBPOSIX_DIR) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_bos_k_libc
+CFLAGS_DBG=-g -std=gnu99 -I$(INCLUDE) -I$(INC_LIBC_DIR) -I$(INC_LIBPOSIX_DIR) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_simplix_k_libc
 ASFLAGS_DBG=-g -felf32
 
 include kernel/Makefile.inc

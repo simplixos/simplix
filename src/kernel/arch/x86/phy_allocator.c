@@ -25,10 +25,10 @@
  *
  ***********************************************************************/
 
-#include <bos/k/arch/x86/page.h>
-#include <bos/k/arch/x86/memory_layout.h>
-#include <bos/k/arch/x86/multiboot.h>
-#include <bos/k/arch/x86/phy_alloc.h>
+#include <simplix/k/arch/x86/page.h>
+#include <simplix/k/arch/x86/memory_layout.h>
+#include <simplix/k/arch/x86/multiboot.h>
+#include <simplix/k/arch/x86/phy_alloc.h>
 
 /* Check if the bit BIT in FLAGS is set. */
 #define CHECK_FLAG(flags, bit)	((flags) & (1 << (bit)))
@@ -153,8 +153,7 @@ void page_map_init(multiboot_info_t *info , unsigned long lmagic)
 			mbi.mmap_addr += KERNEL_VIRTUAL_BASE;
 			for (mmap = (multiboot_memory_map_t *) mbi.mmap_addr;
 				(unsigned long) mmap < mbi.mmap_addr + mbi.mmap_length;
-					mmap = (multiboot_memory_map_t *) ((unsigned long) mmap
-                                         + mmap->size + sizeof (mmap->size)))
+					mmap = (multiboot_memory_map_t *) ((unsigned long) mmap + mmap->size + sizeof (mmap->size)))
 			{
 				unsigned long long start = mmap->addr, end = mmap->addr + mmap->len;
 				if (start >= 0x100000000ULL)

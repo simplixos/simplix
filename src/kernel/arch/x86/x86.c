@@ -25,12 +25,12 @@
  *
  ***********************************************************************/
 
-#include <bos/k/arch/x86/x86.h>
-#include <bos/k/defs.h>
+#include <simplix/k/arch/x86/x86.h>
+#include <simplix/k/defs.h>
 
 #ifdef _x86
-	#include <bos/k/arch/x86/serial.h>
-	#include <bos/k/arch/x86/phy_alloc.h>
+	#include <simplix/k/arch/x86/serial.h>
+	#include <simplix/k/arch/x86/phy_alloc.h>
 #else
 #endif
 
@@ -62,7 +62,7 @@ void init_x86(multiboot_info_t* mbd, unsigned long lmagic)
 	kprintf(ASCII_LOGO);
 
 	// Display build and authoring info
-	vga_write("SimplixOS ver. "BAS_VER_FUL"\n");
+	vga_write("SimplixOS ver. "SIMPLIX_VER_FUL"\n");
 	vga_write(AUTHOR_NOTE"\n");
 	vga_write(COMPILE_NOTE"\n\n");
 

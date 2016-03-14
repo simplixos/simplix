@@ -1,7 +1,7 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/arch/x86/gdt.h
+ * File: include/simplix/k/arch/x86/gdt.h
  *
  * Description:
  * 	Defines GDT constants and related structs.
@@ -28,8 +28,8 @@
 #ifndef GDT_H
 #define GDT_H
 
-#include <bos/k/common.h>
-#include <bos/k/vga.h>
+#include <simplix/k/common.h>
+#include <simplix/k/vga.h>
 
 /** GDT Pointer Structures **/
 

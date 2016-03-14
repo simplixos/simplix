@@ -25,7 +25,7 @@
  *
  ***********************************************************************/
 
-#include <bos/k/vga.h>
+#include <simplix/k/vga.h>
 
 // VGA Framebuffer
 uint16_t *video_memory = (uint16_t *)0xB8000;

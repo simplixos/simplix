@@ -1,7 +1,7 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/arch/x86/memory_layout.h
+ * File: include/simplix/k/arch/x86/memory_layout.h
  *
  * Description:
  * 	Data that defines kernel Virtual and Physical memory.

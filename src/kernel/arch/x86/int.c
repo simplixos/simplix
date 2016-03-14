@@ -25,7 +25,7 @@
  *
  ************************************************************/
 
-#include <bos/k/arch/x86/int.h>
+#include <simplix/k/arch/x86/int.h>
 
 void int_disable() {
 	asm volatile("cli");

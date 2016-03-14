@@ -1,10 +1,10 @@
 /************************************************************
  * SimplixOS Operating System
  *
- * File: include/bos/k/arch/x86/irq.h
+ * File: include/simplix/k/arch/x86/io.h
  *
  * Description:
- *      Defines IRQ PIC types.
+ *      x86 low-level I/O manipulation functions.
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
@@ -25,51 +25,16 @@
  *
  ************************************************************/
 
-#ifndef _IRQ_H
-#define	_IRQ_H
+#ifndef IO_H
+#define IO_H
 
-#include <bos/k/common.h>
-#include <bos/k/arch/x86/idt.h>
+#ifdef __GNUC__
+#include <stddef.h>
+#include <stdint.h>
+#endif
 
-#define IRQ0_DEFAULT_OFFSET 0x20
-#define IRQ1_DEFAULT_OFFSET 0x28
-
-#define IRQ_PIC0         0x20
-#define IRQ_PIC0_COMMAND IRQ_PIC0
-#define IRQ_PIC0_DATA    IRQ_PIC0 + 1
-
-#define IRQ_PIC1         0xA0
-#define IRQ_PIC1_COMMAND IRQ_PIC1
-#define IRQ_PIC1_DATA    IRQ_PIC1 + 1
-
-#define IRQ_PIC_INIT 0x11
-#define IRQ_EOI      0x20
-
-#define IRQ_PIC_8086_MODE 0x01
-
-#define IRQ_0 0
-#define IRQ_1 1
-#define IRQ_2 2
-#define IRQ_3 3
-#define IRQ_4 4
-#define IRQ_5 5
-#define IRQ_6 6
-#define IRQ_7 7
-#define IRQ_8 8
-#define IRQ_9 9
-#define IRQ_10 10
-#define IRQ_11 11
-#define IRQ_12 12
-#define IRQ_13 13
-#define IRQ_14 14
-#define IRQ_15 15
-
-#define IRQ_TYPE 6
-#define IRQ_TYPE 6
-// TODO: add other ints
-
-void irq_init();
-bool irq_test(uint8_t int_n);
-void register_irq_handler(interrupt_handler_t irq_handler_info,int irq);
+void outb(uint16_t port, uint8_t val);
+uint8_t inb(uint16_t port);
+uint16_t inw(uint16_t port);
 
 #endif
