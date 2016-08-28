@@ -29,26 +29,34 @@ export TARGET=i686-simplix
 echo $TARGET
 export PATH="$PREFIX/bin:$PATH"
 
+# Toolchain Versions
+NASM_VERSION=2.12.02
+GMP_VERSION=6.1.1
+MPC_VERSION=1.0.3
+MPFR_VERSION=3.1.4
+ISL_VERSION=0.16.1
+
 platform='unknown'
 uname=$(uname)
 if [ "$uname" == 'Linux' ]; then
 	platform='linux'
 	if [ `getconf LONG_BIT` = "64" ]; then
-		wget http://dl.simplixos.org/pub/toolchains/build/linux/x86_64/x86_64-unknown-linux-gnu_build-toolchain.tar.bz2
-		tar -xvf x86_64-unknown-linux-gnu_build-toolchain.tar.bz2
-		rm -f x86_64-unknown-linux-gnu_build-toolchain.tar.bz2
+		wget http://dl.simplixos.org/pub/toolchains/build/linux/x86_64/x86_64-unknown-linux-gnu_cross-toolchain.tar.bz2
+		tar -xvf x86_64-unknown-linux-gnu_cross-toolchain.tar.bz2
+		rm -f x86_64-unknown-linux-gnu_cross-toolchain.tar.bz2
 		exit 0
 	fi
 elif [ "$uname" == 'Darwin' ]; then
 	platform='macos'
 	if [ `getconf LONG_BIT` = "64" ]; then
-		wget http://dl.simplixos.org/pub/toolchains/build/darwin/x86_64/x86_64-apple-darwin15.2.0_build-toolchain.tar.bz2
-		tar -xvf x86_64-apple-darwin15.2.0_build-toolchain.tar.bz2
-		rm -f x86_64-apple-darwin15.2.0_build-toolchain.tar.bz2
+		wget http://dl.simplixos.org/pub/toolchains/build/darwin/x86_64/x86_64-apple-darwin16.0.0_cross-toolchain.tar.bz2
+		tar -xvf x86_64-apple-darwin16.0.0_cross-toolchain.tar.bz2
+		rm -f x86_64-apple-darwin16.0.0_cross-toolchain.tar.bz2
 		exit 0
 	fi
 elif [ "$uname" == 'SunOS' ]; then
 	platform='solaris'
+        gmake='yes'
 	if [ `getconf LONG_BIT` = "64" ]; then
 		wget http://dl.simplixos.org/pub/toolchains/build/solaris/x86_64/x86_64-pc-solaris2.11_build-toolchain.tar.bz2
 		tar -xvf x86_64-pc-solaris2.11_build-toolchain.tar.bz2
@@ -70,6 +78,7 @@ elif [ "$uname" == 'Cygwin' ]; then
 	fi
 elif [ "$uname" == 'FreeBSD' ]; then
 	platform='freebsd'
+	gmake='yes'
 	if [ `getconf LONG_BIT` = "64" ]; then
 		wget https://dl.simplixos.org/pub/toolchains/build/bsd/freebsd/x86_64/x86_64-freebsd10.1_build-toolchain.tar.bz2
 		tar -xjvf x86_64-freebsd10.1_build-toolchain.tar.bz2
@@ -85,25 +94,21 @@ mkdir src
 cd src
 pwd
 
-wget http://dl.simplixos.org/pub/toolchains/binutils/binutils-2.26.tar.bz2
-wget http://dl.simplixos.org/pub/toolchains/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2
-wget http://www.nasm.us/pub/nasm/releasebuilds/2.12/nasm-2.12.tar.gz
+git clone --depth 1 -b simplix-cross https://git.simplixos.org/pub/scm/toolchain/binutils.git
+git clone --depth 1 -b simplix-cross https://git.simplixos.org/pub/scm/toolchain/gcc.git
+wget http://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz
 
-wget http://ftp.gnu.org/gnu/gmp/gmp-6.1.0.tar.bz2
-wget http://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
-wget http://ftp.gnu.org/gnu/mpfr/mpfr-3.1.4.tar.gz
-wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.16.1.tar.bz2
-wget http://www.bastoul.net/cloog/pages/download/cloog-0.18.4.tar.gz
+wget http://ftp.gnu.org/gnu/gmp/gmp-$GMP_VERSION.tar.bz2
+wget http://ftp.gnu.org/gnu/mpc/mpc-$MPC_VERSION.tar.gz
+wget http://ftp.gnu.org/gnu/mpfr/mpfr-$MPFR_VERSION.tar.gz
+wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-$ISL_VERSION.tar.bz2
 
-tar -xjvf binutils-2.26.tar.bz2
-tar -xjvf gcc-5.3.0.tar.bz2
-tar -xzvf nasm-2.12.tar.gz
+tar -xzvf nasm-$NASM_VERSION.tar.gz
 
-tar -xjvf gmp-6.1.0.tar.bz2
-tar -xzvf mpc-1.0.3.tar.gz
-tar -xzvf mpfr-3.1.4.tar.gz
-tar -xjvf isl-0.16.1.tar.bz2
-tar -xzvf cloog-0.18.4.tar.gz
+tar -xjvf gmp-$GMP_VERSION.tar.bz2
+tar -xzvf mpc-$MPC_VERSION.tar.gz
+tar -xzvf mpfr-$MPFR_VERSION.tar.gz
+tar -xjvf isl-$ISL_VERSION.tar.bz2
 
 rm -f *tar.gz
 rm -f *tar.bz2
@@ -111,8 +116,9 @@ rm -f *tar.bz2
 mkdir build-binutils
 cd build-binutils
 pwd
-../binutils-2.26/configure --target=$TARGET --prefix=$PREFIX --with-sysroot --disable-nls --disable-werror
-if [[ $platform == 'solaris' ]]; then
+../binutils/configure --target=$TARGET --prefix=$PREFIX --with-sysroot --disable-nls --disable-werror --disable-gdb \
+                      --disable-libdecnumber --disable-readline --disable-sim --with-pkgversion="Simplix Cross Binutils"
+if [[ $gmake == 'yes' ]]; then
 	gmake
 	gmake install
 else
@@ -122,17 +128,17 @@ fi
 cd ..
 pwd
 
-mv gmp-6.1.0/ gcc-5.3.0/gmp/
-mv mpc-1.0.3/ gcc-5.3.0/mpc/
-mv mpfr-3.1.4/ gcc-5.3.0/mpfr/
-mv isl-0.16.1/ gcc-5.3.0/isl/
-mv cloog-0.18.4/ gcc-5.3.0/cloog/
+mv gmp-$GMP_VERSION/ gcc/gmp/
+mv mpc-$MPC_VERSION/ gcc/mpc/
+mv mpfr-$MPFR_VERSION/ gcc/mpfr/
+mv isl-$ISL_VERSION/ gcc/isl/
 
 mkdir build-gcc
 cd build-gcc
 pwd
-../gcc-5.3.0/configure --target=$TARGET --prefix=$PREFIX --disable-nls --enable-languages=c,c++ --without-headers
-if [[ $platform == 'solaris' ]]; then
+../gcc/configure --target=$TARGET --prefix=$PREFIX --disable-nls --enable-languages=c,c++ --without-headers \
+		 --with-pkgversion="Simplix Cross GCC"
+if [[ $gmake == 'yes' ]]; then
 	gmake all-gcc
 	gmake all-target-libgcc
 	gmake install-gcc
@@ -146,9 +152,9 @@ fi
 cd ..
 pwd
 
-cd nasm-2.12/
+cd nasm-$NASM_VERSION/
 ./configure --prefix="$pwd/cross/os-toolchain"
-if [[ $platform == 'solaris' ]]; then
+if [[ $gmake == 'yes' ]]; then
 	gmake
 	gmake install
 else
@@ -169,11 +175,6 @@ os-toolchain/bin/nasm -v
 cd ..
 pwd
 ls -la
-
-if [[ $platform == 'solaris' ]]; then
-        echo "Applying Solaris patches:"
-        ./scripts/host_patches.sh
-fi
 
 echo " "
 echo "Finished building OS-specific toolchain!"
