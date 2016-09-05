@@ -162,6 +162,31 @@ else
 	make install
 fi
 cd ..
+pwd
+
+if [[ $platform == 'macos' ]]; then
+
+git clone --depth 1 git://git.savannah.gnu.org/grub.git
+
+cd grub/
+./autogen.sh
+cd ..
+
+mkdir build-grub
+cd build-grub
+../grub/configure --disable-werror \
+	TARGET_CC=$PREFIX/bin/$TARGET-gcc \
+	TARGET_OBJCOPY=$PREFIX/bin/$TARGET-objcopy \
+	TARGET_STRIP=$PREFIX/bin/$TARGET-strip \
+	TARGET_NM=$PREFIX/bin/$TARGET-nm \
+	TARGET_RANLIB=$PREFIX/bin/$TARGET-ranlib \
+	--target=i686-elf --prefix=$PREFIX
+make
+make install
+cd ..
+pwd
+fi
+
 ls -lah
 rm -rf build*
 cd ..
@@ -172,9 +197,12 @@ os-toolchain/bin/i686-simplix-gcc --version
 
 os-toolchain/bin/nasm -v
 
+if [[ $platform == 'macos' ]]; then
+os-toolchain/bin/grub-mkrescue --version
+fi
+
 cd ..
 pwd
-ls -la
 
 echo " "
 echo "Finished building OS-specific toolchain!"

@@ -21,12 +21,15 @@
 #	along with this program. If not, see <http://www.gnu.org/licenses/>.  #
 ###############################################################################
 
+GRUB_MKRESCUE=grub-mkrescue
+
 platform='unknown'
 uname=$(uname)
 if [ "$uname" == 'Linux' ]; then
         platform='linux'
 elif [ "$uname" == 'Darwin' ]; then
         platform='macos'
+	GRUB_MKRESCUE=cross/os-toolchain/bin/grub-mkrescue
 elif [ "$uname" == 'SunOS' ]; then
         platform='solaris'
 elif [ "$uname" == 'Cygwin' ]; then
@@ -46,6 +49,6 @@ cp scripts/stage2_eltorito ./isodir/boot/grub/stage2_eltorito
 if [ $platform == 'solaris' ]; then
         mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o bin/simplixos.iso isodir
 else
-	grub-mkrescue -o bin/simplixos.iso isodir
+	$GRUB_MKRESCUE -o bin/simplixos.iso isodir
 fi
 rm -rf isodir
