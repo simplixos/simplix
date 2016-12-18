@@ -30,7 +30,10 @@
 
 #define E_PHY_MEM_ALLOC_FAIL 0x100
 
-#include <simplix/k/arch/x86/multiboot.h>
+#include <simplix/k/arch/multiboot.h>
+
+#include <simplix/k/arch/x86/page.h>
+#include <simplix/k/arch/x86/memory_layout.h>
 #include <simplix/k/arch/x86/panic.h>
 
 uint32_t phy_mmap(vm_offset_t start , vm_offset_t end , vm_offset_t *out_addr , bool page_alloc_needed , uint32_t alloc_size);

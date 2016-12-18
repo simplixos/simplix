@@ -25,8 +25,6 @@
  ***********************************************************************/
 
 #include <simplix/k/arch/x86/phy_alloc.h>
-#include <simplix/k/arch/x86/memory_layout.h>
-#include <simplix/k/arch/x86/multiboot.h>
 
 #define TEST_CASES 1
 

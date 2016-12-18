@@ -25,9 +25,6 @@
  *
  ***********************************************************************/
 
-#include <simplix/k/arch/x86/page.h>
-#include <simplix/k/arch/x86/memory_layout.h>
-#include <simplix/k/arch/x86/multiboot.h>
 #include <simplix/k/arch/x86/phy_alloc.h>
 
 /* Check if the bit BIT in FLAGS is set. */
