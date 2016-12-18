@@ -40,7 +40,7 @@
  * kernel/kernel.c and initializes the x86 cpu.
  *
  */
-void init_x86(multiboot_info_t* mbd, unsigned long lmagic)
+void arch_init(multiboot_info_t* mbd, unsigned long lmagic)
 {
 	// Initialise TTY and Serial devices
 	//tty_init();

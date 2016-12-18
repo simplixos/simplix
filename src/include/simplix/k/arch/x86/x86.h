@@ -39,6 +39,4 @@
 #else
 #endif
 
-void init_x86();
-
 #endif

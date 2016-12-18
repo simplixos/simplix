@@ -29,12 +29,7 @@
 #include <simplix/k/vga.h>
 #include <simplix/k/defs.h>
 
-#ifdef _x86
-	#include <simplix/k/arch/x86/x86.h>
-	#include <simplix/k/arch/x86/phy_alloc.h>
-	#include <hw/cpuid.h>
-#else
-#endif
+#include <simplix/k/arch/interface.h>
 
 #include <stdio.h>
 
@@ -49,11 +44,8 @@
  */
 void _k_early(multiboot_info_t* mbd, unsigned long lmagic)
 {
-	#ifdef _x86
-		init_x86(mbd,lmagic);
-
-		cpu_info();
-	#endif
+	// Initialize the CPU.
+	arch_init(mbd, lmagic);
 }
 
 /** The Kernel's Main Entrypoint function, kmain.
