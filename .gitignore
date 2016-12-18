@@ -8,3 +8,5 @@ obj/
 *.so
 *.do
 *.a
+
+*.patch
