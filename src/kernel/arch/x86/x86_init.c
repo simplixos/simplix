@@ -1,10 +1,10 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: kernel/arch/x86/x86.c
+ * File: kernel/arch/x86/x86_init.c
  *
  * Description:
- * 	x86 specific code.
+ * 	x86 initialization code.
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
