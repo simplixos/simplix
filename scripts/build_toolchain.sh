@@ -31,10 +31,10 @@ export PATH="$PREFIX/bin:$PATH"
 
 # Toolchain Versions
 NASM_VERSION=2.12.02
-GMP_VERSION=6.1.1
+GMP_VERSION=6.1.2
 MPC_VERSION=1.0.3
-MPFR_VERSION=3.1.4
-ISL_VERSION=0.16.1
+MPFR_VERSION=3.1.5
+ISL_VERSION=0.18
 
 platform='unknown'
 uname=$(uname)
@@ -101,7 +101,7 @@ wget http://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.
 wget http://ftp.gnu.org/gnu/gmp/gmp-$GMP_VERSION.tar.bz2
 wget http://ftp.gnu.org/gnu/mpc/mpc-$MPC_VERSION.tar.gz
 wget http://ftp.gnu.org/gnu/mpfr/mpfr-$MPFR_VERSION.tar.gz
-wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-$ISL_VERSION.tar.bz2
+wget http://isl.gforge.inria.fr/isl-$ISL_VERSION.tar.bz2
 
 tar -xzvf nasm-$NASM_VERSION.tar.gz
 
@@ -117,7 +117,8 @@ mkdir build-binutils
 cd build-binutils
 pwd
 ../binutils/configure --target=$TARGET --prefix=$PREFIX --with-sysroot --disable-nls --disable-werror --disable-gdb \
-                      --disable-libdecnumber --disable-readline --disable-sim --with-pkgversion="Simplix Cross Binutils"
+                      --disable-libdecnumber --disable-readline --disable-sim --with-pkgversion="Simplix Cross Binutils" \
+                      --disable-shared --enable-static
 if [[ $gmake == 'yes' ]]; then
 	gmake
 	gmake install
@@ -137,7 +138,7 @@ mkdir build-gcc
 cd build-gcc
 pwd
 ../gcc/configure --target=$TARGET --prefix=$PREFIX --disable-nls --enable-languages=c,c++ --without-headers \
-		 --with-pkgversion="Simplix Cross GCC"
+		 --with-pkgversion="Simplix Cross GCC" --enable-static --disable-shared
 if [[ $gmake == 'yes' ]]; then
 	gmake all-gcc
 	gmake all-target-libgcc
@@ -153,7 +154,7 @@ cd ..
 pwd
 
 cd nasm-$NASM_VERSION/
-./configure --prefix="$pwd/cross/os-toolchain"
+./configure --prefix="$pwd/cross/os-toolchain" --enable-static --disable-shared
 if [[ $gmake == 'yes' ]]; then
 	gmake
 	gmake install
