@@ -80,9 +80,10 @@ elif [ "$uname" == 'FreeBSD' ]; then
 	platform='freebsd'
 	gmake='yes'
 	if [ `getconf LONG_BIT` = "64" ]; then
-		wget https://dl.simplixos.org/pub/toolchains/build/bsd/freebsd/x86_64/x86_64-freebsd10.1_build-toolchain.tar.bz2
-		tar -xjvf x86_64-freebsd10.1_build-toolchain.tar.bz2
-		rm -f x86_64-freebsd10.1_build-toolchain.tar.bz2
+		wget https://dl.simplixos.org/pub/toolchains/build/bsd/freebsd/x86_64/x86_64-freebsd11.0_build-toolchain.tar.bz2
+		tar -xjvf x86_64-freebsd11.0_build-toolchain.tar.bz2
+		rm -f x86_64-freebsd11.0_build-toolchain.tar.bz2
+		exit 0
 	fi
 fi
 
