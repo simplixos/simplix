@@ -57,10 +57,10 @@ elif [ "$uname" == 'Darwin' ]; then
 elif [ "$uname" == 'SunOS' ]; then
 	platform='solaris'
         gmake='yes'
-	if [ `getconf LONG_BIT` = "64" ]; then
-		wget http://dl.simplixos.org/pub/toolchains/build/solaris/x86_64/x86_64-pc-solaris2.11_build-toolchain.tar.bz2
-		tar -xvf x86_64-pc-solaris2.11_build-toolchain.tar.bz2
-		rm -f x86_64-pc-solaris2.11_build-toolchain.tar.bz2
+	if [ `getconf LONG_BIT` = "32" ]; then
+		wget http://dl.simplixos.org/pub/toolchains/build/solaris/i386/i386-pc-solaris2.11_build-toolchain.tar.bz2
+		tar -xvf i386-pc-solaris2.11_build-toolchain.tar.bz2
+		rm -f i386-pc-solaris2.11_build-toolchain.tar.bz2
 		exit 0
 	fi
 elif [ "$uname" == 'Cygwin' ]; then
