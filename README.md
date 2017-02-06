@@ -1,7 +1,7 @@
 SimplixOS
 =========
 
-[![Build Status](https://travis-ci.org/aunali1/SimplixOS.svg?branch=master)](https://travis-ci.org/aunali1/SimplixOS)
+[![Build Status](https://ci.simplixos.org/job/SimplixOS%20Development/badge/icon)](https://ci.simplixos.org/job/SimplixOS%20Development/)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/4010/badge.svg)](https://scan.coverity.com/projects/4010)
 
 ![Demo1](https://aunali1.com/demo1.png)
