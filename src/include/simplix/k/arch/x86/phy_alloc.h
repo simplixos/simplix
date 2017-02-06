@@ -8,7 +8,7 @@
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
- * Copyright (C) 2016 Aun-Ali Zaidi, Rahul Ramesh
+ * Copyright (C) 2015-17 Aun-Ali Zaidi, Rahul Ramesh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
