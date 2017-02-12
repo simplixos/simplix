@@ -42,7 +42,7 @@ uname=$(uname)
 bits=$(getconf LONG_BIT)
 
 retrieve_toolchain() {
-	wget http://dl.simplixos.org/pub/toolchains/build/$platform/$1/$1-$2_cross-toolchain.tar.bz2
+	curl -O http://dl.simplixos.org/pub/toolchains/build/$platform/$1/$1-$2_cross-toolchain.tar.bz2
 	tar -xvf $1-$2_cross-toolchain.tar.bz2
 	rm -f $1-$2_cross-toolchain.tar.bz2
 	exit 0
