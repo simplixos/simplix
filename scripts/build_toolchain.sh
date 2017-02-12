@@ -37,55 +37,46 @@ MPFR_VERSION=3.1.5
 ISL_VERSION=0.18
 
 platform='unknown'
+bits='unknown'
 uname=$(uname)
-if [ "$uname" == 'Linux' ]; then
-	platform='linux'
-	if [ `getconf LONG_BIT` = "64" ]; then
-		wget http://dl.simplixos.org/pub/toolchains/build/linux/x86_64/x86_64-unknown-linux-gnu_cross-toolchain.tar.bz2
-		tar -xvf x86_64-unknown-linux-gnu_cross-toolchain.tar.bz2
-		rm -f x86_64-unknown-linux-gnu_cross-toolchain.tar.bz2
-		exit 0
-	fi
-elif [ "$uname" == 'Darwin' ]; then
-	platform='macos'
-	if [ `getconf LONG_BIT` = "64" ]; then
-		wget http://dl.simplixos.org/pub/toolchains/build/darwin/x86_64/x86_64-apple-darwin16.0.0_cross-toolchain.tar.bz2
-		tar -xvf x86_64-apple-darwin16.0.0_cross-toolchain.tar.bz2
-		rm -f x86_64-apple-darwin16.0.0_cross-toolchain.tar.bz2
-		exit 0
-	fi
-elif [ "$uname" == 'SunOS' ]; then
-	platform='solaris'
-        gmake='yes'
-	if [ `getconf LONG_BIT` = "32" ]; then
-		wget http://dl.simplixos.org/pub/toolchains/build/solaris/i386/i386-pc-solaris2.11_build-toolchain.tar.bz2
-		tar -xvf i386-pc-solaris2.11_build-toolchain.tar.bz2
-		rm -f i386-pc-solaris2.11_build-toolchain.tar.bz2
-		exit 0
-	fi
-elif [ "$uname" == 'Cygwin' ]; then
-	platform='cygwin'
-	if [ `getconf LONG_BIT` = "64" ]; then
-		wget http://dl.simplixos.org/pub/toolchains/build/cygwin/x86_64/x86_64-pc-cygwin_build-toolchain.tar.bz2
-		tar -xvf x86_64-pc-cygwin_build-toolchain.tar.bz2
-		rm -f x86_64-pc-cygwin_build-toolchain.tar.bz2
-		exit 0
-	elif [ `getconf LONG_BIT` = "32" ]; then
-		wget https://dl.simplixos.org/pub/toolchains/build/cygwin/i686/i686-pc-cygwin_build-toolchain.tar.bz2
-		tar -xvf i686-pc-cygwin_build-toolchain.tar.bz2
-		rm -f i686-pc-cygwin_build-toolchain.tar.bz2
-		exit 0
-	fi
-elif [ "$uname" == 'FreeBSD' ]; then
-	platform='freebsd'
-	gmake='yes'
-	if [ `getconf LONG_BIT` = "64" ]; then
-		wget https://dl.simplixos.org/pub/toolchains/build/bsd/freebsd/x86_64/x86_64-freebsd11.0_build-toolchain.tar.bz2
-		tar -xjvf x86_64-freebsd11.0_build-toolchain.tar.bz2
-		rm -f x86_64-freebsd11.0_build-toolchain.tar.bz2
-		exit 0
-	fi
-fi
+bits=$(getconf LONG_BIT)
+
+retrieve_toolchain() {
+	wget http://dl.simplixos.org/pub/toolchains/build/$platform/$1/$1-$2_cross-toolchain.tar.bz2
+	tar -xvf $1-$2_cross-toolchain.tar.bz2
+	rm -f $1-$2_cross-toolchain.tar.bz2
+	exit 0
+}
+
+case "$bits:$uname" in
+	64:Linux)   platform='linux'
+		    retrieve_toolchain x86_64 unknown-linux-gnu
+		    ;;
+	64:Darwin)  platform='darwin'
+		    retrieve_toolchain x86_64 apple-darwin16.0.0
+		    ;;
+	32:SunOS)   platform='solaris'
+		    gmake='yes'
+		    retrieve_toolchain i386 pc-solaris2.11
+		    ;;
+	64:CYGWIN*) platform='cygwin'
+		    retrieve_toolchain x86_64 pc-cygwin
+		    ;;
+	32:CYGWIN*) platform='cygwin'
+		    retrieve_toolchain i686 pc-cygwin
+		    ;;
+	64:FreeBSD) platform='bsd/freebsd'
+		    gmake='yes'
+		    retrieve_toolchain x86_64 freebsd11.0
+		    ;;
+esac
+
+retrieve_toolchain() {
+	wget http://dl.simplixos.org/pub/toolchains/build/$platform/$1/$1-$2_cross-toolchain.tar.bz2
+	tar -xvf $1-$2_cross-toolchain.tar.bz2
+	rm -f $1-$2_cross-toolchain.tar.bz2
+	exit 0
+}
 
 mkdir cross
 cd cross
