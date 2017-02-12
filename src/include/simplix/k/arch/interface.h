@@ -49,6 +49,19 @@
  */
 void arch_init(multiboot_info_t* mbd, unsigned long lmagic);
 
+/** Architecture CPU Information Function
+ *
+ * This function serves as a method to display
+ * information regrading the CPU and is called
+ * after the CPU init process.
+ *
+ * Information such as CPU type, registers,
+ * features, etc. are displayed and echoed to the
+ * user.
+ *
+ */
+void arch_cpu_info(void);
+
 /** Architecture Exit Function
  *
  * This function servers as the exitpoint of the
