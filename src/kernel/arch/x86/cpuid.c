@@ -79,19 +79,16 @@ uint32_t cpuid_extended_features()
 	return (uint32_t)ecx;
 }
 
-/* -- NOT WORKING : PAGE FAULT
-// Retrieve the processor name.
-// \param name Preallocated string containing at least room for 13 characters. Will
-// 	       contain the name of the processor.
-void cpuid_procname(char* name)
-{
-  name[12] = 0;
-  uint32_t max_op;
-  __get_cpuid(0, max_op, (uint32_t)name[0], (uint32_t)name[8], (uint32_t)name[4]);
-}
-*/
 
-/** x86 CPUID Info Retrieval Function, cpu_info
+// Retrieve the processor vendor id.
+void cpuid_vendorid(char* name)
+{
+	name[12] = 0;
+	unsigned int * max_op = 0;
+	__get_cpuid(0, max_op, (unsigned int *)&name[0], (unsigned int *)&name[8], (unsigned int *)&name[4]);
+}
+
+/** x86 CPUID Info Retrieval Function, arch_cpu_info
  *
  * This function returns information retrieved from the
  * CPUID x86 assembly instruction, such as CPU Name, Stepping,
@@ -104,9 +101,8 @@ void arch_cpu_info(void)
 	unsigned eax, ebx, ecx, edx;
 	__get_cpuid(1, &eax, &ebx, &ecx, &edx);
 
-	char *procname;
-	//cpuid_procname(procname);
-	procname = "Unavailable";
+	char vendorid[13];
+	cpuid_vendorid(vendorid);
 	kprintf("________________________________\n");
 	kprintf("|         Processor Info       |\n");
 	kprintf("********************************\n");
@@ -127,8 +123,8 @@ void arch_cpu_info(void)
 	kprintf(" Extended Family: ");
 	kprintf("%d\n", (eax >> 20) & 0xFF);
 
-	kprintf("	Processor Name: \n");
-	kprintf("	"); kprintf(procname); kprintf("\n");
+	kprintf("	Processor Vendor ID: \n");
+	kprintf("	"); kprintf(vendorid); kprintf("\n");
 	kprintf("	Processor Max 'cpuid' Calls: \n");
 	kprintf("	"); kprintf("%d\n", cpuid_maxcall());
 
