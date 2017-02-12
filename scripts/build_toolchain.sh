@@ -71,13 +71,6 @@ case "$bits:$uname" in
 		    ;;
 esac
 
-retrieve_toolchain() {
-	wget http://dl.simplixos.org/pub/toolchains/build/$platform/$1/$1-$2_cross-toolchain.tar.bz2
-	tar -xvf $1-$2_cross-toolchain.tar.bz2
-	rm -f $1-$2_cross-toolchain.tar.bz2
-	exit 0
-}
-
 mkdir cross
 cd cross
 pwd
