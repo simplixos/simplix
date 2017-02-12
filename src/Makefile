@@ -60,7 +60,6 @@ ASFLAGS_DBG=-g -felf32
 
 include kernel/Makefile.inc
 include kernel/arch/x86/Makefile.inc
-include hw/Makefile.inc
 
 CSOURCES_DBG=$(CSOURCES)
 ASMSOURCES_DBG=$(ASMSOURCES)

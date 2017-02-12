@@ -1,10 +1,10 @@
 /***********************************************************************
  * SimplixOS Operating System
  *
- * File: hw/cpu/cpuid.c
+ * File: kernel/arch/x86/cpuid.c
  *
  * Description:
- *      Functions detecting CPU and CPU features.
+ *      Functions detecting x86 CPU features.
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
@@ -25,7 +25,7 @@
  *
  ***********************************************************************/
 
-#include <hw/cpuid.h>
+#include <simplix/k/arch/x86/cpuid.h>
 
 #ifdef __GNUC__
 	#include <cpuid.h>
@@ -99,7 +99,7 @@ void cpuid_procname(char* name)
  * Family, Features, and Extended Features.
  *
  */
-void cpu_info(void)
+void arch_cpu_info(void)
 {
 	unsigned eax, ebx, ecx, edx;
 	__get_cpuid(1, &eax, &ebx, &ecx, &edx);

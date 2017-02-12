@@ -33,7 +33,7 @@
 
 #include <stdio.h>
 
-/** The Kernel's Early Entrpoint function, kearly.
+/** The Kernel's Early Entrypoint function, kearly.
  *
  * This section is called within the initial trampoline/boot
  * assembly after the initial bootup process. It then
@@ -46,6 +46,9 @@ void _k_early(multiboot_info_t* mbd, unsigned long lmagic)
 {
 	// Initialize the CPU.
 	arch_init(mbd, lmagic);
+
+	// Display CPU info.
+	arch_cpu_info();
 }
 
 /** The Kernel's Main Entrypoint function, kmain.

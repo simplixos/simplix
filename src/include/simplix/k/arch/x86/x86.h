@@ -4,7 +4,7 @@
  * File: include/simplix/k/arch/x86/x86.h
  *
  * Description:
- *      x86 specific init code.
+ *      x86 specific includes.
  *
  * License:
  * SimplixOS Operating System - An experimental operating system.
@@ -30,9 +30,11 @@
 
 // x86 specific includes
 #ifdef _x86
+	#include <simplix/k/arch/x86/cpuid.h>
 	#include <simplix/k/arch/x86/gdt.h>
 	#include <simplix/k/arch/x86/idt.h>
 	#include <simplix/k/arch/x86/int.h>
+	#include <simplix/k/arch/x86/io.h>
 	#include <simplix/k/arch/x86/irq.h>
 	#include <simplix/k/arch/x86/page.h>
 	#include <simplix/k/arch/x86/panic.h>

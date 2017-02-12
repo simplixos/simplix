@@ -26,6 +26,7 @@ CFLAGS+= -D_x86
 CFLAGS_DBG+= -D_x86
 
 CSOURCES+=	kernel/arch/x86/x86_init.c \
+		kernel/arch/x86/cpuid.c \
 		kernel/arch/x86/io.c \
 		kernel/arch/x86/tty.c \
 		kernel/arch/x86/gdt.c \
