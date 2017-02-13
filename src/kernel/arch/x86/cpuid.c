@@ -27,6 +27,8 @@
 
 #include <simplix/k/arch/x86/cpuid.h>
 
+#include <assert.h>
+
 #ifdef __GNUC__
 	#include <cpuid.h>
 	#ifdef __clang__
@@ -85,7 +87,7 @@ void cpuid_vendorid(char* name)
 {
 	name[12] = 0;
 	unsigned int * max_op = 0;
-	__get_cpuid(0, max_op, (unsigned int *)&name[0], (unsigned int *)&name[8], (unsigned int *)&name[4]);
+	assert(__get_cpuid(0, max_op, (unsigned int *)&name[0], (unsigned int *)&name[8], (unsigned int *)&name[4]));
 }
 
 // Retrieves the processor branding string.
@@ -93,28 +95,28 @@ void cpuid_brand(unsigned int brand)
 {
 	unsigned op, unused;
 	op = 0;
-	__get_cpuid(0x80000000, &op, &unused, &unused, &unused);
+	assert(__get_cpuid(0x80000000, &op, &unused, &unused, &unused));
 
 	if (op >= 0x80000004) {
 		unsigned eax = 0, ebx = 0, ecx = 0, edx = 0;
 
 		// XXX: Simplify conditionals...
 		if (op >= 0x80000002) {
-			__get_cpuid(0x80000002, &eax, &ebx, &ecx, &edx);
+			assert(__get_cpuid(0x80000002, &eax, &ebx, &ecx, &edx));
 			kprintf("%c%c%c%c", eax & 0xff, (eax >> 8) & 0xff, (eax >> 16) & 0xff, (eax >> 24) & 0xff);
 			kprintf("%c%c%c%c", ebx & 0xff, (ebx >> 8) & 0xff, (ebx >> 16) & 0xff, (ebx >> 24) & 0xff);
 			kprintf("%c%c%c%c", ecx & 0xff, (ecx >> 8) & 0xff, (ecx >> 16) & 0xff, (ecx >> 24) & 0xff);
 			kprintf("%c%c%c%c", edx & 0xff, (edx >> 8) & 0xff, (edx >> 16) & 0xff, (edx >> 24) & 0xff);
 		}
 		if (op >= 0x80000003) {
-			__get_cpuid(0x80000003, &eax, &ebx, &ecx, &edx);
+			assert(__get_cpuid(0x80000003, &eax, &ebx, &ecx, &edx));
 			kprintf("%c%c%c%c", eax & 0xff, (eax >> 8) & 0xff, (eax >> 16) & 0xff, (eax >> 24) & 0xff);
 			kprintf("%c%c%c%c", ebx & 0xff, (ebx >> 8) & 0xff, (ebx >> 16) & 0xff, (ebx >> 24) & 0xff);
 			kprintf("%c%c%c%c", ecx & 0xff, (ecx >> 8) & 0xff, (ecx >> 16) & 0xff, (ecx >> 24) & 0xff);
 			kprintf("%c%c%c%c", edx & 0xff, (edx >> 8) & 0xff, (edx >> 16) & 0xff, (edx >> 24) & 0xff);
 		}
 		if (op >= 0x80000004) {
-			__get_cpuid(0x80000004, &eax, &ebx, &ecx, &edx);
+			assert(__get_cpuid(0x80000004, &eax, &ebx, &ecx, &edx));
 			kprintf("%c%c%c%c", eax & 0xff, (eax >> 8) & 0xff, (eax >> 16) & 0xff, (eax >> 24) & 0xff);
 			kprintf("%c%c%c%c", ebx & 0xff, (ebx >> 8) & 0xff, (ebx >> 16) & 0xff, (ebx >> 24) & 0xff);
 			kprintf("%c%c%c%c", ecx & 0xff, (ecx >> 8) & 0xff, (ecx >> 16) & 0xff, (ecx >> 24) & 0xff);
@@ -135,7 +137,7 @@ void cpuid_brand(unsigned int brand)
 void arch_cpu_info(void)
 {
 	unsigned eax = 0, ebx = 0, ecx = 0, edx = 0;
-	__get_cpuid(1, &eax, &ebx, &ecx, &edx);
+	assert(__get_cpuid(1, &eax, &ebx, &ecx, &edx));
 
 	char vendorid[13];
 	unsigned int brand = ebx & 0xff;
