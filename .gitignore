@@ -10,3 +10,5 @@ obj/
 *.a
 
 *.patch
+
+cppcheck.xml
