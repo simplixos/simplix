@@ -29,6 +29,8 @@
 
 #include <assert.h>
 
+unsigned unused, op;
+
 #ifdef __GNUC__
 	#include <cpuid.h>
 	#ifdef __clang__
@@ -57,7 +59,7 @@ uint32_t cpuid_maxcall()
 // returns the content of the edx register containing available features
 uint32_t cpuid_features()
 {
-	unsigned edx = 0, unused;
+	unsigned edx = 0;
 	#ifdef _CLANG_CPUID
 		int features = __get_cpuid(1, &unused, &unused, &unused, &edx);
 	#elif defined(_GCC_CPUID)
@@ -71,7 +73,7 @@ uint32_t cpuid_features()
 // returns The content of the ecx register containing available extended features
 uint32_t cpuid_extended_features()
 {
-	unsigned ecx = 0, unused;
+	unsigned ecx = 0;
 	#ifdef _CLANG_CPUID
 		int extendedFeatures = __get_cpuid(1, &unused, &unused, &ecx, &unused);
 	#elif defined(_GCC_CPUID)
@@ -86,15 +88,12 @@ uint32_t cpuid_extended_features()
 void cpuid_vendorid(char* name)
 {
 	name[12] = 0;
-	unsigned int max_op;
-	assert(__get_cpuid(0, &max_op, (unsigned int *)&name[0], (unsigned int *)&name[8], (unsigned int *)&name[4]));
+	assert(__get_cpuid(0, &unused, (unsigned int *)&name[0], (unsigned int *)&name[8], (unsigned int *)&name[4]));
 }
 
 // Retrieves the processor branding string.
-void cpuid_brand(unsigned int brand)
+void cpuid_brand(unsigned int brand, unsigned op)
 {
-	unsigned op, unused;
-	op = 0;
 	assert(__get_cpuid(0x80000000, &op, &unused, &unused, &unused));
 
 	if (op >= 0x80000004) {
@@ -136,7 +135,7 @@ void cpuid_brand(unsigned int brand)
  */
 void arch_cpu_info(void)
 {
-	unsigned eax = 0, ebx = 0, unused;
+	unsigned eax = 0, ebx = 0;
 	assert(__get_cpuid(1, &eax, &ebx, &unused, &unused));
 
 	char vendorid[13];
@@ -162,7 +161,7 @@ void arch_cpu_info(void)
 	kprintf("	Processor Vendor ID: \n");
 	kprintf("	"); kprintf(vendorid); kprintf("\n");
 	kprintf("	Processor Brand: \n");
-	kprintf("	"); cpuid_brand(brand); kprintf("\n");
+	kprintf("	"); cpuid_brand(brand, op); kprintf("\n");
 	kprintf("	Processor Max 'cpuid' Calls: \n");
 	kprintf("	"); kprintf("%d\n", cpuid_maxcall());
 
