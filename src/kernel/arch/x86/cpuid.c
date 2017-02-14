@@ -57,11 +57,11 @@ uint32_t cpuid_maxcall()
 // returns the content of the edx register containing available features
 uint32_t cpuid_features()
 {
-	unsigned eax, ebx, ecx, edx;
+	unsigned edx = 0, unused;
 	#ifdef _CLANG_CPUID
-		int features = __get_cpuid(1, &eax, &ebx, &ecx, &edx);
+		int features = __get_cpuid(1, &unused, &unused, &unused, &edx);
 	#elif defined(_GCC_CPUID)
-		unsigned features = __get_cpuid(1, &eax, &ebx, &ecx, &edx);
+		unsigned features = __get_cpuid(1, &unused, &unused, &unused, &edx);
 	#endif
 	if (features == 0) return (uint32_t)0;
 	return (uint32_t)edx;
@@ -71,11 +71,11 @@ uint32_t cpuid_features()
 // returns The content of the ecx register containing available extended features
 uint32_t cpuid_extended_features()
 {
-	unsigned eax, ebx, ecx, edx;
+	unsigned ecx = 0, unused;
 	#ifdef _CLANG_CPUID
-		int extendedFeatures = __get_cpuid(1, &eax, &ebx, &ecx, &edx);
+		int extendedFeatures = __get_cpuid(1, &unused, &unused, &ecx, &unused);
 	#elif defined(_GCC_CPUID)
-		unsigned extendedFeatures = __get_cpuid(1, &eax, &ebx, &ecx, &edx);
+		unsigned extendedFeatures = __get_cpuid(1, &unused, &unused, &ecx, &unused);
 	#endif
 	if (extendedFeatures == 0) return (uint32_t)0;
 	return (uint32_t)ecx;
@@ -86,8 +86,8 @@ uint32_t cpuid_extended_features()
 void cpuid_vendorid(char* name)
 {
 	name[12] = 0;
-	unsigned int * max_op = 0;
-	assert(__get_cpuid(0, max_op, (unsigned int *)&name[0], (unsigned int *)&name[8], (unsigned int *)&name[4]));
+	unsigned int max_op;
+	assert(__get_cpuid(0, &max_op, (unsigned int *)&name[0], (unsigned int *)&name[8], (unsigned int *)&name[4]));
 }
 
 // Retrieves the processor branding string.
@@ -136,8 +136,8 @@ void cpuid_brand(unsigned int brand)
  */
 void arch_cpu_info(void)
 {
-	unsigned eax = 0, ebx = 0, ecx = 0, edx = 0;
-	assert(__get_cpuid(1, &eax, &ebx, &ecx, &edx));
+	unsigned eax = 0, ebx = 0, unused;
+	assert(__get_cpuid(1, &eax, &ebx, &unused, &unused));
 
 	char vendorid[13];
 	unsigned int brand = ebx & 0xff;
@@ -153,10 +153,7 @@ void arch_cpu_info(void)
 	kprintf(" Model: ");
 	kprintf("%d", (eax >> 4) & 0xF);
 	kprintf(" Family: ");
-	#pragma GCC diagnostic push
-	#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 	kprintf("%d", (eax >> 8) & 0xF);
-	#pragma GCC diagnostic pop
 	kprintf(" Extended Model: ");
 	kprintf("%d", (eax >> 16) & 0xF);
 	kprintf(" Extended Family: ");
