@@ -81,12 +81,12 @@ pwd
 
 git clone --depth 1 -b simplix-cross https://git.simplixos.org/pub/scm/toolchain/binutils.git
 git clone --depth 1 -b simplix-cross https://git.simplixos.org/pub/scm/toolchain/gcc.git
-wget http://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz
+curl -O http://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz
 
-wget http://ftp.gnu.org/gnu/gmp/gmp-$GMP_VERSION.tar.bz2
-wget http://ftp.gnu.org/gnu/mpc/mpc-$MPC_VERSION.tar.gz
-wget http://ftp.gnu.org/gnu/mpfr/mpfr-$MPFR_VERSION.tar.gz
-wget http://isl.gforge.inria.fr/isl-$ISL_VERSION.tar.bz2
+curl -O http://ftp.gnu.org/gnu/gmp/gmp-$GMP_VERSION.tar.bz2
+curl -O http://ftp.gnu.org/gnu/mpc/mpc-$MPC_VERSION.tar.gz
+curl -O http://ftp.gnu.org/gnu/mpfr/mpfr-$MPFR_VERSION.tar.gz
+curl -O http://isl.gforge.inria.fr/isl-$ISL_VERSION.tar.bz2
 
 tar -xzvf nasm-$NASM_VERSION.tar.gz
 
