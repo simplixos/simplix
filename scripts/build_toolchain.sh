@@ -38,6 +38,8 @@ ISL_VERSION=0.18
 
 platform='unknown'
 bits='unknown'
+gmake='no'
+grub='no'
 uname=$(uname)
 bits=$(getconf LONG_BIT)
 
@@ -53,10 +55,12 @@ case "$bits:$uname" in
 		    retrieve_toolchain x86_64 unknown-linux-gnu
 		    ;;
 	64:Darwin)  platform='darwin'
+		    grub='yes'
 		    retrieve_toolchain x86_64 apple-darwin16.0.0
 		    ;;
 	32:SunOS)   platform='solaris'
 		    gmake='yes'
+		    grub='yes'
 		    retrieve_toolchain i386 pc-solaris2.11
 		    ;;
 	64:CYGWIN*) platform='cygwin'
@@ -150,7 +154,7 @@ fi
 cd ..
 pwd
 
-if [[ $platform == 'macos' ]]; then
+if [[ $grub == 'yes' ]]; then
 
 git clone --depth 1 git://git.savannah.gnu.org/grub.git
 
@@ -183,7 +187,7 @@ os-toolchain/bin/i686-simplix-gcc --version
 
 os-toolchain/bin/nasm -v
 
-if [[ $platform == 'macos' ]]; then
+if [[ $grub == 'yes' ]]; then
 os-toolchain/bin/grub-mkrescue --version
 fi
 
