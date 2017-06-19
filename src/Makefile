@@ -44,13 +44,13 @@ include kernel/arch/x86/Makefile.inc
 
 ## Directories ##
 
-BASE_DIR = $(CURDIR)
-BINARY_DIR = $(BASE_DIR)/../bin
-INCLUDE_DIR = $(BASE_DIR)/include
-LIBRARY_DIR = $(BASE_DIR)/lib
+BASE_DIR = $(CURDIR)/
+BINARY_DIR = $(BASE_DIR)../bin
+INCLUDE_DIR = $(BASE_DIR)include
+LIBRARY_DIR = $(BASE_DIR)lib
 LIBRARY_BIN_DIR = $(LIBRARY_DIR)/bin
-OBJECT_DIR = $(BASE_DIR)/obj
-SCRIPT_DIR= $(BASE_DIR)/../scripts
+OBJECT_DIR = $(BASE_DIR)obj
+SCRIPT_DIR= $(BASE_DIR)../scripts
 
 LIBC_DIR = $(LIBRARY_DIR)/libc
 LIBC_BIN = $(LIBRARY_BIN_DIR)/libc.a
@@ -62,11 +62,11 @@ INCLUDE_LIBPOSIX_DIR = $(LIBRARY_DIR)/libposix/include
 
 ## Tools ##
 
-CC=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-gcc
-AS=$(BASE_DIR)/../cross/os-toolchain/bin/nasm
-LD=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-ld
-STRIP=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-strip
-OBJCOPY=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-objcopy
+CC=$(BASE_DIR)../cross/os-toolchain/bin/i686-simplix-gcc
+AS=$(BASE_DIR)../cross/os-toolchain/bin/nasm
+LD=$(BASE_DIR)../cross/os-toolchain/bin/i686-simplix-ld
+STRIP=$(BASE_DIR)../cross/os-toolchain/bin/i686-simplix-strip
+OBJCOPY=$(BASE_DIR)../cross/os-toolchain/bin/i686-simplix-objcopy
 MV=mv
 
 ## Flags ##
@@ -89,7 +89,7 @@ ASFLAGS = -felf32
 ASFLAGS_DEBUG = -g $(ASFLAGS)
 
 # Architecture specific linker file.
-LINK_SPEC = $(BASE_DIR)/kernel/arch/$(ARCH)/linker-$(ARCH).ld
+LINK_SPEC = $(BASE_DIR)kernel/arch/$(ARCH)/linker-$(ARCH).ld
 LDFLAGS = -T $(LINK_SPEC)
 
 OBJFLAGS = --add-section .copyright=$(SCRIPT_DIR)/copyright --set-section-flags .copyright=noload
@@ -133,49 +133,46 @@ debug: $(ASMSOURCES) $(CSOURCES) $(KERNEL_DEBUG)
 
 $(KERNEL_STABLE): $(ASMOBJECTS) $(COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN)
 	$(call cmd, \
-	rm -f $(KERNEL_STABLE), \
-	RM 	$(KERNEL_STABLE))
-	$(call cmd, \
 	$(LD) $(LDFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN) -o $@, \
-	LD 	$(KERNEL_STABLE))
+	LD      $(subst $(BASE_DIR),,$(KERNEL_STABLE)))
 	$(call cmd, \
 	$(OBJCOPY) $(OBJFLAGS) $(KERNEL_STABLE) $(KERNEL_STABLE), \
-	OBJCOPY $(KERNEL_STABLE) $(KERNEL_STABLE))
+	OBJCOPY $(subst $(BASE_DIR),,$(KERNEL_STABLE)))
 	$(call cmd, \
 	$(STRIP) $(KERNEL_STABLE), \
-	STRIP  $(KERNEL_STABLE))
+	STRIP   $(subst $(BASE_DIR),,$(KERNEL_STABLE)))
 
 $(KERNEL_DBG): $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX)
 	$(call cmd, \
 	$(LD) $(LDFLAGS) $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX) -o $@, \
-	LD 	$(KERNEL_DBG))
+	LD      $(subst $(BASE_DIR),,$(KERNEL_DBG)))
 	$(call cmd, \
 	$(OBJCOPY) $(OBJFLAGS) $(KERNEL_DBG) $(KERNEL_DBG), \
-	OBJCOPY $(KERNEL_DBG) $(KERNEL_DBG))
+	OBJCOPY $(subst $(BASE_DIR),,$(KERNEL_DBG)))
 
 obj/%.os: %.c
 	@mkdir -p $(@D)
 	$(call cmd, \
 	$(CC) $(CFLAGS) -c $< -o $@, \
-	CC 	$@)
+	CC      $(subst obj/,,$@))
 
 obj/%.sos: %.s
 	@mkdir -p $(@D)
 	$(call cmd, \
 	$(AS) $(ASFLAGS)  $< -o $@, \
-	AS 	$@)
+	AS      $(subst obj/,,$@))
 
 obj/%.od: %.c
 	@mkdir -p $(@D)
 	$(call cmd, \
 	$(CC) $(CFLAGS_DBG) -c $< -o $@, \
-	CC 	$@)
+	CC      $(subst obj/,,$@))
 
 obj/%.sod: %.s
 	@mkdir -p $(@D)
 	$(call cmd, \
 	$(AS) $(ASFLAGS_DBG)  $< -o $@, \
-	AS 	$@)
+	AS      $(subst obj/,,$@))
 
 $(LIBC_BIN):
 	@echo "Building libc:"
@@ -190,4 +187,4 @@ clean:
 	@cd $(LIBPOSIX_DIR) && $(MAKE) clean
 	$(call cmd, \
 	rm -rf $(COBJECTS) $(ASMOBJECTS) $(KERNEL_STABLE) $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(KERNEL_DBG) $(OBJ_DIR) $(BIN_DIR), \
-	CLEAN kernel/ hw/cpuid/ ../bin/)
+	CLEAN   kernel/ hw/cpuid/ ../bin/)
