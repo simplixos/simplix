@@ -64,6 +64,7 @@ INCLUDE_LIBPOSIX_DIR = $(LIBRARY_DIR)/libposix/include
 
 CC=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-gcc
 AS=$(BASE_DIR)/../cross/os-toolchain/bin/nasm
+LD=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-ld
 STRIP=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-strip
 OBJCOPY=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-objcopy
 MV=mv
@@ -124,7 +125,7 @@ obj::
 #             Targets            #
 #--------------------------------#
 
-all: debug stable
+all: stable debug
 
 stable: $(ASMSOURCES) $(CSOURCES) $(KERNEL_STABLE)
 
@@ -135,8 +136,8 @@ $(KERNEL_STABLE): $(ASMOBJECTS) $(COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN)
 	rm -f $(KERNEL_STABLE), \
 	RM 	$(KERNEL_STABLE))
 	$(call cmd, \
-	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN) -o $@, \
-	CC 	$(KERNEL_STABLE))
+	$(LD) $(LDFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN) -o $@, \
+	LD 	$(KERNEL_STABLE))
 	$(call cmd, \
 	$(OBJCOPY) $(OBJFLAGS) $(KERNEL_STABLE) $(KERNEL_STABLE)1, \
 	OBJCOPY $(KERNEL_STABLE) $(KERNEL_STABLE)1)
@@ -149,8 +150,8 @@ $(KERNEL_STABLE): $(ASMOBJECTS) $(COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN)
 
 $(KERNEL_DBG): $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX)
 	$(call cmd, \
-	$(CC) $(LDFLAGS) $(CFLAGS_DBG) $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX) -o $@, \
-	CC 	$(KERNEL_DBG))
+	$(LD) $(LDFLAGS) $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX) -o $@, \
+	LD 	$(KERNEL_DBG))
 	$(call cmd, \
 	$(OBJCOPY) $(OBJFLAGS) $(KERNEL_DBG) $(KERNEL_DBG)1, \
 	OBJCOPY $(KERNEL_DBG) $(KERNEL_DBG)1)
