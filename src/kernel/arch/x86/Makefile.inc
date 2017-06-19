@@ -20,10 +20,11 @@
 ###############################################################################
 
 ifeq ($(ARCH),x86)
-LINK_SPEC=kernel/arch/x86/linker-x86.ld
+CFLAGS_DEFS = -D_x86
 
-CFLAGS+= -D_x86
-CFLAGS_DBG+= -D_x86
+ASMSOURCES+=	kernel/arch/x86/boot.s \
+		kernel/arch/x86/idt_asm.s \
+		kernel/arch/x86/isr.s
 
 CSOURCES+=	kernel/arch/x86/x86_init.c \
 		kernel/arch/x86/cpuid.c \
@@ -39,8 +40,4 @@ CSOURCES+=	kernel/arch/x86/x86_init.c \
 		kernel/arch/x86/phy_allocator.c \
 		kernel/arch/x86/symtab.c \
 		kernel/arch/x86/phy_page_alloc_test.c
-
-ASMSOURCES+=	kernel/arch/x86/boot.s \
-		kernel/arch/x86/idt_asm.s \
-		kernel/arch/x86/isr.s
 endif

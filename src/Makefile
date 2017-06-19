@@ -1,7 +1,7 @@
 ###############################################################################
 #	SimplixOS Kernel Makefile					      #
 #									      #
-# 	License:							      #
+#	License:							      #
 #	SimplixOS Operating System - An experimental operating system	      #
 #	Copyright (C) 2015-17 Aun-Ali Zaidi and its contributors.	      #
 #									      #
@@ -31,93 +31,114 @@ else
 cmd = @$(if $(value 2),echo "$2";)$1
 endif
 
-CC=../cross/os-toolchain/bin/i686-simplix-gcc
-AS=../cross/os-toolchain/bin/nasm
-STRIP=../cross/os-toolchain/bin/i686-simplix-strip
-OBJCOPY=../cross/os-toolchain/bin/i686-simplix-objcopy
-MV=mv
-
-INCLUDE=include/
-INC_LIBC_DIR=lib/libc/include/
-INC_LIBPOSIX_DIR=lib/libposix/include/
-
-LIBDIR=lib/bin/
-LIBS=-lc -lposix
-
-OBJ_DIR=obj
-BIN_DIR=../bin
-
-LIBC_DIR=lib/libc
-LIBPOSIX_DIR=lib/libposix
-
-CFLAGS=-m32 -std=gnu99 -I$(INCLUDE) -I$(INC_LIBC_DIR) -I$(INC_LIBPOSIX_DIR) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_simplix_k_libc
-ASFLAGS=-felf32
-# Architecture specific linker file. Specified in kernel/arch/$(ARCH)/linker-$(ARCH).ld
-LDFLAGS=-T $(LINK_SPEC)
-
-CFLAGS_DBG=-g -std=gnu99 -I$(INCLUDE) -I$(INC_LIBC_DIR) -I$(INC_LIBPOSIX_DIR) -L$(LIBDIR) $(LIBS) -ffreestanding -nostdlib -O2 -Wall -Wextra -fstack-protector-all -D_simplix_k_libc
-ASFLAGS_DBG=-g -felf32
+#--------------------------------#
+#       Included Makefiles       #
+#--------------------------------#
 
 include kernel/Makefile.inc
 include kernel/arch/x86/Makefile.inc
 
-CSOURCES_DBG=$(CSOURCES)
-ASMSOURCES_DBG=$(ASMSOURCES)
+#----------------------------------#
+#        Makefile Variables        #
+#----------------------------------#
+
+## Directories ##
+
+BASE_DIR = $(CURDIR)
+BINARY_DIR = $(BASE_DIR)/../bin
+INCLUDE_DIR = $(BASE_DIR)/include
+LIBRARY_DIR = $(BASE_DIR)/lib
+LIBRARY_BIN_DIR = $(LIBRARY_DIR)/bin
+OBJECT_DIR = $(BASE_DIR)/obj
+SCRIPT_DIR= $(BASE_DIR)/../scripts
+
+LIBC_DIR = $(LIBRARY_DIR)/libc
+LIBC_BIN = $(LIBRARY_BIN_DIR)/libc.a
+INCLUDE_LIBC_DIR = $(LIBRARY_DIR)/libc/include
+
+LIBPOSIX_DIR = $(LIBRARY_DIR)/libposix
+LIBPOSIX_BIN = $(LIBRARY_BIN_DIR)/libposix.a
+INCLUDE_LIBPOSIX_DIR = $(LIBRARY_DIR)/libposix/include
+
+## Tools ##
+
+CC=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-gcc
+AS=$(BASE_DIR)/../cross/os-toolchain/bin/nasm
+STRIP=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-strip
+OBJCOPY=$(BASE_DIR)/../cross/os-toolchain/bin/i686-simplix-objcopy
+MV=mv
+
+## Flags ##
+
+CFLAGS_BASE	= -std=gnu99 -ffreestanding -nostdlib -fstack-protector-all
+CFLAGS_DEFS	+= -D_simplix_k_libc
+CFLAGS_INC	= -I$(INCLUDE_DIR) -I$(INCLUDE_LIBC_DIR) -I$(INCLUDE_LIBPOSIX_DIR)
+CFLAGS_LIBS	= -L$(LIBRARY_BIN_DIR) -lc -lposix
+CFLAGS_OPT	= -O2
+CFLAGS_WARN	= -Wall -Wextra
 
 ifeq ($(TESTS),1)
-CFLAGS+= -DTESTS
-CFLAGS_DBG+= -DTESTS
+CFLAGS_DEFS += -DTESTS
 endif
 
-KERNEL_DBG=$(BIN_DIR)/simplixos_dbg.bin
-KERNEL_STABLE=$(BIN_DIR)/simplixos_stable.bin
+CFLAGS = $(CFLAGS_OPT) $(CFLAGS_INC) $(CFLAGS_BASE) $(CFLAGS_WARN) $(CFLAGS_DEFS)
+CFLAGS_DEBUG = -g $(CFLAGS)
 
-COBJECTS_DBG = $(patsubst %.c,obj/%.od,$(CSOURCES_DBG)) # debug objects named with .od extension
-ASMOBJECTS_DBG = $(patsubst %.s,obj/%.sod,$(ASMSOURCES_DBG))# debug ASM objects named with .sod extension
+ASFLAGS = -felf32
+ASFLAGS_DEBUG = -g $(ASFLAGS)
+
+# Architecture specific linker file.
+LINK_SPEC = $(BASE_DIR)/kernel/arch/$(ARCH)/linker-$(ARCH).ld
+LDFLAGS = -T $(LINK_SPEC)
+
+OBJFLAGS = --add-section .copyright=$(SCRIPT_DIR)/copyright --set-section-flags .copyright=noload
+
+#---------------------------------#
+#       Sources and Objects       #
+#---------------------------------#
+
+CSOURCES_DEBUG = $(CSOURCES)
+ASMSOURCES_DEBUG = $(ASMSOURCES)
+
+KERNEL_DEBUG = $(BINARY_DIR)/simplixos_dbg.bin
+KERNEL_STABLE = $(BINARY_DIR)/simplixos_stable.bin
+
+# Debug objects named with .od extension
+COBJECTS_DEBUG = $(patsubst %.c,obj/%.od,$(CSOURCES_DEBUG))
+ASMOBJECTS_DEBUG = $(patsubst %.s,obj/%.sod,$(ASMSOURCES_DEBUG))# debug ASM objects named with .sod extension
 
 COBJECTS = $(patsubst %.c,obj/%.os,$(CSOURCES)) # stable objects named with .os extension
 ASMOBJECTS = $(patsubst %.s,obj/%.sos,$(ASMSOURCES))# stable ASM objects named with .sos extension
-
-# add static libs here and provide a rule below
-LIBC=$(LIBDIR)libc.a
-LIBPOSIX=$(LIBDIR)libposix.a
-
-$(COBJECTS_DBG): | obj
-$(ASMOBJECTS_DBG): | obj
-obj::
-	@test -d $@ || mkdir $@
 
 $(COBJECTS): | obj
 $(ASMOBJECTS): | obj
 obj::
 	@test -d $@ || mkdir $@
 
+$(COBJECTS_DEBUG): | obj
+$(ASMOBJECTS_DEBUG): | obj
+obj::
+	@test -d $@ || mkdir $@
+
+#--------------------------------#
+#             Targets            #
+#--------------------------------#
+
 all: debug stable
 
-debug: $(CSOURCES) $(ASMSOURCES) $(KERNEL_DBG)
+stable: $(ASMSOURCES) $(CSOURCES) $(KERNEL_STABLE)
 
-stable: $(CSOURCES) $(ASMSOURCES) $(KERNEL_STABLE)
+debug: $(ASMSOURCES) $(CSOURCES) $(KERNEL_DEBUG)
 
-$(KERNEL_DBG): $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(LIBC) $(LIBPOSIX)
-	$(call cmd, \
-	$(CC) $(LDFLAGS) $(CFLAGS_DBG) $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX) -o $@, \
-	CC 	$(KERNEL_DBG))
-	$(call cmd, \
-	$(OBJCOPY) --add-section .copyright=../scripts/copyright --set-section-flags .copyright=noload $(KERNEL_DBG) $(KERNEL_DBG)1, \
-	OBJCOPY $(KERNEL_DBG) $(KERNEL_DBG)1)
-	$(call cmd, \
-	$(MV) $(KERNEL_DBG)1 $(KERNEL_DBG), \
-	MV	$(KERNEL_DBG)1 $(KERNEL_DBG))
-
-$(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS) $(LIBC) $(LIBPOSIX)
+$(KERNEL_STABLE): $(ASMOBJECTS) $(COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN)
 	$(call cmd, \
 	rm -f $(KERNEL_STABLE), \
 	RM 	$(KERNEL_STABLE))
 	$(call cmd, \
-	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBC) $(LIBPOSIX) -o $@, \
+	$(CC) $(LDFLAGS) $(CFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN) -o $@, \
 	CC 	$(KERNEL_STABLE))
 	$(call cmd, \
-	$(OBJCOPY) --add-section .copyright=../scripts/copyright --set-section-flags .copyright=noload $(KERNEL_STABLE) $(KERNEL_STABLE)1, \
+	$(OBJCOPY) $(OBJFLAGS) $(KERNEL_STABLE) $(KERNEL_STABLE)1, \
 	OBJCOPY $(KERNEL_STABLE) $(KERNEL_STABLE)1)
 	$(call cmd, \
 	$(MV) $(KERNEL_STABLE)1 $(KERNEL_STABLE), \
@@ -126,35 +147,46 @@ $(KERNEL_STABLE): $(COBJECTS) $(ASMOBJECTS) $(LIBC) $(LIBPOSIX)
 	$(STRIP) $(KERNEL_STABLE), \
 	STRIP  $(KERNEL_STABLE))
 
+$(KERNEL_DBG): $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX)
+	$(call cmd, \
+	$(CC) $(LDFLAGS) $(CFLAGS_DBG) $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX) -o $@, \
+	CC 	$(KERNEL_DBG))
+	$(call cmd, \
+	$(OBJCOPY) $(OBJFLAGS) $(KERNEL_DBG) $(KERNEL_DBG)1, \
+	OBJCOPY $(KERNEL_DBG) $(KERNEL_DBG)1)
+	$(call cmd, \
+	$(MV) $(KERNEL_DBG)1 $(KERNEL_DBG), \
+	MV	$(KERNEL_DBG)1 $(KERNEL_DBG))
+
 obj/%.os: %.c
 	@mkdir -p $(@D)
 	$(call cmd, \
 	$(CC) $(CFLAGS) -c $< -o $@, \
-	CC 	$<)
+	CC 	$@)
 
 obj/%.sos: %.s
 	@mkdir -p $(@D)
 	$(call cmd, \
 	$(AS) $(ASFLAGS)  $< -o $@, \
-	AS 	$<)
+	AS 	$@)
 
 obj/%.od: %.c
 	@mkdir -p $(@D)
 	$(call cmd, \
 	$(CC) $(CFLAGS_DBG) -c $< -o $@, \
-	CC 	$<)
+	CC 	$@)
 
 obj/%.sod: %.s
 	@mkdir -p $(@D)
 	$(call cmd, \
 	$(AS) $(ASFLAGS_DBG)  $< -o $@, \
-	AS 	$<)
+	AS 	$@)
 
-$(LIBC):
+$(LIBC_BIN):
 	@echo "Building libc:"
 	@cd $(LIBC_DIR) && $(MAKE) all V=$(V)
 
-$(LIBPOSIX):
+$(LIBPOSIX_BIN):
 	@echo "Building libposix:"
 	@cd $(LIBPOSIX_DIR) && $(MAKE) all V=$(V)
 
