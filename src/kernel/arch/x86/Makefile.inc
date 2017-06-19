@@ -22,22 +22,22 @@
 ifeq ($(ARCH),x86)
 CFLAGS_DEFS = -D_x86
 
-ASMSOURCES+=	kernel/arch/x86/boot.s \
-		kernel/arch/x86/idt_asm.s \
-		kernel/arch/x86/isr.s
+KERNEL_ASMSOURCES += kernel/arch/x86/boot.s \
+		     kernel/arch/x86/idt_asm.s \
+		     kernel/arch/x86/isr.s
 
-CSOURCES+=	kernel/arch/x86/x86_init.c \
-		kernel/arch/x86/cpuid.c \
-		kernel/arch/x86/io.c \
-		kernel/arch/x86/tty.c \
-		kernel/arch/x86/gdt.c \
-		kernel/arch/x86/idt.c \
-		kernel/arch/x86/panic.c \
-		kernel/arch/x86/irq.c \
-		kernel/arch/x86/int.c \
-		kernel/arch/x86/page.c \
-		kernel/arch/x86/serial.c \
-		kernel/arch/x86/phy_allocator.c \
-		kernel/arch/x86/symtab.c \
-		kernel/arch/x86/phy_page_alloc_test.c
+KERNEL_CSOURCES += kernel/arch/x86/x86_init.c \
+		   kernel/arch/x86/cpuid.c \
+		   kernel/arch/x86/io.c \
+		   kernel/arch/x86/tty.c \
+		   kernel/arch/x86/gdt.c \
+		   kernel/arch/x86/idt.c \
+		   kernel/arch/x86/panic.c \
+		   kernel/arch/x86/irq.c \
+		   kernel/arch/x86/int.c \
+		   kernel/arch/x86/page.c \
+		   kernel/arch/x86/serial.c \
+		   kernel/arch/x86/phy_allocator.c \
+		   kernel/arch/x86/symtab.c \
+		   kernel/arch/x86/phy_page_alloc_test.c
 endif

@@ -83,10 +83,16 @@ CFLAGS_DEFS += -DTESTS
 endif
 
 CFLAGS = $(CFLAGS_OPT) $(CFLAGS_INC) $(CFLAGS_BASE) $(CFLAGS_WARN) $(CFLAGS_DEFS)
-CFLAGS_DEBUG = -g $(CFLAGS)
+
+ifeq ($(DEBUG),1)
+CFLAGS += -g
+endif
 
 ASFLAGS = -felf32
-ASFLAGS_DEBUG = -g $(ASFLAGS)
+
+ifeq ($(DEBUG),1)
+ASFLAGS += -g
+endif
 
 # Architecture specific linker file.
 LINK_SPEC = $(BASE_DIR)kernel/arch/$(ARCH)/linker-$(ARCH).ld
@@ -98,26 +104,13 @@ OBJFLAGS = --add-section .copyright=$(SCRIPT_DIR)/copyright --set-section-flags 
 #       Sources and Objects       #
 #---------------------------------#
 
-CSOURCES_DEBUG = $(CSOURCES)
-ASMSOURCES_DEBUG = $(ASMSOURCES)
+KERNEL = $(BINARY_DIR)/simplixos_kernel.bin
 
-KERNEL_DEBUG = $(BINARY_DIR)/simplixos_dbg.bin
-KERNEL_STABLE = $(BINARY_DIR)/simplixos_stable.bin
+KERNEL_COBJECTS = $(patsubst %.c,obj/%.o,$(KERNEL_CSOURCES)) # C objects named with .o extension
+KERNEL_ASMOBJECTS = $(patsubst %.s,obj/%.so,$(KERNEL_ASMSOURCES)) # ASM objects named with .so extension
 
-# Debug objects named with .od extension
-COBJECTS_DEBUG = $(patsubst %.c,obj/%.od,$(CSOURCES_DEBUG))
-ASMOBJECTS_DEBUG = $(patsubst %.s,obj/%.sod,$(ASMSOURCES_DEBUG))# debug ASM objects named with .sod extension
-
-COBJECTS = $(patsubst %.c,obj/%.os,$(CSOURCES)) # stable objects named with .os extension
-ASMOBJECTS = $(patsubst %.s,obj/%.sos,$(ASMSOURCES))# stable ASM objects named with .sos extension
-
-$(COBJECTS): | obj
-$(ASMOBJECTS): | obj
-obj::
-	@test -d $@ || mkdir $@
-
-$(COBJECTS_DEBUG): | obj
-$(ASMOBJECTS_DEBUG): | obj
+$(KERNEL_COBJECTS): | obj
+$(KERNEL_ASMOBJECTS): | obj
 obj::
 	@test -d $@ || mkdir $@
 
@@ -125,53 +118,31 @@ obj::
 #             Targets            #
 #--------------------------------#
 
-all: stable debug
+all: kernel
 
-stable: $(ASMSOURCES) $(CSOURCES) $(KERNEL_STABLE)
+kernel: $(KERNEL_ASMSOURCES) $(KERNEL_CSOURCES) $(KERNEL)
 
-debug: $(ASMSOURCES) $(CSOURCES) $(KERNEL_DEBUG)
+$(KERNEL): $(KERNEL_ASMOBJECTS) $(KERNEL_COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN)
+	$(call cmd, \
+	$(LD) $(LDFLAGS) $(KERNEL_ASMOBJECTS) $(KERNEL_COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN) -o $@, \
+	LD      $(subst $(BASE_DIR),,$(KERNEL)))
+	$(call cmd, \
+	$(OBJCOPY) $(OBJFLAGS) $(KERNEL) $(KERNEL), \
+	OBJCOPY $(subst $(BASE_DIR),,$(KERNEL)))
+	$(call cmd, \
+	$(STRIP) $(KERNEL), \
+	STRIP   $(subst $(BASE_DIR),,$(KERNEL)))
 
-$(KERNEL_STABLE): $(ASMOBJECTS) $(COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN)
-	$(call cmd, \
-	$(LD) $(LDFLAGS) $(ASMOBJECTS) $(COBJECTS) $(LIBC_BIN) $(LIBPOSIX_BIN) -o $@, \
-	LD      $(subst $(BASE_DIR),,$(KERNEL_STABLE)))
-	$(call cmd, \
-	$(OBJCOPY) $(OBJFLAGS) $(KERNEL_STABLE) $(KERNEL_STABLE), \
-	OBJCOPY $(subst $(BASE_DIR),,$(KERNEL_STABLE)))
-	$(call cmd, \
-	$(STRIP) $(KERNEL_STABLE), \
-	STRIP   $(subst $(BASE_DIR),,$(KERNEL_STABLE)))
-
-$(KERNEL_DBG): $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX)
-	$(call cmd, \
-	$(LD) $(LDFLAGS) $(ASMOBJECTS_DBG) $(COBJECTS_DBG) $(LIBC) $(LIBPOSIX) -o $@, \
-	LD      $(subst $(BASE_DIR),,$(KERNEL_DBG)))
-	$(call cmd, \
-	$(OBJCOPY) $(OBJFLAGS) $(KERNEL_DBG) $(KERNEL_DBG), \
-	OBJCOPY $(subst $(BASE_DIR),,$(KERNEL_DBG)))
-
-obj/%.os: %.c
+obj/%.o: %.c
 	@mkdir -p $(@D)
 	$(call cmd, \
 	$(CC) $(CFLAGS) -c $< -o $@, \
 	CC      $(subst obj/,,$@))
 
-obj/%.sos: %.s
+obj/%.so: %.s
 	@mkdir -p $(@D)
 	$(call cmd, \
 	$(AS) $(ASFLAGS)  $< -o $@, \
-	AS      $(subst obj/,,$@))
-
-obj/%.od: %.c
-	@mkdir -p $(@D)
-	$(call cmd, \
-	$(CC) $(CFLAGS_DBG) -c $< -o $@, \
-	CC      $(subst obj/,,$@))
-
-obj/%.sod: %.s
-	@mkdir -p $(@D)
-	$(call cmd, \
-	$(AS) $(ASFLAGS_DBG)  $< -o $@, \
 	AS      $(subst obj/,,$@))
 
 $(LIBC_BIN):
@@ -186,5 +157,5 @@ clean:
 	@cd $(LIBC_DIR) && $(MAKE) clean
 	@cd $(LIBPOSIX_DIR) && $(MAKE) clean
 	$(call cmd, \
-	rm -rf $(COBJECTS) $(ASMOBJECTS) $(KERNEL_STABLE) $(COBJECTS_DBG) $(ASMOBJECTS_DBG) $(KERNEL_DBG) $(OBJ_DIR) $(BIN_DIR), \
+	rm -rf $(KERNEL_COBJECTS) $(KERNEL_ASMOBJECTS) $(KERNEL) $(OBJ_DIR) $(BIN_DIR), \
 	CLEAN   kernel/ hw/cpuid/ ../bin/)

@@ -42,12 +42,11 @@ mkdir -p isodir
 mkdir -p isodir/boot
 mkdir -p isodir/boot/grub
 echo $PWD
-cp bin/simplixos_stable.bin ./isodir/boot/simplixos_stable.bin
-cp bin/simplixos_dbg.bin ./isodir/boot/simplixos_dbg.bin
+cp bin/simplixos_kernel.bin ./isodir/boot/simplixos_kernel.bin
 cp scripts/grub.cfg ./isodir/boot/grub/grub.cfg
 cp scripts/stage2_eltorito ./isodir/boot/grub/stage2_eltorito
 if [ $platform == 'solaris' ]; then
-        mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o bin/simplixos.iso isodir
+	mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o bin/simplixos.iso isodir
 else
 	$GRUB_MKRESCUE -o bin/simplixos.iso isodir
 fi

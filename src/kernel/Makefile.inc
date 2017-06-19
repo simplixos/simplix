@@ -19,6 +19,6 @@
 #       along with this program. If not, see <http://www.gnu.org/licenses/>.  #
 ###############################################################################
 
-CSOURCES+=	kernel/stack_protector.c \
-	   	kernel/vga.c \
-		kernel/kernel.c
+KERNEL_CSOURCES += kernel/stack_protector.c \
+		   kernel/vga.c \
+		   kernel/kernel.c
