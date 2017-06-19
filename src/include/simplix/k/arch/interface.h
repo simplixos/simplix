@@ -64,7 +64,7 @@ void arch_cpu_info(void);
 
 /** Architecture Exit Function
  *
- * This function servers as the exitpoint of the
+ * This function serves as the exitpoint of the
  * CPU architecture and is called during the
  * halting stages of the kernel lifecycle.
  *
@@ -74,5 +74,17 @@ void arch_cpu_info(void);
  *
  */
 void arch_halt(void);
+
+/** Architecture State Dump Function
+ *
+ * This function serves to dump the current execution
+ * state of the processor, at any given time. The
+ * execution state includes information such as
+ * register values, memory accesses, call stack, etc.
+ *
+ * This function does not have any preconditions.
+ *
+ */
+void arch_dump_state(void);
 
 #endif // ARCH_INTERFACE_H
