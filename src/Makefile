@@ -71,7 +71,7 @@ MV=mv
 ## Flags ##
 
 CFLAGS_BASE	= -std=gnu99 -ffreestanding -nostdlib -fstack-protector-all
-CFLAGS_DEFS	+= -D_simplix_k_libc
+CFLAGS_DEFS	+= -D_simplix_k_libc -D_BUILD_TIME_=$(shell date "+%s")
 CFLAGS_INC	= -I$(INCLUDE_DIR) -I$(INCLUDE_LIBC_DIR) -I$(INCLUDE_LIBPOSIX_DIR)
 CFLAGS_LIBS	= -L$(LIBRARY_BIN_DIR) -lc -lposix
 CFLAGS_OPT	= -O2

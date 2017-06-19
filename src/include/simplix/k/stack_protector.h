@@ -34,8 +34,7 @@
 	#include <simplix/k/arch/x86/panic.h>
 #endif
 
-// TODO: Implement a randomized value during boot-time.
-#define STACK_CHK_GUARD 0x0999E9
+#define STACK_CHK_GUARD (0x0999E9+_BUILD_TIME_)
 
 void __stack_chk_guard(void);
 void __stack_chk_fail(void) __attribute__((noreturn));
