@@ -1,9 +1,9 @@
 [submodule "src/lib/libc"]
 	path = src/lib/libc
-	url = https://git.simplixos.org/pub/scm/kernel/libs/libc.git
+	url = https://github.com/simplixos/libc.git
 [submodule "src/lib/libmodule"]
 	path = src/lib/libmodule
-	url = https://git.simplixos.org/pub/scm/kernel/libs/libmodule.git
+	url = https://github.com/simplixos/libmodule.git
 [submodule "src/lib/libposix"]
 	path = src/lib/libposix
-	url = https://git.simplixos.org/pub/scm/kernel/libs/libposix.git
+	url = https://github.com/simplixos/libposix.git
