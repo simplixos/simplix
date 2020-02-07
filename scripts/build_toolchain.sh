@@ -30,11 +30,11 @@ echo $TARGET
 export PATH="$PREFIX/bin:$PATH"
 
 # Toolchain Versions
-NASM_VERSION=2.12.02
-GMP_VERSION=6.1.2
-MPC_VERSION=1.0.3
-MPFR_VERSION=3.1.5
-ISL_VERSION=0.18
+NASM_VERSION=2.14.02
+GMP_VERSION=6.2.0
+MPC_VERSION=1.1.0
+MPFR_VERSION=4.0.2
+ISL_VERSION=0.22.1
 
 platform='unknown'
 bits='unknown'
@@ -83,9 +83,9 @@ mkdir src
 cd src
 pwd
 
-git clone --depth 1 -b simplix-cross https://git.simplixos.org/pub/scm/toolchain/binutils.git
-git clone --depth 1 -b simplix-cross https://git.simplixos.org/pub/scm/toolchain/gcc.git
-curl -O http://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz
+git clone --depth 1 https://github.com/simplixos/simplix-gcc.git gcc
+git clone --depth 1 https://github.com/simplixos/simplix-binutils.git binutils
+curl -O https://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.gz
 
 curl -O http://ftp.gnu.org/gnu/gmp/gmp-$GMP_VERSION.tar.bz2
 curl -O http://ftp.gnu.org/gnu/mpc/mpc-$MPC_VERSION.tar.gz
@@ -106,8 +106,8 @@ mkdir build-binutils
 cd build-binutils
 pwd
 ../binutils/configure --target=$TARGET --prefix=$PREFIX --with-sysroot --disable-nls --disable-werror --disable-gdb \
-                      --disable-libdecnumber --disable-readline --disable-sim --with-pkgversion="Simplix Cross Binutils" \
-                      --disable-shared --enable-static
+		      --disable-libdecnumber --disable-readline --disable-sim --with-pkgversion="Simplix Cross Binutils" \
+		      --disable-shared --enable-static
 if [[ $gmake == 'yes' ]]; then
 	gmake
 	gmake install
@@ -170,7 +170,7 @@ cd build-grub
 	TARGET_STRIP=$PREFIX/bin/$TARGET-strip \
 	TARGET_NM=$PREFIX/bin/$TARGET-nm \
 	TARGET_RANLIB=$PREFIX/bin/$TARGET-ranlib \
-	--target=i686-elf --prefix=$PREFIX
+	--target=i686-elf --prefix=$PREFIX --enable-static
 make
 make install
 cd ..
@@ -183,7 +183,8 @@ cd ..
 rm -rf src/
 pwd
 
-os-toolchain/bin/i686-simplix-gcc --version
+os-toolchain/bin/$TARGET-as --version
+os-toolchain/bin/$TARGET-gcc --version
 
 os-toolchain/bin/nasm -v
 
